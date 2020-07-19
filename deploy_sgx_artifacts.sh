@@ -1,152 +1,106 @@
 #!/bin/bash
-
-SGX_DRIVER_VERSION=1.22
-SYSLIB_PATH=/usr/lib64
+SGX_DRIVER_VERSION=1.35
 SGX_INSTALL_DIR=/opt/intel
-SGX_TOOLKIT_INSTALL_PREFIX=$SGX_INSTALL_DIR/sgxtoolkit
-GIT_CLONE_PATH=/tmp/sgxstuff
+SGX_TOOLKIT_INSTALL_PREFIX=$SGX_INSTALL_DIR/cryptoapitoolkit
+KDIR=/lib/modules/$(uname -r)/build
+INKERNEL_SGX=$(cat $KDIR/.config | grep "CONFIG_INTEL_SGX=y")
 CENTRL_REPO=$PWD
 bold=$(tput bold)
 normal=$(tput sgr0)
 
 uninstall_sgx()
 {
-	if [[ -d $SGX_INSTALL_DIR/sgxsdk ]]; then
-		$SGX_INSTALL_DIR/sgxsdk/uninstall.sh
-	fi
-
-	modprobe -r intel_sgx
-	dkms remove -m sgx -v $SGX_DRIVER_VERSION --all
-
-	if [ -d /usr/src/sgx-$SGX_DRIVER_VERSION ]; then
-		rm -rf /usr/src/sgx-$SGX_DRIVER_VERSION/
+	if [[ -d $SGX_TOOLKIT_INSTALL_PREFIX ]]; then
+		echo "Uninstalling cryptoapitoolkit"
+		rm -rf $SGX_TOOLKIT_INSTALL_PREFIX
 	fi
 
 	if [[ -d $SGX_INSTALL_DIR/sgxssl ]]; then
-		echo "Uninstalling SGX SSL"
+		echo "uninstalling sgxssl"
 		rm -rf $SGX_INSTALL_DIR/sgxssl
 	fi
 
-	if [[ -d $SGX_TOOLKIT_INSTALL_PREFIX ]]; then
-		echo "Uninstalling SGX Toolkit"
-		rm -rf $SGX_TOOLKIT_INSTALL_PREFIX
-		rm -rf $SGX_INSTALL_DIR/cryptoapitoolkit/
-	fi
-
+	echo "uninstalling sgx psw/qgl"
 	rpm -qa | grep 'sgx' | xargs rpm -e
-	find $SYSLIB_PATH -name 'libsgx*' -exec rm -f {} \;
-	find $SYSLIB_PATH -name 'libdcap*' -exec rm -f {} \;
-	find $SYSLIB_PATH -name 'libquote*' -exec rm -f {} \;
 	rm -rf /etc/yum.repos.d/*sgx_rpm_local_repo.repo
-	rm -rf /usr/local/bin/ld /usr/local/bin/as /usr/local/bin/ld.gold /usr/local/bin/objdump /usr/local/bin/PCKIDRetrievalTool /usr/local/bin/enclave.signed.so /usr/local/libdcap_quoteprov.so.1
-	#rm -rf $GIT_CLONE_PATH
+
+	echo "uninstalling sgx dcap driver"
+	sh $SGX_INSTALL_DIR/sgxdriver/uninstall.sh
 }
 
 install_sgxssl()
 {
-	mkdir -p  /opt/intel/sgxssl/include/
-	mkdir -p /opt/intel/sgxssl/lib64/
-	cp -prf $CENTRL_REPO/sgxssl/include/include/* /opt/intel/sgxssl/include/
-	cp -prf $CENTRL_REPO/sgxssl/lib/lib64/* /opt/intel/sgxssl/lib64/
+	cp -prf $CENTRL_REPO/sgxssl $SGX_INSTALL_DIR
 }
 
-install_DCAP()
+install_dcap_driver()
 {
-	mkdir -p /usr/src/sgx-$SGX_DRIVER_VERSION/
-        cp -rpf $CENTRL_REPO/DCAP/* /usr/src/sgx-$SGX_DRIVER_VERSION/
-
-        dkms add -m sgx -v $SGX_DRIVER_VERSION
-        dkms build -m sgx -v $SGX_DRIVER_VERSION
-        dkms install -m sgx -v $SGX_DRIVER_VERSION
-
-        modprobe intel_sgx
-
-        cp $CENTRL_REPO/DCAP/10-sgx.rules /etc/udev/rules.d
-        groupadd sgx_prv
-        usermod -a -G sgx_prv root
-        udevadm trigger
-}
-
-install_SDK()
-{
-	pushd $CENTRL_REPO/SGX_SDK
-        chmod +x *.bin
-        # install SGX SDK
-        ./sgx_linux_x64_sdk*.bin -prefix=$SGX_INSTALL_DIR || exit 1
-        source $SGX_INSTALL_DIR/sgxsdk/environment
-
-        tar -xzf sgx_rpm_local_repo.tgz
-        yum-config-manager --add-repo file://$PWD/sgx_rpm_local_repo
-        yum install -y --nogpgcheck libsgx-launch libsgx-uae-service libsgx-urts
+	pushd $CENTRL_REPO/sgx_driver
+	# install sgx dcap driver if not intel-next kernel
+	if [ -z "$INKERNEL_SGX" ]; then
+		echo "installing sgx dcap driver"
+		chmod u+x sgx_linux_x64_driver_${SGX_DRIVER_VERSION}.bin
+		./sgx_linux_x64_driver_${SGX_DRIVER_VERSION}.bin -prefix=$SGX_INSTALL_DIR || exit 1
+	else
+		echo "found in-built sgx dcap driver, skipping installation"
+	fi
 	popd
 }
 
-install_QGL()
+install_psw()
 {
-	cp -f $CENTRL_REPO/QGL/lib/*.so $SYSLIB_PATH
-	cp -f $CENTRL_REPO/QGL/header_files/*.h $SGX_INSTALL_DIR/sgxsdk/include/
-        ln -fs $SYSLIB_PATH/libsgx_dcap_ql.so $SYSLIB_PATH/libsgx_dcap_ql.so.1
-        ln -sf $SYSLIB_PATH/libsgx_default_qcnl_wrapper.so $SYSLIB_PATH/libsgx_default_qcnl_wrapper.so.1
-        ln -sf $SYSLIB_PATH/libdcap_quoteprov.so $SYSLIB_PATH/libdcap_quoteprov.so.1
-	
-	cp -p $CENTRL_REPO/QGL/conf/* /etc
-	sed -i "s|PCCS_URL=.*|PCCS_URL=https://localhost:9000/scs/sgx/certification/v1/|g" /etc/sgx_default_qcnl.conf
-        sed -i "s/USE_SECURE_CERT=.*/USE_SECURE_CERT=FALSE/g" /etc/sgx_default_qcnl.conf
+	pushd $CENTRL_REPO/sgxpsw
+	tar -xzf sgx_rpm_local_repo.tgz
+	yum-config-manager --add-repo file://$PWD/sgx_rpm_local_repo
+	dnf install -y --nogpgcheck libsgx-launch libsgx-uae-service libsgx-urts libsgx-ae-qve libsgx-dcap-ql libsgx-dcap-ql-devel libsgx-dcap-default-qpl-devel libsgx-dcap-default-qpl
+	popd
 }
 
-install_sgxtoolkit()
+install_ctk()
 {
-	mkdir $SGX_TOOLKIT_INSTALL_PREFIX/
-        cp -prf ${CENTRL_REPO}/sgxtoolkit/include $SGX_TOOLKIT_INSTALL_PREFIX/include/
-        cp -prf ${CENTRL_REPO}/sgxtoolkit/lib $SGX_TOOLKIT_INSTALL_PREFIX/lib/
-
-	mkdir $SGX_INSTALL_DIR/cryptoapitoolkit
-	mkdir $SGX_INSTALL_DIR/cryptoapitoolkit/tokens
-	chmod -R 1777 $SGX_INSTALL_DIR/cryptoapitoolkit/tokens
-
+	cp -prf ${CENTRL_REPO}/cryptoapitoolkit $SGX_INSTALL_DIR
 }
 
 check_for_prerequisites()
 {
-	echo "CHECKING IF DEPENDENT PACKAGES ARE INSTALLED"
- 	pkg_list='yum-utils dkms ocaml protobuf'
-	deps_installed='y'
+	echo "Checking if dependent packages are installed"
+	pkg_list='epel-release kernel-devel kernel-headers yum-utils dkms protobuf'
 	for pkg in $pkg_list
 	do
-        	if rpm -q $pkg
-        	then
-                	echo "$pkg installed"
-        	else
-               		echo "${bold}$pkg NOT installed${normal}"
-                	deps_installed='n'
-        	fi
+		if rpm -q $pkg
+		then
+			continue
+		else
+			echo "${bold}$pkg NOT installed${normal}. Please refer to the install document"
+			exit 1
+		fi
 	done
-
-	if [ $deps_installed = 'n' ]
-	then
-       		echo "${bold}Dependent packages are not installed. Please refer to install document"
-        	echo "Exiting${normal}"
-		exit 1
-	fi
 }
 
-uninstall_sgx
-check_for_prerequisites
-echo "DCAP install started"
-install_DCAP
-echo "DCAP install completed"
-echo "SDK install started"
-install_SDK
-echo "DCAP install completed"
-echo "QGL install started"
-install_QGL
-echo "DCAP install completed"
-echo "PCK install started"
-install_PCK
-echo "PCK install completed"
-echo "SGXSSL INSTALL started"
-install_sgxssl
-echo "SGXSSL install completed"
-echo "SGX toolkit install started"
-install_sgxtoolkit
-echo "SGX toolkit install completed"
+for arg in "$@"
+do
+	check_for_prerequisites
+	case $arg in
+		uninstall)
+			uninstall_sgx
+			;;
+		driver)
+			install_dcap_driver
+			;;
+		sgxpsw)
+			install_psw
+			;;
+		sgxssl)
+			install_sgxssl
+			;;
+		ctk)
+			install_ctk
+			;;
+		all)
+			uninstall_sgx
+			install_dcap_driver
+			install_psw
+			install_sgxssl
+			install_ctk
+	esac
+done
