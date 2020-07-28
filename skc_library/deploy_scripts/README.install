@@ -1,0 +1,41 @@
+Pre-requisite for the SKC Library Deployment
+==========================================
+ - Icelake Server with SGX Enabled in BIOS
+ - RHEL 8.1 OS
+
+RHEL8 package Requirements
+==========================
+Following RHEL 8 repositories should be setup and available (/etc/yum.repos.d) to download and resolve SKC package dependencies
+	BaseOS
+	AppStream
+	CodeReady
+- Ensure that dnf update can download and install latest software updates
+
+- Ensure CMS/AAS/KBS server/VM IP addresses are added to the no_proxy environment variable
+
+- Ensure that the system date is properly setup (to PDT time) on all machines/VMs where SKC components are being installed
+
+How to Deploy
+==============
+- To verify the checksum of the SKC Library tar file and extract
+# ./untar.sh
+
+- Update the IP Address for CMS/AAS/KBS in skc_library.conf. Default values for Ports are pre-filled
+
+- To deploy SKC Library on a SGX Enabled Server,
+# ./deploy_skc_library.sh
+
+Contents of the Deployment Tar file
+===================================
+- Deployment scripts:deploy_skc_library.sh skc_library_create_roles.sh and deployment_prerequisites.sh
+- Pre-filled skc_library.conf
+- Download binaries/rpms/libraries in bin directory.
+
+Repo Contents
+=============
+deploy_skc_library.sh		Main script for Deploying SKC Library on SGX enabled server
+deployment_prerequisites.sh	Install RHEL 8 packages dependencies required for SKC Library Deployment
+skc_library_create_roles.sh	Script to create SKC Library user and roles with AAS and fetching TLS Client Cert from CMS
+skc_library.conf		Pre-filled config file with CMS/AAS/KBS IP Address and port numbers
+openssl.cnf 			Engine section added for libp11
+nginx.conf 			SSL block enabled

@@ -1,0 +1,42 @@
+Pre-requisite for the SGX Agent Deployment
+==========================================
+ - Icelake Server with SGX Enabled in BIOS
+ - RHEL 8.1 OS
+
+RHEL8 package Requirements
+==========================
+Following RHEL 8 repositories should be setup and available (/etc/yum.repos.d) to download and resolve SKC package dependencies
+	BaseOS
+	AppStream
+	CodeReady
+- Ensure that dnf update can download and install latest software updates
+
+- Ensure CMS/AAS/SHVS server/VM IP addresses are added to the no_proxy environment variable
+
+- Turn off Firewall service or ensure that the SHVS system can access the machine where SGX Agent is running
+# systemctl stop firewalld
+
+- Ensure that the system date is properly setup (to PDT time) on all machines/VMs where SKC components are being installed
+
+How to Deploy
+==============
+- To verify the checksum of the SGX Agent Deployment tar file and extract it
+# ./untar.sh
+- Update the IP Addresses for the SKC Components and CMS_TLS_SHA value in agent.conf. Default values for Ports are pre-filled
+	To find CMS_TLA_SHA run following command on the machine where CMS is installed
+	# cms tlscertsha384
+- To deploy SKC Agent on a SGX Enabled Server, run deploy_sgx_agent.sh
+# ./deploy_sgx_agent.sh
+
+Contents of the Deployment Tar file
+===================================
+- Deployment scripts:deploy_sgx_agent.sh sgx_agent_create_roles.sh and deployment_prerequisites.sh
+- Pre-filled agent.conf
+- Download binaries/rpms/libraries in bin directory.
+
+Repo Contents
+=============
+deploy_sgx_agent.sh		Main script for Deploying SGX Agent on SGX enabled server
+deployment_prerequisites.sh	Install RHEL 8 packages dependencies required fro SGX Agent Deployment
+sgx_agent_create_roles.sh	Script to create SGX Agent user and roles with AAS
+agent.conf			Pre-filled config file with CMS/AAS/SHVS IP Address and Port Numners
