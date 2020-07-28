@@ -1,0 +1,6 @@
+This is the simple shell script to create key in KMS. And assumed that this script will be executing in where KMS installed and running and user created before executing this script. ( admin as username and changeit as password ).
+
+Create Transfer policy:
+	Open transfer_policy_request.json modify  attestation_type_anyof as SW or SGX or SW, SGX based on user need
+Create APP Key:
+	Open run.sh search 'printf' string there you can find a json and there you find 'algorithm' ( AES or RSA )  and keybits ( for AES: 256, 128, 192 and RSA 1024, 2048, 3072 )
