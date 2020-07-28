@@ -21,6 +21,7 @@ create_skc_library_tar()
 	cp -pf ../deploy_scripts/nginx.conf $SKCLIB_DIR
 	tar -cf $TAR_NAME.tar -C $SKCLIB_DIR . --remove-files
 	sha256sum $TAR_NAME.tar > $TAR_NAME.sha2
+	echo "skc_library.tar file and skc_library.sha2 checksum file created"
 }
 
 download_dcap_driver()

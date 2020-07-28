@@ -9,6 +9,7 @@ create_sgx_agent_tar()
 	cp -pf ../deploy_scripts/agent.conf $SGX_AGENT_DIR
 	tar -cf $TAR_NAME.tar -C $SGX_AGENT_DIR . --remove-files
 	sha256sum $TAR_NAME.tar > $TAR_NAME.sha2
+	echo "sgx_agent.tar file and sgx_agent.sha2 checksum file created"
 }
 
 rm -f /etc/yum.repos.d/*sgx_rpm_local_repo.repo
