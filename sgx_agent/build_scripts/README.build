@@ -24,7 +24,7 @@ How to Build
 - To build SGX Agent, 
 # git clone ssh://git@gitlab.devtools.intel.com:29418/sst/isecl/sgx-tools.git
 # cd sgx-tools/sgx_agent/build_scripts/
-#./sagent_build.sh
+#./sgxagent_build.sh
 - This script will generate a tarball(sgx_agent.tar) and checksum file(sgx_agent.sha2)
 - Copy sgx_agent.tar, sgx_agent.sha2 and untar.sh(from sgx_agent directory) to a directory in the deployment machine
 
