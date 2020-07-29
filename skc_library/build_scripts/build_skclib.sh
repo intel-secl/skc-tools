@@ -1,7 +1,7 @@
 #!/bin/bash
 SKCLIB_DIR=$PWD/skc_library
 SKCLIB_BIN_DIR=$SKCLIB_DIR/bin
-SKCLIB_URL="https://gitlab.devtools.intel.com/sst/isecl/skc_library.git"
+SKCLIB_URL="ssh://git@gitlab.devtools.intel.com:29418/sst/isecl/skc_library.git"
 SKCLIB_BRANCH="v13+next-major"
 SKCLIB_CLONE_PATH=/tmp/skc_library
 SKCLIB_BIN_NAME=skc_library_M13_v1.0.bin

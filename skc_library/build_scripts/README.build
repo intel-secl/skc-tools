@@ -3,22 +3,28 @@ Pre-requisite for the SKC Library build system
 
 RHEL8 package Requirements
 ==========================
-- Following RHEL 8 repositories should be setup and available (/etc/yum.repos.d) to download and resolve SKC package dependencies
+- Following RHEL 8 repositories should be setup and available (/etc/yum.repos.d) to download and resolve SKC_Library package dependencies
 	BaseOS
 	AppStream
 	CodeReady
 - Ensure that dnf update can download and install latest software updates
+	If dnf update installs new kernel, make sure to restart the build vm for the new kernel to take effect
+- dnf install git
 - Ensure that the system date is properly setup (to PDT time)
 
 Git Access
 ==========
 - SKC Library source code is hosted in gitlab. Ensure that access is available to these repositories
 - To download source code, the SSH keys of the build system needs to be uploaded into gitlab
+	To generate ssh keys, run ssh-keygen and follow the instructions. SSH Public key will be stored in ~/.ssh/id_rsa.pub
+	copy the id_rsa.pub contents in settings ==> SSH Keys section in gitlab
 
 How to Build
 =============
 - To build SKC Library, 
-#./skc_library_build.sh
+# git clone ssh://git@gitlab.devtools.intel.com:29418/sst/isecl/sgx-tools.git
+# cd sgx-tools/skc_library/build_scripts/
+# ./skc_library_build.sh
 - This script will generate a tarball(skc_library.tar) and checksum file(skc_library.sha2)
 - Copy skc_library.tar, skc_library.sha2 and untar.sh(from skc_library directory) to a directory in the deployment machine
 
