@@ -3,7 +3,7 @@
 SGX_AGENT_DIR=$PWD/sgx_agent
 SGX_AGENT_BIN_DIR=$SGX_AGENT_DIR/bin
 SGX_AGENT_BRANCH="v14+next-major"
-SGX_AGENT_URL="https://gitlab.devtools.intel.com/sst/isecl/sgx_agent.git"
+SGX_AGENT_URL="ssh://git@gitlab.devtools.intel.com:29418/sst/isecl/sgx_agent.git"
 SGX_AGENT_CLONE_PATH=/tmp/sgx_agent
 
 build_sgx_agent()

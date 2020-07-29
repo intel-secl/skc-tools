@@ -9,9 +9,9 @@ build_PCKID_Retrieval_tool()
 {
 	pushd $PWD
 	git clone $SGX_DCAP_REPO $GIT_CLONE_PATH
+	cp -pf remove_pccs_connect.diff $GIT_CLONE_PATH/tools/PCKRetrievalTool
 	cd $GIT_CLONE_PATH/
 	git checkout $SGX_DCAP_TAG
-	cp -pf remove_pccs_connect.diff $GIT_CLONE_PATH
 	cd $GIT_CLONE_PATH/tools/PCKRetrievalTool
 	git apply remove_pccs_connect.diff
 	make
