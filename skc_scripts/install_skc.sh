@@ -22,6 +22,8 @@ if [ $# -gt 0 ] && [ $1 == "-r" ]; then
   echo "################ Uninstalling AAS....  #################"
   authservice uninstall --purge
   echo "################ Remove AAS DB....  #################"
+  pushd $PWD
+  cd /usr/local/pgsql
   sudo -u postgres dropdb aas_db
   echo "################ Uninstalling SCS....  #################"
   scs uninstall --purge
@@ -39,6 +41,7 @@ if [ $# -gt 0 ] && [ $1 == "-r" ]; then
   sudo -u postgres dropdb pgshubdb
   echo "################ Uninstalling KMS....  #################"
   kms uninstall --purge
+  popd
 fi
 
 export PGPASSWORD=dbpassword
@@ -57,7 +60,6 @@ else
    pushd $PWD
    cd ~
    bash install_pg.sh
-   popd
 fi
 
 export DBNAME=pgscsdb
@@ -68,10 +70,7 @@ else
    echo $DBNAME database does not exist
    echo "################ Update iseclpgdb.env for SCS....  #################"
    sed -i "s/^\(ISECL_PGDB_DBNAME\s*=\s*\).*\$/\1$DBNAME/" ~/iseclpgdb.env
-   pushd $PWD
-   cd ~
    bash install_pgscsdb.sh
-   popd
 fi
 
 export DBNAME=pgshvsdb
@@ -82,10 +81,7 @@ else
    echo $DBNAME database does not exist
    echo "################ Update iseclpgdb.env for SHVS....  #################"
    sed -i "s/^\(ISECL_PGDB_DBNAME\s*=\s*\).*\$/\1$DBNAME/" ~/iseclpgdb.env
-   pushd $PWD
-   cd ~
    bash install_pgshvsdb.sh
-   popd
 fi
 
 export DBNAME=pgshubdb
@@ -96,11 +92,9 @@ else
    echo $DBNAME database does not exist
    echo "################ Update iseclpgdb.env for SHUB....  #################"
    sed -i "s/^\(ISECL_PGDB_DBNAME\s*=\s*\).*\$/\1$DBNAME/" ~/iseclpgdb.env
-   pushd $PWD
-   cd ~
    bash install_pgshubdb.sh
-   popd
 fi
+popd
 
 pushd $PWD
 cd $SKC_BINARY_DIR
@@ -110,7 +104,7 @@ sed -i "s/^\(AAS_TLS_SAN\s*=\s*\).*\$/\1$AAS_IP/" ~/cms.env
 sed -i "s@^\(AAS_API_URL\s*=\s*\).*\$@\1$AAS_URL@" ~/cms.env
 sed -i "s/^\(SAN_LIST\s*=\s*\).*\$/\1$CMS_IP/" ~/cms.env
 
-./cms-v2.2.0.bin
+./cms-v2.2.0.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ CMS Installation Failed"
   exit 1
@@ -133,7 +127,7 @@ sed -i "s@^\(CMS_BASE_URL\s*=\s*\).*\$@\1$CMS_URL@"  ~/authservice.env
 
 sed -i "s/^\(SAN_LIST\s*=\s*\).*\$/\1$AAS_IP/"  ~/authservice.env
 
-./authservice-v2.2.0.bin
+./authservice-v2.2.0.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ AuthService Installation Failed"
   exit 1
@@ -252,7 +246,7 @@ sed -i "s@^\(AAS_API_URL\s*=\s*\).*\$@\1$AAS_URL@" ~/scs.env
 sed -i "s@^\(CMS_BASE_URL\s*=\s*\).*\$@\1$CMS_URL@" ~/scs.env
 
 echo "################ Installing SCS....  #################"
-./scs-skc_M12.bin
+./scs-skc_M12.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ SCS Installation Failed"
   exit 1
@@ -269,7 +263,7 @@ SCS_URL=https://$SCS_IP:9000/scs/sgx/certification/v1
 sed -i "s@^\(SCS_BASE_URL\s*=\s*\).*\$@\1$SCS_URL@" ~/sqvs.env
 
 echo "################ Installing SQVS....  #################"
-./sqvs-skc_M12.bin
+./sqvs-skc_M12.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ SQVS Installation Failed"
   exit 1
@@ -286,7 +280,7 @@ SCS_URL=https://$SCS_IP:9000/scs/sgx/
 sed -i "s@^\(SCS_BASE_URL\s*=\s*\).*\$@\1$SCS_URL@" ~/shvs.env
 
 echo "################ Installing SHVS....  #################"
-./shvs-skc_M12.bin
+./shvs-skc_M12.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ SHVS Installation Failed"
   exit 1
@@ -303,7 +297,7 @@ SHVS_URL=https://$SHVS_IP:13000/sgx-hvs/v1/
 sed -i "s@^\(SHVS_BASE_URL\s*=\s*\).*\$@\1$SHVS_URL@" ~/shub.env
 
 echo "################ Installing SHUB....  #################"
-./shub-skc_M12.bin
+./shub-skc_M12.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ SHUB Installation Failed"
   exit 1
@@ -320,7 +314,7 @@ SQVS_URL=https://$SQVS_IP:12000/svs/v1
 sed -i "s@^\(SVS_BASE_URL\s*=\s*\).*\$@\1$SQVS_URL@" ~/kms.env
 
 echo "################ Installing KMS....  #################"
-./kms-5.2-SNAPSHOT.bin
+./kms-5.2-SNAPSHOT.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ KMS Installation Failed"
   exit 1
