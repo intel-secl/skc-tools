@@ -84,6 +84,7 @@ EOF
 	if [ -s $tmpdir/role_response.json ]; then
 		role_id=$(jq -r '.role_id' < $tmpdir/role_response.json)
 	fi
+	echo $role_id
 }
 
 create_roles()
