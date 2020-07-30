@@ -46,15 +46,15 @@ cd $SKC_DIR
 repo init -u ssh://git@gitlab.devtools.intel.com:29418/sst/isecl/skc_manifest.git -b v13+next-major -m skc.xml
 repo sync
 # Build all the SKC components
-make
+make || exit 1
 
 # Copy the binaries to common directory
-cp -pf certificate-management-service/out/cms-v2.2.0.bin $SKC_BINARY_DIR
-cp -pf authservice/out/authservice-v2.2.0.bin $SKC_BINARY_DIR
-cp -pf sgx-caching-service/out/scs-skc_M12.bin $SKC_BINARY_DIR
-cp -pf sgx-verification-service/out/sqvs-skc_M12.bin $SKC_BINARY_DIR
-cp -pf sgx-hvs/out/shvs-skc_M12.bin $SKC_BINARY_DIR
-cp -pf sgx-ah/out/shub-skc_M12.bin $SKC_BINARY_DIR
+cp -pf certificate-management-service/out/cms-*.bin $SKC_BINARY_DIR
+cp -pf authservice/out/authservice-*.bin $SKC_BINARY_DIR
+cp -pf sgx-caching-service/out/scs-*.bin $SKC_BINARY_DIR
+cp -pf sgx-verification-service/out/sqvs-*.bin $SKC_BINARY_DIR
+cp -pf sgx-hvs/out/shvs-*.bin $SKC_BINARY_DIR
+cp -pf sgx-ah/out/shub-*.bin $SKC_BINARY_DIR
 
 # Copy env files to Home directory
 HOME_DIR=~/
@@ -74,4 +74,4 @@ cp -pf env/kms.env $HOME_DIR
 cp -pf env/iseclpgdb.env $HOME_DIR
 cp -pf env/install_pg.sh $HOME_DIR
 cp -pf env/trusted_rootca.pem /tmp
-cp -pf bin/kms-5.2-SNAPSHOT.bin $SKC_BINARY_DIR
+cp -pf bin/kms-*.bin $SKC_BINARY_DIR

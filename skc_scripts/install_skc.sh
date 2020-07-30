@@ -16,33 +16,31 @@ if [ $? -ne 0 ]; then
   yum install -y jq
 fi
 
-if [ $# -gt 0 ] && [ $1 == "-r" ]; then
-  echo "################ Uninstalling CMS....  #################"
-  cms uninstall --purge
-  echo "################ Uninstalling AAS....  #################"
-  authservice uninstall --purge
-  echo "################ Remove AAS DB....  #################"
-  pushd $PWD
-  cd /usr/local/pgsql
-  sudo -u postgres dropdb aas_db
-  echo "################ Uninstalling SCS....  #################"
-  scs uninstall --purge
-  echo "################ Remove SCS DB....  #################"
-  sudo -u postgres dropdb pgscsdb
-  echo "################ Uninstalling SQVS....  #################"
-  sqvs uninstall --purge
-  echo "################ Uninstalling SHVS....  #################"
-  shvs uninstall --purge
-  echo "################ Remove SHVS DB....  #################"
-  sudo -u postgres dropdb pgshvsdb
-  echo "################ Uninstalling SHUB....  #################"
-  shub uninstall --purge
-  echo "################ Remove SHUB DB....  #################"
-  sudo -u postgres dropdb pgshubdb
-  echo "################ Uninstalling KMS....  #################"
-  kms uninstall --purge
-  popd
-fi
+echo "################ Uninstalling CMS....  #################"
+cms uninstall --purge
+echo "################ Uninstalling AAS....  #################"
+authservice uninstall --purge
+echo "################ Remove AAS DB....  #################"
+pushd $PWD
+cd /usr/local/pgsql
+sudo -u postgres dropdb aas_db
+echo "################ Uninstalling SCS....  #################"
+scs uninstall --purge
+echo "################ Remove SCS DB....  #################"
+sudo -u postgres dropdb pgscsdb
+echo "################ Uninstalling SQVS....  #################"
+sqvs uninstall --purge
+echo "################ Uninstalling SHVS....  #################"
+shvs uninstall --purge
+echo "################ Remove SHVS DB....  #################"
+sudo -u postgres dropdb pgshvsdb
+echo "################ Uninstalling SHUB....  #################"
+shub uninstall --purge
+echo "################ Remove SHUB DB....  #################"
+sudo -u postgres dropdb pgshubdb
+echo "################ Uninstalling KMS....  #################"
+kms uninstall --purge
+popd
 
 export PGPASSWORD=dbpassword
 function is_database() {
@@ -104,13 +102,12 @@ sed -i "s/^\(AAS_TLS_SAN\s*=\s*\).*\$/\1$AAS_IP/" ~/cms.env
 sed -i "s@^\(AAS_API_URL\s*=\s*\).*\$@\1$AAS_URL@" ~/cms.env
 sed -i "s/^\(SAN_LIST\s*=\s*\).*\$/\1$CMS_IP/" ~/cms.env
 
-./cms-v2.2.0.bin || exit 1
+./cms-*.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ CMS Installation Failed"
   exit 1
 fi
 echo "################ Installed CMS....  #################"
-
 
 echo "################ Installing AuthService....  #################"
 
@@ -127,7 +124,7 @@ sed -i "s@^\(CMS_BASE_URL\s*=\s*\).*\$@\1$CMS_URL@"  ~/authservice.env
 
 sed -i "s/^\(SAN_LIST\s*=\s*\).*\$/\1$AAS_IP/"  ~/authservice.env
 
-./authservice-v2.2.0.bin || exit 1
+./authservice-*.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ AuthService Installation Failed"
   exit 1
@@ -147,7 +144,7 @@ echo "Got admin user ID $USER_ID"
 
 # SGX Caching Service User and Roles
 
-SCS_USER=`curl --noproxy "*" -k  -X POST https://$AAS_IP:8444/aas/users -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "scsuser@scs","password": "scspassword"}'`
+SCS_USER=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/users -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "scsuser@scs","password": "scspassword"}'`
 SCS_USER_ID=`curl --noproxy "*" -k https://$AAS_IP:8444/aas/users?name=scsuser@scs -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' | jq -r '.[0].user_id'`
 echo "Created SCS User with user ID $SCS_USER_ID"
 SCS_ROLE_ID1=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"service": "CMS","name": "CertApprover","context": "CN=SCS TLS Certificate;SAN='$SCS_IP';certType=TLS"}' | jq -r ".role_id"`
@@ -156,7 +153,7 @@ SCS_ROLE_ID2=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/roles -H "A
 echo "Created SCS CacheManager role with ID $SCS_ROLE_ID2"
 
 if [ $? -eq 0 ]; then
-  curl --noproxy "*" -k  -X POST https://$AAS_IP:8444/aas/users/$SCS_USER_ID/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"role_ids": ["'"$SCS_ROLE_ID1"'", "'"$SCS_ROLE_ID2"'"]}'
+  curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/users/$SCS_USER_ID/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"role_ids": ["'"$SCS_ROLE_ID1"'", "'"$SCS_ROLE_ID2"'"]}'
 fi
 
 SCS_TOKEN=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/token -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "scsuser@scs","password": "scspassword"}'`
@@ -164,7 +161,7 @@ echo "SCS Token $SCS_TOKEN"
 
 # SGX Quote Verification Service User and Roles
 
-SQVS_USER=`curl --noproxy "*" -k  -X POST https://$AAS_IP:8444/aas/users -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "sqvsuser@sqvs","password": "sqvspassword"}'`
+SQVS_USER=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/users -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "sqvsuser@sqvs","password": "sqvspassword"}'`
 SQVS_USER_ID=`curl --noproxy "*" -k https://$AAS_IP:8444/aas/users?name=sqvsuser@sqvs -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' | jq -r '.[0].user_id'`
 echo "Created SQVS User with user ID $SQVS_USER_ID"
 SQVS_ROLE_ID1=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"service": "CMS","name": "CertApprover","context": "CN=SQVS TLS Certificate;SAN='$SQVS_IP';certType=TLS"}' | jq -r ".role_id"`
@@ -179,7 +176,7 @@ echo "SQVS Token $SQVS_TOKEN"
 
 # SGX Host Verification Service User and Roles
 
-SHVS_USER=`curl --noproxy "*" -k  -X POST https://$AAS_IP:8444/aas/users -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "shvsuser@shvs","password": "shvspassword"}'`
+SHVS_USER=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/users -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "shvsuser@shvs","password": "shvspassword"}'`
 SHVS_USER_ID=`curl --noproxy "*" -k https://$AAS_IP:8444/aas/users?name=shvsuser@shvs -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' | jq -r '.[0].user_id'`
 echo "Created SHVS User with user ID $SHVS_USER_ID"
 SHVS_ROLE_ID1=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"service": "CMS","name": "CertApprover","context": "CN=SHVS TLS Certificate;SAN='$SHVS_IP';certType=TLS"}' | jq -r ".role_id"`
@@ -194,7 +191,7 @@ SHVS_ROLE_ID5=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/roles -H "
 echo "Created SHVS HostListManager role with ID $SHVS_ROLE_ID5"
 
 if [ $? -eq 0 ]; then
-  curl --noproxy "*" -k  -X POST https://$AAS_IP:8444/aas/users/$SHVS_USER_ID/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"role_ids": ["'"$SHVS_ROLE_ID1"'", "'"$SHVS_ROLE_ID2"'", "'"$SHVS_ROLE_ID3"'", "'"$SHVS_ROLE_ID4"'", "'"$SHVS_ROLE_ID5"'"]}'
+  curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/users/$SHVS_USER_ID/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"role_ids": ["'"$SHVS_ROLE_ID1"'", "'"$SHVS_ROLE_ID2"'", "'"$SHVS_ROLE_ID3"'", "'"$SHVS_ROLE_ID4"'", "'"$SHVS_ROLE_ID5"'"]}'
 fi
 
 SHVS_TOKEN=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/token -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "shvsuser@shvs","password": "shvspassword"}'`
@@ -215,7 +212,7 @@ SHUB_ROLE_ID4=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/roles -H "
 echo "Created SHUB TenantManager role with ID $SHUB_ROLE_ID4"
 
 if [ $? -eq 0 ]; then
-  curl --noproxy "*" -k  -X POST https://$AAS_IP:8444/aas/users/$SHUB_USER_ID/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"role_ids": ["'"$SHUB_ROLE_ID1"'", "'"$SHUB_ROLE_ID2"'", "'"$SHUB_ROLE_ID3"'", "'"$SHUB_ROLE_ID4"'"]}'
+  curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/users/$SHUB_USER_ID/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"role_ids": ["'"$SHUB_ROLE_ID1"'", "'"$SHUB_ROLE_ID2"'", "'"$SHUB_ROLE_ID3"'", "'"$SHUB_ROLE_ID4"'"]}'
 fi
 
 SHUB_TOKEN=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/token -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "shubuser@shub","password": "shubpassword"}'`
@@ -232,7 +229,7 @@ KMS_ROLE_ID2=`curl --noproxy "*" -k -X GET https://$AAS_IP:8444/aas/roles?name=A
 echo "Retrieved KMS Administrator role with ID $KMS_ROLE_ID2"
 
 if [ $? -eq 0 ]; then
-  curl --noproxy "*" -k  -X POST https://$AAS_IP:8444/aas/users/$KMS_USER_ID/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"role_ids": ["'"$KMS_ROLE_ID1"'", "'"$KMS_ROLE_ID2"'"]}'
+  curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/users/$KMS_USER_ID/roles -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"role_ids": ["'"$KMS_ROLE_ID1"'", "'"$KMS_ROLE_ID2"'"]}'
 fi
 
 KMS_TOKEN=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/token -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "kmsuser@kms","password": "kmspassword"}'`
@@ -246,7 +243,7 @@ sed -i "s@^\(AAS_API_URL\s*=\s*\).*\$@\1$AAS_URL@" ~/scs.env
 sed -i "s@^\(CMS_BASE_URL\s*=\s*\).*\$@\1$CMS_URL@" ~/scs.env
 
 echo "################ Installing SCS....  #################"
-./scs-skc_M12.bin || exit 1
+./scs-*.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ SCS Installation Failed"
   exit 1
@@ -263,7 +260,7 @@ SCS_URL=https://$SCS_IP:9000/scs/sgx/certification/v1
 sed -i "s@^\(SCS_BASE_URL\s*=\s*\).*\$@\1$SCS_URL@" ~/sqvs.env
 
 echo "################ Installing SQVS....  #################"
-./sqvs-skc_M12.bin || exit 1
+./sqvs-*.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ SQVS Installation Failed"
   exit 1
@@ -280,7 +277,7 @@ SCS_URL=https://$SCS_IP:9000/scs/sgx/
 sed -i "s@^\(SCS_BASE_URL\s*=\s*\).*\$@\1$SCS_URL@" ~/shvs.env
 
 echo "################ Installing SHVS....  #################"
-./shvs-skc_M12.bin || exit 1
+./shvs-*.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ SHVS Installation Failed"
   exit 1
@@ -297,7 +294,7 @@ SHVS_URL=https://$SHVS_IP:13000/sgx-hvs/v1/
 sed -i "s@^\(SHVS_BASE_URL\s*=\s*\).*\$@\1$SHVS_URL@" ~/shub.env
 
 echo "################ Installing SHUB....  #################"
-./shub-skc_M12.bin || exit 1
+./shub-*.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ SHUB Installation Failed"
   exit 1
@@ -312,9 +309,9 @@ sed -i "s@^\(AAS_API_URL\s*=\s*\).*\$@\1$AAS_URL@" ~/kms.env
 sed -i "s@^\(CMS_BASE_URL\s*=\s*\).*\$@\1$CMS_URL@" ~/kms.env
 SQVS_URL=https://$SQVS_IP:12000/svs/v1
 sed -i "s@^\(SVS_BASE_URL\s*=\s*\).*\$@\1$SQVS_URL@" ~/kms.env
-
+hostnamectl set-hostname kbshostname
 echo "################ Installing KMS....  #################"
-./kms-5.2-SNAPSHOT.bin || exit 1
+./kms-*.bin || exit 1
 if [ $? -ne 0 ]; then
   echo "############ KMS Installation Failed"
   exit 1

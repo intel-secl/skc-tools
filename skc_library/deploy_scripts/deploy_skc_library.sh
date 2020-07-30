@@ -71,11 +71,16 @@ install_skc_library_bin()
 
 run_post_deployment_script()
 {
-	mv /etc/pki/tls/openssl.cnf /etc/pki/tls/openssl.cnf.orig
-	cp -pf openssl.cnf /etc/pki/tls/
-	mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.orig
-	cp -pf nginx.conf /etc/nginx/
-
+	if [  ! -f /etc/pki/tls/openssl.cnf.orig ]
+	then
+		mv /etc/pki/tls/openssl.cnf /etc/pki/tls/openssl.cnf.orig
+		cp -pf openssl.cnf /etc/pki/tls/
+	fi
+	if [  ! -f /etc/nginx/nginx.conf.orig ]
+	then
+		mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.orig
+		cp -pf nginx.conf /etc/nginx/
+	fi
 	./skc_library_create_roles.sh
 	if [ $? -ne 0 ]
 	then

@@ -61,7 +61,7 @@ fi
 
 # download postgres repo
 yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm &>>$log_file
-yum module disable postgresql
+yum module disable postgresql -y
 yum -y install postgresql11-server postgresql11 postgresql11-contrib &>>$log_file
 
 if [ $? -ne 0 ] ; then

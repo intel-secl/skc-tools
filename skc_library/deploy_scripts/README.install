@@ -11,9 +11,15 @@ Following RHEL 8 repositories should be setup and available (/etc/yum.repos.d) t
 	CodeReady
 - Ensure that dnf update can download and install latest software updates
 
-- Ensure CMS/AAS/KBS server/VM IP addresses are added to the no_proxy environment variable
+- If there are kernel updates updates avaiable, please install them and reboot the machine, so that SGX driver can build against proper kernel
 
-- Ensure that the system date is properly setup (to PDT time) on all machines/VMs where SKC components are being installed
+- Ensure CMS/AAS/KBS server/VM IP addresses are added to the no_proxy environment variable.
+	Also ensure the KBS VM hostname(kbshostname) is added to the no_proxy list
+	Also kbshostname domain to KBS VM IP mapping should be added in SGX Server /etc/hosts file, where SKC_Library is being deployed
+	for ex: 10.80.245.119 kbshostname
+
+- Ensure that the system date is properly setup to same date/time(PDT time) on all machines/VMs where SKC components are being installed
+	This is important, else certificate verifications will fail
 
 How to Deploy
 ==============
@@ -24,6 +30,25 @@ How to Deploy
 
 - To deploy SKC Library on a SGX Enabled Server,
 # ./deploy_skc_library.sh
+- As part of the deployment, script takes a backup of /etc/nginx/nginx.conf as /etc/nginx/nginx.conf.orig and copies skc version of nginx.conf
+similarly backup of /etc/pki/tls/openssl.cnf is taken as /etc/pki/tls/openssl.cnf.orig and skc version of openssl.cnf is copied
+
+To test Secure key transfer of a key from KBS to the nginx, please follow the below mentioned steps.
+1. On the KBS VM:
+	edit sgx-tools/kbs_scripts/run.sh, change the KMS_IP and  AAS_IP with the ip address where these services are running, save and close
+2. ./run.sh reg
+3. copy the crt file generated to the SGX server /root/ directory where skc_library is installed
+4. On the SGX Server :
+	a. create a file /root/keys.txt and add PKCS11 url as below:
+		 pkcs11:token=KMS;id=4fa20b5a-ef7e-4cba-ab51-f778656d65a3;object=RSAKEY;type=private;pin-value=1234
+		 replace the id with the id printed as output of step 2
+	b. edit /etc/nginx/nginx.conf file add same id in ssl_certificate_key. also add crt file location which was copied in step 3. save and close
+	c. open /opt/skc/wtc/pkcs11-apimodule.ini file and following line under [core] section
+		preload_keys=/root/keys.txt. save and close
+	d. systemctl restart nginx
+		This will fetch the key from KBS to enclave loaded by nginx
+	e. wget -k -v https://localhost:2443 --no-check-certificate
+		This will use key stored inside enclave for SSL Handshake and download index.html from nginx
 
 Contents of the Deployment Tar file
 ===================================
