@@ -232,7 +232,7 @@
 
 ​        [6.3.7 Role Definitions](#role-definitions)
 
-[7. Connection Settings](#connection-settings)
+[7. Connection Strings](#connection-strings)
 
  [7.1 SGX Agent](#sgx-agent-1)
 
@@ -889,7 +889,7 @@ SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS mat
 
 Execute the installer binary.
 
-./shvs-skc_M12.bin
+./shvs-M13.bin
 
 When the installation completes, the SGX Host Verification Service is available. The services can be verified by running **shvs** status from the SGX Host Verification Service command line.
 
@@ -1019,26 +1019,7 @@ Installation of the SGX \_Agent is done by running the binary of sgx_agent.
 
 To install the SGX Agent:
 
-1.  Copy the tarball built for SGX Agent to /root/ directory
-2.  Update the sgx_agent.env file in the /root/ directory (for full configuration options, see section 9.2). The minimum configuration options for installation are provided below
-
-​             SGX_AGENT_USERNAME  
-
-​             SGX_AGENT_PASSWORD 
-
-​            SHVS_BASE_URL=  CMS_TLS_CERT_SHA384=<CMS TLS digest> 
-
-​            BEARER_TOKEN=<Installation token from  populate-user script>  
-
-​            AAS_API_URL=https://<AAS IP or Hostname  >:8444/aas 
-
-​            CMS_BASE_URL=https://<CMS IP or Hostname  >:8444/cms/v1  
-
-SAN_LIST=<Comma-seperated list of IP addresses and hostnames for the SGX_Agent matching the SAN list specified in the    populate-users script; may include wildcards>
-
-3. Execute the SGX Agent binary and wait for the installation to complete. 
-
-   If the sgx_agent.env file is provided with the minimum required options, the SGX Agent will be installed and also registered to the SGX Host Verification Service
+    Please Refer to the README file in sgx-tools repo for instructions on SGX Agent deployment
 
 ##  Installing the SGX-QVS
 
@@ -1048,13 +1029,13 @@ SGX ECDSA Attestation / SGX Quote Verification by KBS
 
 ### Prerequisites 
 
--   The following must be completed before installing the SGX Agent:
+-   The following must be completed before installing the SGX QVS:
 
     -   Certificate Management Service, Authentication and Authorization Service must be installed and available.
 
 ### Package Dependencies
 
-The Intel® Security Libraries Verification Service requires the following packages and their dependencies:
+The Intel® Security Libraries Quote Verification Service requires the following packages and their dependencies:
 
 -   Golang packages
 
@@ -1082,7 +1063,7 @@ To install the SQVS Service, follow these steps:
 
 3.  Execute the sqvs installer binary.
 
-sqvs-skc_M11.bin
+sqvs-M13.bin
 
 A sample minimal sqvs.env file is provided below. For all configuration options and their descriptions, refer to the Configuration section on the SGX Quote Verification Service.
 
@@ -1198,7 +1179,7 @@ To install the SGX Hub, follow these steps:
 
 3.  Execute the installer binary.
 
-./shub-skc_M12.bin
+./shub-M13.bin
 
 ##  Installing the Key Broker Service
 
@@ -1282,27 +1263,7 @@ The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.1
 
 ### Installation
 
-1.  Execute the skc_library deployment script
-
-​      sh deploy_skc_library.sh
-
-​           KBS_Hostname=< Key Broker Service Hostname>
-
-​           KS_PORT=<Key Broker Service Port Number>
-
-​           SKC_USER=<skc_library usrname>
-
-​           SKC_USER_PASSWORD=<skc_library password>
-
-​           CMS_IP=< Certificate Management Service IP/DNS >
-
-​           CMS_PORT=<Certificate Management Service Port Number>
-
-​           AAS_API_URL=<base Url of AAS>
-
-​           SCS_IP=<SGX Caching Server IP/DNS>
-
-​           SCS_PORT=<SGX Caching Service Port Number>
+    Please Refer to the README file in sgx-tools repo for instructions on SKC_Library deployment
 
 # Authentication
 
@@ -1514,7 +1475,7 @@ Following are the set of roles which are required during installation and runtim
 
 
 
-# Connection Settings
+# Connection Strings
 
 Connection Strings define a remote API resource endpoint that will be used to communicate with the registered host for retrieving SGX information and another platform information. Connection Strings differ based on the type of host.
 
@@ -1538,7 +1499,7 @@ The SGX Agent registers the host with an SGX Host Verification Service at the ti
 
 ### Retrieving Current Host State Information
 
-Admin can get the host state information by calling this rest API. GET https://\<hostname\>:8443/ sgx-hvs//v1/host-status
+Admin can get the host state information by calling this rest API. GET https://\<hostname\>:13000/sgx-hvs/v1/host-status
 
 # Intel Security Libraries Configuration Settings 
 
