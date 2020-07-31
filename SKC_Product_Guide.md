@@ -1,339 +1,338 @@
-Intel® Security Libraries --DC\
-*Secure Key Caching (SKC)*
+***Intel® Security Libraries --DC***
 
-Prepared by:\< Author\>
+***Secure Key Caching (SKC)***
 
-Date: July-2020
+***Date: July-2020***
 
-Version 1.0
+***Version 1.0****
 
 **Table of Contents**
 
 [1. Introduction](#introduction)
 
-[1.1 Overview](#overview)
+​     [1.1 Overview](#overview)
 
-[1.2 Trusted Execution Environment](#trusted-execution-environment)
+​     [1.2 Trusted Execution Environment](#trusted-execution-environment)
 
-[1.2.1 Intel Software Guard Extensions](#intel-software-guard-extensions)
+​            [1.2.1 Intel Software Guard Extensions](#intel-software-guard-extensions)
 
-[1.3 Key Protection](#key-protection)
+​     [1.3 Key Protection](#key-protection)
 
-[1.3.1 HSM](#hsm)
+​           [1.3.1 HSM](#hsm)
 
-[1.3.2 PKCS\#11](#pkcs11)
+​           [1.3.2 PKCS\#11](#pkcs11)
 
-[1.4 SKC Features](#skc-features)
+ [1.4 SKC Features](#skc-features)
 
-[1.4.1 Key Protection](#key-protection-1)
+​           [1.4.1 Key Protection](#key-protection-1)
 
-[1.4.2 SGX Attestation Support](#sgx-attestation-support)
+​           [1.4.2 SGX Attestation Support](#sgx-attestation-support)
 
-[1.4.3 SGX Support in Orchestrators](#sgx-support-in-orchestrators)
+​           [1.4.3 SGX Support in Orchestrators](#sgx-support-in-orchestrators)
 
 [2. SKC Components](#skc-components)
 
-[2.1 Certificate Management Service](#certificate-management-service)
+​     [2.1 Certificate Management Service](#certificate-management-service)
 
-[2.2 Authentication and Authorization Service](#authentication-and-authorization-service)
+​     [2.2 Authentication and Authorization Service](#authentication-and-authorization-service)
 
-[2.3 SGX Host Verification Service](#sgx-host-verification-service)
+​     [2.3 SGX Host Verification Service](#sgx-host-verification-service)
 
-[2.4 SGX Caching Service](#sgx-caching-service)
+​     [2.4 SGX Caching Service](#sgx-caching-service)
 
-[2.5 SGX Agent](#sgx-agent)
+​     [2.5 SGX Agent](#sgx-agent)
 
-[2.6 SGX Hub](#sgx-hub)
+​     [2.6 SGX Hub](#sgx-hub)
 
-[2.7 Key Broker Service](#key-broker-service)
+​     [2.7 Key Broker Service](#key-broker-service)
 
-[2.8 SGX Quote Verification Service](#sgx-quote-verification-service)
+​     [2.8 SGX Quote Verification Service](#sgx-quote-verification-service)
 
-[2.9 The SKC Client](#the-skc-client)
+​     [2.9 The SKC Client](#the-skc-client)
 
 [3. Definitions, Acronyms, and Abbreviation](#definitions-acronyms-and-abbreviation)
 
 [4. Architecture Overview](#architecture-overview)
 
-[4.1 Key Protection](#key-protection-2)
+  [4.1 Key Protection](#key-protection-2)
 
-[4.1 SGX Attestation Support and SGX Support in Orchestrators](#sgx-attestation-support-and-sgx-support-in-orchestrators)
+  [4.2 SGX Attestation Support and SGX Support in Orchestrators](#sgx-attestation-support-and-sgx-support-in-orchestrators)
 
 [5. Intel® Security Libraries Installation](#intel-security-libraries-installation)
 
-[5.1 Building from Source](#building-from-source)
+  [5.1 Building from Source](#building-from-source)
 
-[5.2 Hardware Considerations](#hardware-considerations)
+  [5.2 Hardware Considerations](#hardware-considerations)
 
-[5.2.1 Supported Hardware](#supported-hardware)
+​      [5.2.1 Supported Hardware](#supported-hardware)
 
-[5.2.2 BIOS Requirements](#bios-requirements)
+​      [5.2.2 BIOS Requirements](#bios-requirements)
 
-[5.2.3 OS Requirements (Intel® SGX does not supported on 32-bit OS):](#os-requirements-intel-sgx-does-not-supported-on-32-bit-os)
+​      [5.2.3 OS Requirements (Intel® SGX does not supported on 32-bit OS):](#os-requirements-intel-sgx-does-not-supported-on-32-bit-os)
 
-[5.3 Recommended Service Layout](#recommended-service-layout)
+ [5.3 Recommended Service Layout](#recommended-service-layout)
 
-[5.4 Installing/Configuring the Database](#installingconfiguring-the-database)
+  [5.4 Installing/Configuring the Database](#installingconfiguring-the-database)
 
-[5.4.1 Using the provided Database Installation Script](#using-the-provided-database-installation-script)
+​       [5.4.1 Using the provided Database Installation Script](#using-the-provided-database-installation-script)
 
-[5.4.2 Provisioning the Database](#provisioning-the-database)
+​       [5.4.2 Provisioning the Database](#provisioning-the-database)
 
-[5.4.3 Database Server TLS Certificate](#database-server-tls-certificate)
+​       [5.4.3 Database Server TLS Certificate](#database-server-tls-certificate)
 
-[5.5 Installing the Certificate Management Service](#installing-the-certificate-management-service)
+ [5.5 Installing the Certificate Management Service](#installing-the-certificate-management-service)
 
-[5.5.1 Required For](#required-for)
+​       [5.5.1 Required For](#required-for)
 
-[5.5.2 Supported Operating System](#supported-operating-system)
+​       [5.5.2 Supported Operating System](#supported-operating-system)
 
-[5.5.3 Recommended Hardware](#recommended-hardware)
+​       [5.5.3 Recommended Hardware](#recommended-hardware)
 
-[5.5.4 Installation](#installation)
+​       [5.5.4 Installation](#installation)
 
-[5.6 Installing the Authentication and Authorization Service](#installing-the-authentication-and-authorization-service)
+ [5.6 Installing the Authentication and Authorization Service](#installing-the-authentication-and-authorization-service)
 
-[5.6.1 Required For](#required-for-1)
+​       [5.6.1 Required For](#required-for-1)
 
-[5.6.2 Prerequisites](#prerequisites)
+​       [5.6.2 Prerequisites](#prerequisites)
 
-[5.6.3 Package Dependencies](#package-dependencies)
+​       [5.6.3 Package Dependencies](#package-dependencies)
 
-[5.6.4 Supported Operating Systems](#supported-operating-systems)
+​       [5.6.4 Supported Operating Systems](#supported-operating-systems)
 
-[5.6.5 Recommended Hardware](#recommended-hardware-1)
+​       [5.6.5 Recommended Hardware](#recommended-hardware-1)
 
-[5.6.6 Installation](#installation-1)
+​       [5.6.6 Installation](#installation-1)
 
-[5.6.7 Creating Users](#creating-users)
+​       [5.6.7 Creating Users](#creating-users)
 
 [5.7 Installing the SGX Host Verification Service](#installing-the-sgx-host-verification-service)
 
-[5.7.1 Required For](#required-for-2)
+​        [5.7.1 Required For](#required-for-2)
 
-[5.7.2 Prerequisites](#prerequisites-1)
+​        [5.7.2 Prerequisites](#prerequisites-1)
 
-[5.7.3 Package Dependencies](#package-dependencies-1)
+​        [5.7.3 Package Dependencies](#package-dependencies-1)
 
-[5.7.4 Supported Operating Systems](#supported-operating-systems-1)
+​        [5.7.4 Supported Operating Systems](#supported-operating-systems-1)
 
-[5.7.5 Recommended Hardware](#recommended-hardware-2)
+​        [5.7.5 Recommended Hardware](#recommended-hardware-2)
 
-[5.7.6 Installation](#installation-2)
+​        [5.7.6 Installation](#installation-2)
 
 [5.8 Installing the Caching Service](#installing-the-caching-service)
 
-[5.8.1 Required For](#required-for-3)
+​        [5.8.1 Required For](#required-for-3)
 
-[5.8.2 Prerequisites (CSP & Enterprise)](#prerequisites-csp-enterprise)
+​        [5.8.2 Prerequisites (CSP & Enterprise)](#prerequisites-csp-enterprise)
 
-[5.8.3 Package Dependencies](#package-dependencies-2)
+​        [5.8.3 Package Dependencies](#package-dependencies-2)
 
-[5.8.4 Supported Operating System](#supported-operating-system-1)
+​        [5.8.4 Supported Operating System](#supported-operating-system-1)
 
-[5.8.5 Recommended Hardware](#recommended-hardware-3)
+​        [5.8.5 Recommended Hardware](#recommended-hardware-3)
 
-[5.8.6 Installation](#installation-3)
+​        [5.8.6 Installation](#installation-3)
 
-[5.9 Installing the SGX Agent](#installing-the-sgx-agent)
+ [5.9 Installing the SGX Agent](#installing-the-sgx-agent)
 
-[5.9.1 Required for](#required-for-4)
+​        [5.9.1 Required for](#required-for-4)
 
-[5.9.2 Prerequisites](#prerequisites-2)
+​        [5.9.2 Prerequisites](#prerequisites-2)
 
-[5.9.3 Package Dependencies](#package-dependencies-3)
+​        [5.9.3 Package Dependencies](#package-dependencies-3)
 
-[5.9.4 Supported Operating Systems](#supported-operating-systems-2)
+​        [5.9.4 Supported Operating Systems](#supported-operating-systems-2)
 
-[**5.9.5** **Recommended Hardware**](#_Toc46743564)
+​       [5.9.5 Recommended Hardware](#_Toc46743564)
 
-[5.9.6 Installation](#installation-4)
+​       [5.9.6 Installation](#installation-4)
 
-[5.10 Installing the SGX-QVS](#installing-the-sgx-qvs)
+  [5.10 Installing the SGX-QVS](#installing-the-sgx-qvs)
 
-[5.10.1 Required for](#required-for-5)
+​           [5.10.1 Required for](#required-for-5)
 
-[5.10.2 Prerequisites](#prerequisites-3)
+​           [5.10.2 Prerequisites](#prerequisites-3)
 
-[5.10.3 Package Dependencies](#package-dependencies-4)
+​           [5.10.3 Package Dependencies](#package-dependencies-4)
 
-[5.10.4 Supported Operating Systems](#supported-operating-systems-3)
+​           [5.10.4 Supported Operating Systems](#supported-operating-systems-3)
 
-[5.10.5 Recommended Hardware](#recommended-hardware-4)
+​           [5.10.5 Recommended Hardware](#recommended-hardware-4)
 
-[5.10.6 Installation](#installation-5)
+​           [5.10.6 Installation](#installation-5)
 
-[5.11 Installing the SGX Hub](#installing-the-sgx-hub)
+ [5.11 Installing the SGX Hub](#installing-the-sgx-hub)
 
-[5.11.1 Required For](#required-for-6)
+​          [5.11.1 Required For](#required-for-6)
 
-[5.11.2 Prerequisites](#prerequisites-4)
+​          [5.11.2 Prerequisites](#prerequisites-4)
 
-[5.11.3 Package Dependencies](#package-dependencies-5)
+​          [5.11.3 Package Dependencies](#package-dependencies-5)
 
-[5.11.4 Supported Operating Systems](#supported-operating-systems-4)
+​          [5.11.4 Supported Operating Systems](#supported-operating-systems-4)
 
-[5.11.5 Recommended Hardware](#recommended-hardware-5)
+​          [5.11.5 Recommended Hardware](#recommended-hardware-5)
 
-[5.12 Installing the Key Broker Service](#installing-the-key-broker-service)
+​     [5.12 Installing the Key Broker Service](#installing-the-key-broker-service)
 
-[5.12.1 Required for](#required-for-7)
+​          [5.12.1 Required for](#required-for-7)
 
-[5.12.2 Prerequisites](#prerequisites-5)
+​          [5.12.2 Prerequisites](#prerequisites-5)
 
-[5.12.3 Package Dependencies](#package-dependencies-6)
+​          [5.12.3 Package Dependencies](#package-dependencies-6)
 
-[5.12.4 Supported Operating Systems](#supported-operating-systems-5)
+​          [5.12.4 Supported Operating Systems](#supported-operating-systems-5)
 
-[5.12.5 Recommended Hardware](#recommended-hardware-6)
+​          [5.12.5 Recommended Hardware](#recommended-hardware-6)
 
-[5.12.6 Installation](#installation-6)
+​          [5.12.6 Installation](#installation-6)
 
-[5.13 Installing the SKC Library](#installing-the-skc-library)
+​      [5.13 Installing the SKC Library](#installing-the-skc-library)
 
-[5.13.1 Required For](#required-for-8)
+​           [5.13.1 Required For](#required-for-8)
 
-[5.13.2 Package Dependencies](#package-dependencies-7)
+​           [5.13.2 Package Dependencies](#package-dependencies-7)
 
-[5.13.3 Supported Operation System](#supported-operation-system)
+​           [5.13.3 Supported Operation System](#supported-operation-system)
 
-[5.13.4 Recommended Hardware](#recommended-hardware-7)
+​           [5.13.4 Recommended Hardware](#recommended-hardware-7)
 
-[5.13.5 Installation](#installation-7)
+​           [5.13.5 Installation](#installation-7)
 
 [6. Authentication](#authentication)
 
-[6.1 Create Token](#create-token)
+ [6.1 Create Token](#create-token)
 
-[6.2 User Management](#user-management)
+ [6.2 User Management](#user-management)
 
-[6.2.1 Username and Password Requirement](#username-and-password-requirement)
+​         [6.2.1 Username and Password Requirement](#username-and-password-requirement)
 
-[6.2.2 Create User](#create-user)
+​         [6.2.2 Create User](#create-user)
 
-[6.2.3 Search User](#search-user)
+​         [6.2.3 Search User](#search-user)
 
-[6.2.4 Change User Password](#change-user-password)
+​         [6.2.4 Change User Password](#change-user-password)
 
-[6.2.5 Delete User](#delete-user)
+​         [6.2.5 Delete User](#delete-user)
 
 [6.3 Roles and Permission](#roles-and-permission)
 
-[6.3.1 Create Roles](#create-roles)
+​        [6.3.1 Create Roles](#create-roles)
 
-[6.3.2 Search Roles](#search-roles)
+​        [6.3.2 Search Roles](#search-roles)
 
-[6.3.3 Delete Role](#delete-role)
+​        [6.3.3 Delete Role](#delete-role)
 
-[6.3.4 Assign Role to User](#assign-role-to-user)
+​        [6.3.4 Assign Role to User](#assign-role-to-user)
 
-[6.3.5 List Roles Assigned to User](#list-roles-assigned-to-user)
+​        [6.3.5 List Roles Assigned to User](#list-roles-assigned-to-user)
 
-[6.3.6 Remove Role from User](#remove-role-from-user)
+​        [6.3.6 Remove Role from User](#remove-role-from-user)
 
-[6.3.7 Role Definitions](#role-definitions)
+​        [6.3.7 Role Definitions](#role-definitions)
 
-[7. Connection Strings](#connection-strings)
+[7. Connection Settings](#connection-settings)
 
-[7.1 SGX Agent](#sgx-agent-1)
+ [7.1 SGX Agent](#sgx-agent-1)
 
 [8. SGX Features Provisioning](#sgx-features-provisioning)
 
-[8.1 Host Registration](#host-registration)
+ [8.1 Host Registration](#host-registration)
 
-[8.1.1 SGX Agent](#sgx-agent-2)
+​        [8.1.1 SGX Agent](#sgx-agent-2)
 
-[8.1.2 Retrieving Current Host State Information](#retrieving-current-host-state-information)
+​        [8.1.2 Retrieving Current Host State Information](#retrieving-current-host-state-information)
 
 [9. Intel Security Libraries Configuration Settings](#intel-security-libraries-configuration-settings)
 
-[9.1 SGX Host Verification Service](#sgx-host-verification-service-1)
+ [9.1 SGX Host Verification Service](#sgx-host-verification-service-1)
 
-[9.1.1 Installation Answer File Options](#installation-answer-file-options)
+​        [9.1.1 Installation Answer File Options](#installation-answer-file-options)
 
-[9.1.2 Configuration Options](#configuration-options)
+​        [9.1.2 Configuration Options](#configuration-options)
 
-[9.1.3 Command-Line Options](#command-line-options)
+​        [9.1.3 Command-Line Options](#command-line-options)
 
-[9.1.4 Directory Layout](#directory-layout)
+​        [9.1.4 Directory Layout](#directory-layout)
 
-[9.2 SGX Agent](#sgx-agent-3)
+ [9.2 SGX Agent](#sgx-agent-3)
 
-[9.2.1 Installation Answer File Options](#installation-answer-file-options-1)
+​        [9.2.1 Installation Answer File Options](#installation-answer-file-options-1)
 
-[9.2.2 Configuration Options - This is same as above.](#configuration-options---this-is-same-as-above.)
+​        [9.2.2 Configuration Options - This is same as above.](#configuration-options---this-is-same-as-above.)
 
-[9.2.3 Command-Line Options](#command-line-options-1)
+​        [9.2.3 Command-Line Options](#command-line-options-1)
 
-[9.2.4 Directory Layout](#directory-layout-1)
+​        [9.2.4 Directory Layout](#directory-layout-1)
 
 [9.3 SGX Attestation Hub](#sgx-attestation-hub)
 
-[9.3.1 Installation Answer File](#installation-answer-file)
+​       [9.3.1 Installation Answer File](#installation-answer-file)
 
-[9.3.2 Command-Line Options](#command-line-options-2)
+​       [9.3.2 Command-Line Options](#command-line-options-2)
 
-[9.3.3 Directory Layout](#directory-layout-2)
+​       [9.3.3 Directory Layout](#directory-layout-2)
 
 [9.4 Certificate Management Service](#certificate-management-service-1)
 
-[9.4.1 Installation Answer File Options](#installation-answer-file-options-2)
+​       [9.4.1 Installation Answer File Options](#installation-answer-file-options-2)
 
-[9.4.2 Configuration Options](#configuration-options-1)
+​       [9.4.2 Configuration Options](#configuration-options-1)
 
-[9.4.3 Command-Line Options](#command-line-options-3)
+​       [9.4.3 Command-Line Options](#command-line-options-3)
 
-[9.4.4 Directory Layout](#directory-layout-3)
+​       [9.4.4 Directory Layout](#directory-layout-3)
 
-[9.5 Authentication and Authorization Service](#authentication-and-authorization-service-1)
+ [9.5 Authentication and Authorization Service](#authentication-and-authorization-service-1)
 
-[9.5.1 Installation Answer File Options](#installation-answer-file-options-3)
+​        [9.5.1 Installation Answer File Options](#installation-answer-file-options-3)
 
-[9.5.2 Configuration Options](#configuration-options-2)
+​        [9.5.2 Configuration Options](#configuration-options-2)
 
-[9.5.3 Command-Line Options](#command-line-options-4)
+​        [9.5.3 Command-Line Options](#command-line-options-4)
 
-[9.5.4 Directory Layout](#directory-layout-4)
+​       [9.5.4 Directory Layout](#directory-layout-4)
 
-[9.6 Key Broker Service](#key-broker-service-1)
+   [9.6 Key Broker Service](#key-broker-service-1)
 
-[9.6.1 Installation Answer File Options](#installation-answer-file-options-4)
+​      [9.6.1 Installation Answer File Options](#installation-answer-file-options-4)
 
-[9.6.2 Configuration Options](#configuration-options-3)
+​      [9.6.2 Configuration Options](#configuration-options-3)
 
-[9.6.3 Command-Line Options](#command-line-options-5)
+​      [9.6.3 Command-Line Options](#command-line-options-5)
 
-[9.6.4 Directory Layout](#directory-layout-5)
+​      [9.6.4 Directory Layout](#directory-layout-5)
 
-[9.7 SGX Caching Service](#sgx-caching-service-1)
+   [9.7 SGX Caching Service](#sgx-caching-service-1)
 
-[9.7.1 Installation Answer File Options](#installation-answer-file-options-5)
+​      [9.7.1 Installation Answer File Options](#installation-answer-file-options-5)
 
-[9.7.2 Configuration Options](#configuration-options-4)
+​      [9.7.2 Configuration Options](#configuration-options-4)
 
-[9.7.3 Command-Line Options](#command-line-options-6)
+​      [9.7.3 Command-Line Options](#command-line-options-6)
 
-[9.7.4 Directory Layout](#directory-layout-6)
+​      [9.7.4 Directory Layout](#directory-layout-6)
 
 [9.8 SGX Quote Verification](#sgx-quote-verification)
 
-[9.8.1 Installation Answer File Options](#installation-answer-file-options-6)
+​      [9.8.1 Installation Answer File Options](#installation-answer-file-options-6)
 
-[9.8.2 Configuration Options](#configuration-options-5)
+​      [9.8.2 Configuration Options](#configuration-options-5)
 
-[9.8.3 Command-Line Options](#command-line-options-7)
+​      [9.8.3 Command-Line Options](#command-line-options-7)
 
 [10. Uninstallation](#uninstallation)
 
-[10.1 SGX Host Verification Service](#sgx-host-verification-service-2)
+  [10.1 SGX Host Verification Service](#sgx-host-verification-service-2)
 
-[10.2 SGX_Agent](#sgx_agent)
+  [10.2 SGX_Agent](#sgx_agent)
 
-[10.3 SGX Attestation Hub](#sgx-attestation-hub-1)
+  [10.3 SGX Attestation Hub](#sgx-attestation-hub-1)
 
-[10.4 SGX Caching Service](#sgx-caching-service-2)
+  [10.4 SGX Caching Service](#sgx-caching-service-2)
 
-[10.5 SGX Quote Verification Service](#sgx-quote-verification-service-1)
+  [10.5 SGX Quote Verification Service](#sgx-quote-verification-service-1)
 
 [11. Appendix](#appendix)
 
@@ -341,7 +340,7 @@ Version 1.0
 
 ## Overview
 
-Secure Key Caching (SKC) is part of the Intel Security Libraries for datacenter (ISecL-DC). Intel Security Libraries for Datacenter is a collection of software applications and development libraries intended to help turn Intel platform security features into real-world security use cases. SKC provides the key protection at rest and in-use use case using the Intel Software Guard Extensions technology (SGX). SGX implements the Trusted Execution Environment (TEE) paradigm.
+ Secure Key Caching (SKC) is part of the Intel Security Libraries for datacenter (ISecL-DC). Intel Security Libraries for Datacenter is a collection of software applications and development libraries intended to help turn Intel platform security features into real-world security use cases. SKC provides the key protection at rest and in-use use case using the Intel Software Guard Extensions technology (SGX). SGX implements the Trusted Execution Environment (TEE) paradigm.
 
 Using the SKC Client -- a set of libraries -- applications can retrieve keys from the ISecL-DC Key Broker Service (KBS) and load them to an SGX-protected memory (called SGX enclave) in the application memory space. KBS performs the SGX enclave attestation to ensure that the application will store the keys in a genuine SGX enclave. Application keys are wrapped with an enclave public key by KBS prior to transferring to the application enclave. Consequently, application keys are protected from infrastructure admins, malicious applications and compromised HW/BIOS/OS/VMM. SKC does not require the refactoring of the application because it supports a standard PKCS\#11 interface.
 
@@ -459,6 +458,24 @@ TEE -- Trusted Execution Environment
 
 HSM -- Hardware Security Module
 
+KBS -- Key Broker Service
+
+CSP -- Cloud Service Provider
+
+TEE -- Trusted Execution Environment
+
+PCS -- Provisioning Certification Service
+
+CRLs -- Certificate Revocation Lists 
+
+AAS -- Authentication and Authorization Service
+
+SWK -- Symmetric Wrapping Key
+
+SHVS -- SGX Host Verification Service 
+
+CRDs -- Custom Resource Definitions 
+
 # Architecture Overview 
 
 As indicated in section 1.4, SKC provides 3 features essentially:
@@ -483,7 +500,7 @@ The high-level architectures of these features are presented in the next sub-sec
 
 Key Protection is implemented by the SKC Client -- a set of libraries - which must be linked with a tenant workload, like Nginx, deployed in a CSP environment and the Key Broker Service (KBS) deployed in the tenant's enterprise environment. The SKC Client retrieves the keys needed by the workload from KBS after proving that the key can be protected in an SGX enclave as shown in the diagram below.
 
-![image-20200727163116765](C:\Users\sravix\AppData\Roaming\Typora\typora-user-images\image-20200727163116765.png)
+![https://gitlab.devtools.intel.com/sivaramp/cicd-pipeline/-/blob/master/Images/image-20200727163116765.png]
 
 Step 6 is optional (keys can be stored in KBS). Keys policies in step 2 are called Key Transfer Policies and are created by an Admin and assigned to Application keys.
 
@@ -493,7 +510,7 @@ The diagram below shows the infrastructure that CSPs need to deploy to support S
 
 The platform information can optionally be made available to Kubernetes via the SGX Hub (SHUB), which pulls it from SHVS and pushes it to the Kubernetes Master using Custom Resource Definitions (CRDs).
 
-![image-20200727163158892](C:\Users\sravix\AppData\Roaming\Typora\typora-user-images\image-20200727163158892.png)
+![https://gitlab.devtools.intel.com/sivaramp/cicd-pipeline/-/blob/master/Images/image-20200727163158892.png]
 
 The SGX Agent and the SGX services integrate with the Authentication and Authorization Service (AAS) and the Certificate Management Service (CMS). AAS and CMS are not represented on the diagram for clarity.
 
@@ -580,7 +597,7 @@ This Includes:
 
 -   SGX Quote Verification Service (SQVS)
 
-SGX Agent & SKC Library needs to be installed on a SGX Enabled Machine.
+SGX Agent & SKC Library needs to be installed on SGX Enabled Machine.
 
 The node components (SGX Agent) must be installed on each protected physical server:
 
@@ -742,33 +759,33 @@ cms setup cms_auth_token --force
 
 Create the authservice.env installation answer file:
 
-CMS_BASE_URL=https://\<CMS IP or hostname\>:8445/cms/v1/
+​      CMS_BASE_URL=https://\<CMS IP or hostname\>:8445/cms/v1/
 
-CMS_TLS_CERT_SHA384=\<CMS TLS certificate sha384
+​      CMS_TLS_CERT_SHA384=\<CMS TLS certificate sha384
 
-AAS_DB_HOSTNAME=\<IP or hostname of database server\>
+​      AAS_DB_HOSTNAME=\<IP or hostname of database server\>
 
-AAS_DB_PORT=\<database port number; default is 5432\>
+​      AAS_DB_PORT=\<database port number; default is 5432\>
 
-AAS_DB_PORT=\<database port number; default is 5432\>
+​      AAS_DB_PORT=\<database port number; default is 5432\>
 
-AAS_DB_NAME=\<database name\>
+​      AAS_DB_NAME=\<database name\>
 
-AAS_DB_USERNAME=\<database username\>
+​      AAS_DB_USERNAME=\<database username\>
 
-AAS_DB_PASSWORD=\<database password\>
+​      AAS_DB_PASSWORD=\<database password\>
 
-AAS_DB_SSLCERTSRC=\<path to database TLS certificate; the default location is typically /usr/local/pgsql/data/server.crt \>
+​      AAS_DB_SSLCERTSRC=\<path to database TLS certificate; the default location is typically /usr/local/pgsql/data/server.crt \>
 
-AAS_ADMIN_USERNAME=\<username for AAS administrative user\>
+​      AAS_ADMIN_USERNAME=\<username for AAS administrative user\>
 
-AAS_ADMIN_PASSWORD=\<password for AAS administrative user\>
+​      AAS_ADMIN_PASSWORD=\<password for AAS administrative user\>
 
-SAN_LIST=\<comma-separated list of IPs and hostnames for the AAS; this should match the value for the
+​      SAN_LIST=\<comma-separated list of IPs and hostnames for the AAS; this should match the value for the
 
-AAS_TLS_SAN in the cms.env file from the CMS installation\>
+​      AAS_TLS_SAN in the cms.env file from the CMS installation\>
 
-BEARER_TOKEN=\<bearer token from CMS installation\>
+​      BEARER_TOKEN=\<bearer token from CMS installation\>
 
 Execute the AAS installer:
 
@@ -776,16 +793,20 @@ Execute the AAS installer:
 
 Note: the AAS_ADMIN credentials specified in this answer file will have administrator rights for the AAS and can be used to create other users, create new roles, and assign roles to users.
 
-### Creating Users and Roles
+### Creating Users
 
-After installation is complete, several roles and user accounts must be generated.  Most of these accounts will be service users, used by the various Intel® SecL SKC services to work together. 
+After installation is complete, several roles and user accounts must be generated.  Most of these accounts will be service users, used by the various Intel® SecL SKC services to work together.
 
-Creating these required users and roles is facilitated by the scripts in the corresponding components and needs to be executed before installation of each component.  
+Creating these required users and roles is facilitated by the scripts in the corresponding components and needs to be executed before installation of each component.
 
 SCS: scs_aas_curl.sh
+
 SHVS: shvs_aas_curl.sh
+
 SGX-AGENT: sgx_agent_aas.sh
+
 SHUB: shub_aas_curl.sh
+
 SQVS: sqvs_aas_curl.sh
 
 The output of these scripts is a bearer-token which needs to be updated in the BEARER_TOKEN env variable in the corresponding component’s env file.
@@ -840,31 +861,31 @@ To install the SGX Host Verification Service, follow these steps:
 
 A sample minimal shvs.env file is provided below. For all configuration options and their descriptions, refer to the Intel® SecL Configuration section on the SGX Host Verification Service.
 
-SHVS_DB_HOSTNAME=<hostname or IP address to database server> 
+​     SHVS_DB_HOSTNAME=<hostname or IP address to database server> 
 
-SHVS_DB_USERNAME =<Database administrative username> 
+​     SHVS_DB_USERNAME =<Database administrative username> 
 
-SHVS_DB_PORT =5432 
+​     SHVS_DB_PORT =5432 
 
-SHVS_DB_PASSWORD =<Database password> 
+​     SHVS_DB_PASSWORD =<Database password> 
 
-SHVS_DB_NAME =<Database schema>
+​     SHVS_DB_NAME =<Database schema>
 
-SHVS_ADMIN_USERNAME =<SGX Host Verification Service username> 
+​     SHVS_ADMIN_USERNAME =<SGX Host Verification Service username> 
 
-SHVS_ADMIN_PASSWORD =<SGX HostVerification Service password> 
+​     SHVS_ADMIN_PASSWORD =<SGX HostVerification Service password> 
 
-CMS_TLS_CERT_SHA384=<Certificate Management Service TLS digest> 
+​     CMS_TLS_CERT_SHA384=<Certificate Management Service TLS digest> 
 
-BEARER_TOKEN=<Installation token from populate-users script> 
+​     BEARER_TOKEN=<Installation token from populate-users script> 
 
-AAS_API_URL=https://<Authentication and Authorization Service IP or Hostname>:8444/aas 
+​     AAS_API_URL=https://<Authentication and Authorization Service IP or Hostname>:8444/aas 
 
-CMS_BASE_URL=https://<Certificate Management Service IP or Hostname>:8445/cms/v1 
+​     CMS_BASE_URL=https://<Certificate Management Service IP or Hostname>:8445/cms/v1 
 
-SCS_BASE_URL= https://<SGX Caching Service IP or Hostname>:9000/scs/sgx/
+​    SCS_BASE_URL= https://<SGX Caching Service IP or Hostname>:9000/scs/sgx/
 
-SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS matching the SAN list specified in the populate-users script; may include wildcards* > 
+SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS matching the SAN list specified in the populate-users  script; may include wildcards* > 
 
 Execute the installer binary.
 
@@ -928,37 +949,37 @@ The Intel® Security Libraries SGX Caching Service supports Red Hat Enterprise L
 
 2.  Create the scs.env installation answer file:
 
-> SCS_DB_USERNAME=\<database username\>
->
-> SCS_DB_PASSWORD=\<database password\>
->
-> SCS_DB_HOSTNAME=\<IP or hostname of database server\>
->
-> SCS_DB_PORT=\<Database port; 5432 by default\>
->
-> SCS_DB_NAME=\<name of the SCS database; pgscsdb by default\>
->
-> SCS_DB_SSLCERTSRC=\<path to database TLS certificate; the default location is typically
->
-> /usr/local/pgsql/data/server.crt \>
->
-> INTEL_PROVISIONING_SERVER=\<hostname of INTEL PCS Server\>
->
-> INTEL_PROVISIONING_SERVER_API_KEY=\<subscription key\>
->
-> SCS_REFRESH_HOURS=\<time in hours to refresh SGX collaterals; 1 hour by default\>
->
-> SCS_ADMIN \_USERNAME=\<username for SCS service account\>
->
-> SCS_ADMIN_PASSWORD=\<password for SCS service account\>
->
-> CMS_BASE_URL=https://\<IP or hostname to CMS\>:8445/cms/v1/
->
-> CMS_TLS_CERT_SHA384=\<sha384 of CMS TLS certificate\>
->
-> AAS_API_URL=https://\<IP or hostname to AAS\>:8444/aas/
->
-> SAN_LIST=\<comma-separated list of IPs and hostnames for the SCS\>
+​           SCS_DB_USERNAME=\<database username\>
+
+​           SCS_DB_PASSWORD=\<database password\>
+
+​           SCS_DB_HOSTNAME=\<IP or hostname of database server\>
+
+​           SCS_DB_PORT=\<Database port; 5432 by default\>
+
+​           SCS_DB_NAME=\<name of the SCS database; pgscsdb by default\>
+
+​           SCS_DB_SSLCERTSRC=\<path to database TLS certificate; the default location is typically
+
+​           /usr/local/pgsql/data/server.crt \>
+
+​           INTEL_PROVISIONING_SERVER=\<hostname of INTEL PCS Server\>
+
+​           INTEL_PROVISIONING_SERVER_API_KEY=\<subscription key\>
+
+​           SCS_REFRESH_HOURS=\<time in hours to refresh SGX collaterals; 1 hour by default\>
+
+​           SCS_ADMIN \_USERNAME=\<username for SCS service account\>
+
+​           SCS_ADMIN_PASSWORD=\<password for SCS service account\>
+
+​           CMS_BASE_URL=https://\<IP or hostname to CMS\>:8445/cms/v1/
+
+​           CMS_TLS_CERT_SHA384=\<sha384 of CMS TLS certificate\>
+
+​           AAS_API_URL=https://\<IP or hostname to AAS\>:8444/aas/
+
+​         SAN_LIST=\<comma-separated list of IPs and hostnames for the SCS\>
 
 Execute the SCS installer binary:
 
@@ -998,7 +1019,26 @@ Installation of the SGX \_Agent is done by running the binary of sgx_agent.
 
 To install the SGX Agent:
 
-    Please refer to README file in sgx-tools repo for detailed instructions on deploying SGX Agent
+1.  Copy the tarball built for SGX Agent to /root/ directory
+2.  Update the sgx_agent.env file in the /root/ directory (for full configuration options, see section 9.2). The minimum configuration options for installation are provided below
+
+​             SGX_AGENT_USERNAME  
+
+​             SGX_AGENT_PASSWORD 
+
+​            SHVS_BASE_URL=  CMS_TLS_CERT_SHA384=<CMS TLS digest> 
+
+​            BEARER_TOKEN=<Installation token from  populate-user script>  
+
+​            AAS_API_URL=https://<AAS IP or Hostname  >:8444/aas 
+
+​            CMS_BASE_URL=https://<CMS IP or Hostname  >:8444/cms/v1  
+
+SAN_LIST=<Comma-seperated list of IP addresses and hostnames for the SGX_Agent matching the SAN list specified in the    populate-users script; may include wildcards>
+
+3. Execute the SGX Agent binary and wait for the installation to complete. 
+
+   If the sgx_agent.env file is provided with the minimum required options, the SGX Agent will be installed and also registered to the SGX Host Verification Service
 
 ##  Installing the SGX-QVS
 
@@ -1008,7 +1048,7 @@ SGX ECDSA Attestation / SGX Quote Verification by KBS
 
 ### Prerequisites 
 
--   The following must be completed before installing the SGX Quote Verification Service:
+-   The following must be completed before installing the SGX Agent:
 
     -   Certificate Management Service, Authentication and Authorization Service must be installed and available.
 
@@ -1046,21 +1086,21 @@ sqvs-skc_M11.bin
 
 A sample minimal sqvs.env file is provided below. For all configuration options and their descriptions, refer to the Configuration section on the SGX Quote Verification Service.
 
-SGX_TRUSTED_ROOT_CA_PATH=<IP address or hostname of the Verification Service> 
+​       SGX_TRUSTED_ROOT_CA_PATH=<IP address or hostname of the Verification Service> 
 
-SCS_BASE_URL
+​       SCS_BASE_URL
 
-SQVS_USERNAME=<SGX Quote Verification Service username> 
+​       SQVS_USERNAME=<SGX Quote Verification Service username> 
 
-SQVS_PASSWORD=< SGX Quote Verification Service password> 
+​       SQVS_PASSWORD=< SGX Quote Verification Service password> 
 
-CMS_TLS_CERT_SHA384=<Certificate Management Service TLS digest> 
+​       CMS_TLS_CERT_SHA384=<Certificate Management Service TLS digest> 
 
-BEARER_TOKEN=<Installation token > 
+​       BEARER_TOKEN=<Installation token > 
 
-AAS_API_URL=https://<Authentication and Authorization Service IP or Hostname>:8444/aas 
+​       AAS_API_URL=https://<Authentication and Authorization Service IP or Hostname>:8444/aas 
 
-CMS_BASE_URL=https://<Certificate Management Service IP or Hostname>:8445/cms/v1 
+​       CMS_BASE_URL=https://<Certificate Management Service IP or Hostname>:8445/cms/v1 
 
 SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS matching the SAN list specified in the populate-users script; may include wildcards* > 
 
@@ -1126,35 +1166,35 @@ To install the SGX Hub, follow these steps:
 
 2.  Create the shub.env installation answer file. See the sample file below
 
-SHUB_ADMIN_USERNAME =<SAH SHUB service user username> 
+​           SHUB_ADMIN_USERNAME =<SAH SHUB service user username> 
 
-SHUB_ADMIN_PASSWORD=<SAH SHUB service user password> 
+​           SHUB_ADMIN_PASSWORD=<SAH SHUB service user password> 
 
-SHVS_BASE_URL = https://<SHVS IP or Hostname>:13000/sgx-hvs/v1/ 
+​           SHVS_BASE_URL = https://<SHVS IP or Hostname>:13000/sgx-hvs/v1/ 
 
-CMS_TLS_CERT_SHA384=<CMS TLS digest> 
+​           CMS_TLS_CERT_SHA384=<CMS TLS digest> 
 
-BEARER_TOKEN=<Installation token from populate-users script> 
+​           BEARER_TOKEN=<Installation token from populate-users script> 
 
-AAS_API_URL=https://<AAS IP or Hostname>:8444/aas/ 
+​           AAS_API_URL=https://<AAS IP or Hostname>:8444/aas/ 
 
-CMS_BASE_URL=https://<CMS IP or Hostname>:8445/cms/v1 
-
-
-
-SHUB_DB_NAME=<database name>
-
-SHUB_DB_USERNAME=<database username> 
-
-SHUB_DB_PASSWORD=< database password >
-
-SHUB_DB_HOSTNAME=<database hostname or IP> 
-
-SHUB_DB_PORT=<database port; default is 5432> 
+​           CMS_BASE_URL=https://<CMS IP or Hostname>:8445/cms/v1 
 
 
 
-SAN_LIST =<comma separated list of hostnames for the Hub>
+​           SHUB_DB_NAME=<database name>
+
+​           SHUB_DB_USERNAME=<database username> 
+
+​           SHUB_DB_PASSWORD=< database password >
+
+​           SHUB_DB_HOSTNAME=<database hostname or IP> 
+
+​           SHUB_DB_PORT=<database port; default is 5432> 
+
+
+
+​           SAN_LIST =<comma separated list of hostnames for the Hub>
 
 3.  Execute the installer binary.
 
@@ -1194,17 +1234,17 @@ NA
 
 2.  Create the installation answer file kms.env:
 
-> AAS_API_URL=https://\<AAS IP or hostname\>:8444/aas
->
-> CMS_BASE_URL=https://\<CMS IP or hostname\>:8445/cms/v1/
->
-> KMS_TLS_CERT_IP=\<comma-separated list of IP addresses for the Key Broker\>
->
-> KMS_TLS_CERT_DNS=\<comma-separated list of hostnames for the Key Broker\>
->
-> CMS_TLS_CERT_SHA384=\<SHA384 hash of CMS TLS certificate\>
->
-> BEARER_TOKEN=\<Installation token from populate-users script\>
+​            AAS_API_URL=https://\<AAS IP or hostname\>:8444/aas
+
+​            CMS_BASE_URL=https://\<CMS IP or hostname\>:8445/cms/v1/
+
+​            KMS_TLS_CERT_IP=\<comma-separated list of IP addresses for the Key Broker\>
+
+​            KMS_TLS_CERT_DNS=\<comma-separated list of hostnames for the Key Brok
+
+​            CMS_TLS_CERT_SHA384=\<SHA384 hash of CMS TLS certificate\>
+
+​            BEARER_TOKEN=\<Installation token from populate-users script\>
 
 3.  Execute the KBS installer.
 
@@ -1214,17 +1254,17 @@ NA
 
 ### Required For 
 
-> The SKC_Library enables secure transfer of application keys from KBS after performing SGX attestation. It stores the keys in the SGX enclave and performs crypto operations ensuring the keys are never exposed in use, at rest and in transit outside of enclave.
+The SKC_Library enables secure transfer of application keys from KBS after performing SGX attestation. It stores the keys in the SGX enclave and performs crypto operations ensuring the keys are never exposed in use, at rest and in transit outside of enclave.
 
 ### Package Dependencies 
 
-> The Intel® Security Libraries SKC Library requires the following packages and their dependencies
->
-> Openssl
->
-> Curl
->
-> cryptpapitoolkit
+The Intel® Security Libraries SKC Library requires the following packages and their dependencies
+
+Openssl
+
+Curl
+
+cryptpapitoolkit
 
 ### Supported Operation System 
 
@@ -1242,7 +1282,27 @@ The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.1
 
 ### Installation
 
-    Please refer to README file in sgx-tools repo for detailed instructions on deploying SKC_Library
+1.  Execute the skc_library deployment script
+
+​      sh deploy_skc_library.sh
+
+​           KBS_Hostname=< Key Broker Service Hostname>
+
+​           KS_PORT=<Key Broker Service Port Number>
+
+​           SKC_USER=<skc_library usrname>
+
+​           SKC_USER_PASSWORD=<skc_library password>
+
+​           CMS_IP=< Certificate Management Service IP/DNS >
+
+​           CMS_PORT=<Certificate Management Service Port Number>
+
+​           AAS_API_URL=<base Url of AAS>
+
+​           SCS_IP=<SGX Caching Server IP/DNS>
+
+​           SCS_PORT=<SGX Caching Service Port Number>
 
 # Authentication
 
@@ -1454,7 +1514,7 @@ Following are the set of roles which are required during installation and runtim
 
 
 
-# Connection Strings
+# Connection Settings
 
 Connection Strings define a remote API resource endpoint that will be used to communicate with the registered host for retrieving SGX information and another platform information. Connection Strings differ based on the type of host.
 
@@ -1478,7 +1538,7 @@ The SGX Agent registers the host with an SGX Host Verification Service at the ti
 
 ### Retrieving Current Host State Information
 
-Admin can get the host state information by calling this rest API. GET https://\<hostname\>:13000/sgx-hvs/v1/host-status
+Admin can get the host state information by calling this rest API. GET https://\<hostname\>:8443/ sgx-hvs//v1/host-status
 
 # Intel Security Libraries Configuration Settings 
 
@@ -1527,39 +1587,39 @@ shvs \<command\>
 
 #### Help 
 
-> shvs help
->
-> Displays the list of available CLI commands.
+shvs help
+
+Displays the list of available CLI commands.
 
 #### Start 
 
-> shvs start
->
-> Starts the service
+shvs start
+
+Starts the service
 
 ####  Stop 
 
-> shvs stop
->
-> Stops the service
+shvs stop
+
+Stops the service
 
 #### Status 
 
-> shvs status
->
-> Reports whether the service is currently running.
+shvs status
+
+Reports whether the service is currently running.
 
 #### Uninstall 
 
-> Shvs uninstall \[\--purge\]
->
-> Removes the service. Use \--purge option to remove configuration directory(/etc/shvs/)
+Shvs uninstall \[\--purge\]
+
+Removes the service. Use \--purge option to remove configuration directory(/etc/shvs/)
 
 #### Version 
 
-> Shvs \--version
->
-> Shows the version of the service.
+Shvs \--version
+
+Shows the version of the service.
 
 ### Directory Layout 
 
@@ -1709,9 +1769,9 @@ Reports whether the service is currently running.
 
 #####  Uninstall 
 
-> Shub uninstall \[\--purge\]
->
-> Removes the service. Use \--purge option to remove configuration directory(/etc/shub/)
+Shub uninstall \[\--purge\]
+
+Removes the service. Use \--purge option to remove configuration directory(/etc/shub/)
 
 ##### Version 
 
@@ -1783,9 +1843,9 @@ The CMS configuration can be found in /etc/cms/config.yml.
 
 #### Help 
 
-> cms help
->
-> Displays the list of available CLI commands.
+cms help
+
+Displays the list of available CLI commands.
 
 #### Start 
 
@@ -1809,39 +1869,39 @@ tokendurationmins: 20 aasjwtcn: "" aastlscn: ""
 
  intervalmins: 5  lockoutdurationmins: 15 
 
-> cms start
->
-> Starts the services.
+cms start
+
+Starts the services.
 
 #### Stop 
 
-> cms stop
->
-> Stops the service.
+cms stop
+
+Stops the service.
 
 #### Restart 
 
-> cms restart
->
-> Restarts the services.
+cms restart
+
+Restarts the services.
 
 #### Status 
 
-> cms status
->
-> Reports whether the service is currently running.
+cms status
+
+Reports whether the service is currently running.
 
 #### Uninstall 
 
-> cms uninstall
->
-> Uninstalls the service, including the deletion of all files and folders.
+cms uninstall
+
+Uninstalls the service, including the deletion of all files and folders.
 
 #### Version 
 
-> cms version
->
-> Reports the version of the service.
+cms version
+
+Reports the version of the service.
 
 #### Tlscertsha384 
 
@@ -1849,9 +1909,9 @@ Shows the SHA384 of the TLS certificate.
 
 #### setup \[task\] 
 
-> Runs a specific setup task.
->
-> Available Tasks for setup:
+Runs a specific setup task.
+
+Available Tasks for setup:
 
 #####  cms setup server \[\--port=\<port\>\] 
 
@@ -1934,9 +1994,9 @@ Displays the list of available CLI commands.
 
 #### setup \<task\> 
 
-> Executes a specific setup task. Can be used to change the current configuration.
->
-> Available Tasks for setup:
+Executes a specific setup task. Can be used to change the current configuration.
+
+Available Tasks for setup:
 
 ##### authservice setup all 
 
@@ -2108,11 +2168,11 @@ Contains database scripts.
 
 ### Command-Line Options 
 
-> The Key Broker Service supports several command-line commands that can be executed only as the Root user:
->
-> Syntax:
->
-> kms \<command\>
+The Key Broker Service supports several command-line commands that can be executed only as the Root user:
+
+Syntax:
+
+kms \<command\>
 
 #### Start 
 
@@ -2132,9 +2192,9 @@ Displays the version of the service
 
 #### setup 
 
-> Usage: /usr/local/bin/kms setup \[\--force\|\--noexec\] \[task1 task2 \...\]
->
-> Available setup tasks:
+Usage: /usr/local/bin/kms setup \[\--force\|\--noexec\] \[task1 task2 \...\]
+
+Available setup tasks:
 
 ##### kms setup jca-security-providers 
 
@@ -2213,27 +2273,27 @@ Displays the list of available CLI commands.
 
 #### start 
 
-> Scs Start
->
-> Starts the SGX Caching Service
+Scs Start
+
+Starts the SGX Caching Service
 
 #### stop 
 
-> Scs Stop
->
-> Stops the SGX Caching Service
+Scs Stop
+
+Stops the SGX Caching Service
 
 #### status 
 
-> Scs status
->
-> Reports whether the SGX Caching Service is currently running
+Scs status
+
+Reports whether the SGX Caching Service is currently running
 
 #### uninstall 
 
-> Scs uninstall \[\--purge\]
->
-> uninstall the SGX Caching Service. \--purge option needs to be applied to remove configuration files
+Scs uninstall \[\--purge\]
+
+uninstall the SGX Caching Service. \--purge option needs to be applied to remove configuration files
 
 #### version 
 
@@ -2331,9 +2391,9 @@ Removes following directories:
 
 To uninstall the SGX Attestation Hub, run the following command:
 
-> shub uninstall
->
-> Removes the following directories:
+shub uninstall
+
+Removes the following directories:
 
 1.  /opt/shub/
 
@@ -2353,9 +2413,9 @@ Removes all above directories and the following directory
 
 To uninstall the SCS , run the following command:
 
-> scs uninstall \--purge
->
-> Removes the following directories:
+scs uninstall \--purge
+
+Removes the following directories:
 
 1.  /opt/scs/
 
@@ -2367,9 +2427,9 @@ To uninstall the SCS , run the following command:
 
 To uninstall the SGX Quote Verification Service, run the following command:
 
-> sqvs uninstall \--purge
->
-> Removes the following directories:
+sqvs uninstall \--purge
+
+Removes the following directories:
 
 1.  /opt/svs/
 
@@ -2378,3 +2438,4 @@ To uninstall the SGX Quote Verification Service, run the following command:
 3.  /var/log/svs
 
 # Appendix 
+
