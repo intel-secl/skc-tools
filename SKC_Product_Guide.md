@@ -1485,8 +1485,6 @@ The SGX Agent connection string connects directly to the SGX Agent on a given ho
 
 # SGX Features Provisioning
 
-\<some description\>
-
 ## Host Registration 
 
 Host Registration creates a host record with connectivity details and other host information in the SGX host Verification Service database. This host record will be used by the SGX Host Verification Service to retrieve SGX information and platform values from the SGX Agent.
