@@ -998,7 +998,7 @@ Installation of the SGX \_Agent is done by running the binary of sgx_agent.
 
 To install the SGX Agent:
 
-    Please refer to README file for detailed instructions on deploying SGX Agent
+    Please refer to README file in sgx-tools repo for detailed instructions on deploying SGX Agent
 
 ##  Installing the SGX-QVS
 
@@ -1242,7 +1242,7 @@ The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.1
 
 ### Installation
 
-    Please refer to README file for detailed instructions on deploying SKC_Library
+    Please refer to README file in sgx-tools repo for detailed instructions on deploying SKC_Library
 
 # Authentication
 
@@ -1478,7 +1478,7 @@ The SGX Agent registers the host with an SGX Host Verification Service at the ti
 
 ### Retrieving Current Host State Information
 
-Admin can get the host state information by calling this rest API. GET https://\<hostname\>:8443/ sgx-hvs//v1/host-status
+Admin can get the host state information by calling this rest API. GET https://\<hostname\>:13000/sgx-hvs/v1/host-status
 
 # Intel Security Libraries Configuration Settings 
 
