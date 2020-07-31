@@ -1,0 +1,15 @@
+Features in this Release
+------------------------
+- Secure Key caching
+- Support and validation with Nginx workload
+- SGX Attestation for Key Protection 
+- SGX Discovery and integration with Kubernetes
+
+Known Issues
+------------
+- Key Transfer fails when KBS is restarted during key transfer phase
+- SGX Caching Service does not employ Retry mechanism with Intel PCS Service, when communication with PCS fails
+
+Workarounds
+-----------
+- The hostname where the Key Broker Service runs, is currently hardcoded to kbshostname
