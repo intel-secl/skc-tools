@@ -23,9 +23,13 @@ Following RHEL 8 repositories should be setup and available (/etc/yum.repos.d) t
 
 How to Deploy
 ==============
+- Please ensure the SGX Agent is already deployed on the same machine, where SKC Library is being deployed. for SGX Agent deployment instructions,
+  refer to sgx_agent/deploy_scripts/README.install
+
 - To verify the checksum of the SKC Library tar file and extract
 # ./untar.sh
 
+# cd  skc_library
 - Update the IP Address for CMS/AAS/KBS in skc_library.conf. Default values for Ports are pre-filled
 
 - To deploy SKC Library on a SGX Enabled Server,

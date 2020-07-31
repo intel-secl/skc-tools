@@ -233,7 +233,7 @@ Version 1.0
 
 [6.3.7 Role Definitions](#role-definitions)
 
-[7. Connection Settings](#connection-settings)
+[7. Connection Strings](#connection-strings)
 
 [7.1 SGX Agent](#sgx-agent-1)
 
@@ -580,7 +580,7 @@ This Includes:
 
 -   SGX Quote Verification Service (SQVS)
 
-SGX Agent & SKC Library needs to be installed on SGX Enabled Machine.
+SGX Agent & SKC Library needs to be installed on a SGX Enabled Machine.
 
 The node components (SGX Agent) must be installed on each protected physical server:
 
@@ -998,26 +998,7 @@ Installation of the SGX \_Agent is done by running the binary of sgx_agent.
 
 To install the SGX Agent:
 
-1.  Copy the tarball built for SGX Agent to /root/ directory
-2.  Update the sgx_agent.env file in the /root/ directory (for full configuration options, see section 9.2). The minimum configuration options for installation are provided below
-
-SGX_AGENT_USERNAME  
-
-SGX_AGENT_PASSWORD 
-
-SHVS_BASE_URL=  CMS_TLS_CERT_SHA384=<CMS TLS digest> 
-
-BEARER_TOKEN=<Installation token from  populate-user script>  
-
-AAS_API_URL=https://<AAS IP or Hostname  >:8444/aas 
-
-CMS_BASE_URL=https://<CMS IP or Hostname  >:8444/cms/v1  
-
-SAN_LIST=<Comma-seperated list of IP addresses and hostnames for the SGX_Agent matching the SAN list specified in the populate-users script; may include wildcards>
-
-3. Execute the SGX Agent binary and wait for the installation to complete. 
-
-   If the sgx_agent.env file is provided with the minimum required options, the SGX Agent will be installed and also registered to the SGX Host Verification Service
+    Please refer to README file for detailed instructions on deploying SGX Agent
 
 ##  Installing the SGX-QVS
 
@@ -1027,7 +1008,7 @@ SGX ECDSA Attestation / SGX Quote Verification by KBS
 
 ### Prerequisites 
 
--   The following must be completed before installing the SGX Agent:
+-   The following must be completed before installing the SGX Quote Verification Service:
 
     -   Certificate Management Service, Authentication and Authorization Service must be installed and available.
 
@@ -1261,27 +1242,7 @@ The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.1
 
 ### Installation
 
-1.  Execute the skc_library deployment script
-
-sh deploy_skc_library.sh
-
-KBS_Hostname=< Key Broker Service Hostname>
-
-KS_PORT=<Key Broker Service Port Number>
-
-SKC_USER=<skc_library usrname>
-
-SKC_USER_PASSWORD=<skc_library password>
-
-CMS_IP=< Certificate Management Service IP/DNS >
-
-CMS_PORT=<Certificate Management Service Port Number>
-
-AAS_API_URL=<base Url of AAS>
-
-SCS_IP=<SGX Caching Server IP/DNS>
-
-SCS_PORT=<SGX Caching Service Port Number>
+    Please refer to README file for detailed instructions on deploying SKC_Library
 
 # Authentication
 
@@ -1493,7 +1454,7 @@ Following are the set of roles which are required during installation and runtim
 
 
 
-# Connection Settings
+# Connection Strings
 
 Connection Strings define a remote API resource endpoint that will be used to communicate with the registered host for retrieving SGX information and another platform information. Connection Strings differ based on the type of host.
 

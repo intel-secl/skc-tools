@@ -1,0 +1,9 @@
+This directory has following scripts to facilitate build and deployment of SGX DCAP ingredients(driver, sdk, psw, sgxssl,cryptoapitoolkit)
+
+ 1. build_sgx.sh - This needs to be run on a SGX enabled server. This script will build all sgx dcap ingredients and deploy on the same server
+
+ 2. build_sgx_artifiacts.sh - This script can be run on VM/Machine. This script will build all sgx dcap ingredients and generate a tar file. This tar file would need to be copied to a SGX enabled server for deployment
+
+ 3. deploy_sgx_artifacts.sh - This needs to be run on a SGX enabled server. This script will untar the tarball from step 2 above and deploy all dcap ingredients on the SGX enabled server
+
+ 4. sagent_pckid.sh - This needs to be built and deployed on a SGX enabled server. This script needs be runafter the SGX dcap ingredients are installed. This will deploy PCKIDRetrieval tool for collecting manifest file from SGX platform

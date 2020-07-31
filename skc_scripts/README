@@ -1,0 +1,39 @@
+# ./build_skc.sh
+ This will clone and build following SKC golang services
+	Authentiction and Authorization Service (AAS)
+	Certificate Management Service (CMS)
+	SGX Caching Service (SCS)
+	SGX Quote Verification Service (SQVS)
+	SGX Host Verification Service (SHVS)
+	SGX Hub Service (SHUB)
+	Key Broker Service (KBS) - This is a jave service which is directly deployed from a binary
+
+The source code will be checked out to ~/skc folder and built binaries will be available in ~/skc/bin
+
+After build is completed, please update the IP address of the VM/machine where these services need to be installed in skc.conf
+As of now all these components need to be installed on same VM/Machine (please note that these services dont need SGX enabledserver)
+
+# ./install_skc.sh
+ This script will install all SKC golang services along with databases, user accounts and roles asscoiated for each user
+ To check if installation is successful, following command can be used
+# netstat -lntp (if netstat is not available, run dnf install net-tools) 
+
+Alternatively each service status can be checked as follows
+# cms status
+# authservice status
+# scs status
+# sqvs status
+# shvs status
+# shub status
+# kms status
+
+Turn off Firewall service or ensure that these services can be accessed from the machine where SGX Agent/SKC_Library is running
+# systemctl stop firewalld
+
+Configuration files for all golang components can be found in /etc directory (for ex: /etc/cms/)
+
+Log files are accessible from /var/log directory (for ex: /var/log/cms/cms.log)
+
+For Key Broker service, installation is done at /opt/kms directory.
+	configuration files are found in /opt/kms/configuration
+	log file for KBS is at /opt/kms/logs/kms.log

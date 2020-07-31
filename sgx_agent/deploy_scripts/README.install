@@ -22,9 +22,12 @@ How to Deploy
 ==============
 - To verify the checksum of the SGX Agent Deployment tar file and extract it
 # ./untar.sh
+
+# cd sgx_agent
 - Update the IP Addresses for the SKC Components and CMS_TLS_SHA value in agent.conf. Default values for Ports are pre-filled
 	To find CMS_TLA_SHA run following command on the machine where CMS is installed
 	# cms tlscertsha384
+
 - To deploy SKC Agent on a SGX Enabled Server, run deploy_sgx_agent.sh
 # ./deploy_sgx_agent.sh
 
