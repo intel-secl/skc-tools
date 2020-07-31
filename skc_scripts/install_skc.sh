@@ -52,7 +52,6 @@ if is_database $DBNAME
 then 
    echo $DBNAME database exists
 else
-   echo $DBNAME database does not exist
    echo "################ Update iseclpgdb.env for AAS....  #################"
    sed -i "s/^\(ISECL_PGDB_DBNAME\s*=\s*\).*\$/\1$DBNAME/" ~/iseclpgdb.env
    pushd $PWD
@@ -65,7 +64,6 @@ if is_database $DBNAME
 then
    echo $DBNAME database exists
 else
-   echo $DBNAME database does not exist
    echo "################ Update iseclpgdb.env for SCS....  #################"
    sed -i "s/^\(ISECL_PGDB_DBNAME\s*=\s*\).*\$/\1$DBNAME/" ~/iseclpgdb.env
    bash install_pgscsdb.sh
@@ -76,7 +74,6 @@ if is_database $DBNAME
 then
    echo $DBNAME database exists
 else
-   echo $DBNAME database does not exist
    echo "################ Update iseclpgdb.env for SHVS....  #################"
    sed -i "s/^\(ISECL_PGDB_DBNAME\s*=\s*\).*\$/\1$DBNAME/" ~/iseclpgdb.env
    bash install_pgshvsdb.sh
@@ -87,7 +84,6 @@ if is_database $DBNAME
 then
    echo $DBNAME database exists
 else
-   echo $DBNAME database does not exist
    echo "################ Update iseclpgdb.env for SHUB....  #################"
    sed -i "s/^\(ISECL_PGDB_DBNAME\s*=\s*\).*\$/\1$DBNAME/" ~/iseclpgdb.env
    bash install_pgshubdb.sh

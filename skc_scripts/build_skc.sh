@@ -1,17 +1,4 @@
 #!/bin/bash
-# create ssh key using following command : ssh-keygen
-# copy the content of ~/.ssh/id_rsa.pub to the Gitlab (UserProfile->Settings->SSH Keys->Add Key)
-# create ~/.gitconfig file and copy the following content in it:
-#    [user]
-#            email = <intel mail id>
-#            name = <username>
-#    [color]
-#            ui = true
-#    [url "ssh://git@gitlab.devtools.intel.com:29418/"]
-#            insteadOf = https://gitlab.devtools.intel.com/
-#    [core]
-#            filemode = false
-
 SKC_DIR=~/skc
 SKC_BINARY_DIR=$SKC_DIR/bin
 GO_VERSION=go1.14.2
