@@ -25,7 +25,7 @@
 
 **Operating System**
 
-​	RHEL8.1
+​	RHEL8.1 with root account access (All SKC Services run as root)
 
 **Disable Firewall**
 
@@ -95,6 +95,7 @@
 
 **Deploy SKC Service**
 
+- Update the skc.conf with the IP address of the VM where services will be deployed
 - run install_skc.sh
   - It will update all the required configuration files and install all the services
 - Check Service Status
@@ -167,8 +168,7 @@ https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v14+next-major/skc_
 
 ​	./run.sh reg
 
-- copy the content of ~/.ssh/id_rsa.pub to the Gitlab
-  - ​    [user]            email = <intel mail id>            name = <username>    [color]            ui = true    [url "ssh://git@gitlab.devtools.intel.com:29418/"]            insteadOf = https://gitlab.devtools.intel.com/    [core]            filemode = false Save and close
+- copy the generated cert file to sgx machine where skc_library is deployed. Also copy the key id generated
 
 ## Configuration for NGINX testing
 
@@ -187,7 +187,7 @@ engine_id = pkcs11
 
 dynamic_path =/usr/lib64/engines-1.1/pkcs11.so
 
-MODULE_PATH =/opt/skc//lib/libpkcs11-api.so
+MODULE_PATH =/opt/skc/lib/libpkcs11-api.so
 
 init = 0
 
@@ -197,7 +197,7 @@ user root;
 
 ssl_engine pkcs11;
 
-Update the location of certificate created while generating the RSA Key. 
+Update the location of certificate with the loaction where it was copied into the skc_library machine. 
 
 ssl_certificate "/root/nginx/nginxcert.pem"; 
 
@@ -207,7 +207,7 @@ ssl_certificate_key "engine:pkcs11:pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4
 
 **SKC Configuration**
 
-​	**Create keys.txt in any folder. The keyID should match the keyID of RSA key created in KBS. Other contents should 	match with nginx.conf. File location should match on pkcs11-apimodule.ini; **
+​ Create keys.txt in any folder. The keyID should match the keyID of RSA key created in KBS. Other contents should 	match with nginx.conf. File location should match on pkcs11-apimodule.ini; 
 
 ​	pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4a2ab1e5e4c4;object=RSAKEY;type=private;pin-value=1234";
 
@@ -215,14 +215,14 @@ ssl_certificate_key "engine:pkcs11:pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4
 
 ​	**/opt/skc/etc/pkcs11-apimodule.ini**
 
-​	[core]
+​	**[core]**
 ​	preload_keys=/tmp/keys.txt
 ​	keyagent_conf=/opt/skc/etc/key-agent.ini
 ​	mode=SGX
 ​	debug=true
-​	[SW]
+​	**[SW]**
 ​	module=/usr/lib64/pkcs11/libsofthsm2.so
-​	[SGX]
+​	**[SGX]**
 ​	module=/opt/intel/cryptoapitoolkit/lib/libp11sgx.so
 
 **Appendix**
