@@ -216,14 +216,23 @@ ssl_certificate_key "engine:pkcs11:pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4
 ​	**/opt/skc/etc/pkcs11-apimodule.ini**
 
 ​	**[core]**
+
 ​	preload_keys=/tmp/keys.txt
+
 ​	keyagent_conf=/opt/skc/etc/key-agent.ini
+
 ​	mode=SGX
+
 ​	debug=true
+
 ​	**[SW]**
+
 ​	module=/usr/lib64/pkcs11/libsofthsm2.so
+
 ​	**[SGX]**
+
 ​	module=/opt/intel/cryptoapitoolkit/lib/libp11sgx.so
+
 
 **Appendix**
 
