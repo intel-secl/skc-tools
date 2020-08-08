@@ -16,6 +16,26 @@
 
 **SKC Services**
 
+- gitlab access permissions are required for the following components
+
+   - Authorization and Authentication Service
+
+   - Certificate Management Service
+
+   - SGX Host Verification Service
+
+   - SGX Caching Service
+
+   - SGX hub
+
+   - Key Broker Service
+
+   - SGX Quote Verification Service
+
+   - SGX Agent
+
+   - SKC Library
+
 **Recommended HW**
 
 ​	1 vCPUs 
@@ -61,9 +81,9 @@
 
   [user]            
 
-  ​	email = <intel mail id>
+  ​	email = intel mail id
 
-  ​	name = <username>    
+  ​	name = intel username
 
   [color]            
 
@@ -75,7 +95,9 @@
 
   [core]
 
-  ​	filemode = false Save and close
+  ​	filemode = false
+
+ Save and close
 
 ## Building & Deployment of Services
 
@@ -99,8 +121,8 @@
 - run install_skc.sh
   - It will update all the required configuration files and install all the services
 - Check Service Status
-  - netstat -ntlp
-  - Using services
+  - netstat -nltp
+  - Using services command line
     - cms status
     - authservice status
     - scs status
@@ -108,7 +130,8 @@
     - shvs status
     - shub status
     - kms status
-- Turn off Firewall service or ensure that these services can be accessed from the machine where SGX Agent/SKC_Library is running # systemctl stop firewalld
+- Turn off Firewall service or ensure that these services can be accessed from the machine where SGX Agent/SKC_Library is running
+   # systemctl stop firewalld
 
 ## Building & Deployment SGX Agent & SKC Library
 
@@ -207,7 +230,7 @@ ssl_certificate_key "engine:pkcs11:pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4
 
 **SKC Configuration**
 
-​ Create keys.txt in any folder. The keyID should match the keyID of RSA key created in KBS. Other contents should 	match with nginx.conf. File location should match on pkcs11-apimodule.ini; 
+​ Create keys.txt in /tmp folder. The keyID should match the keyID of RSA key created in KBS. Other contents should match with nginx.conf. File location should match on pkcs11-apimodule.ini; 
 
 ​	pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4a2ab1e5e4c4;object=RSAKEY;type=private;pin-value=1234";
 

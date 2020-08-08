@@ -1,13 +1,31 @@
-- Get acces to SKC git repositories in gitlab
+Pre Requisites
+--------------
+- VM/Server running RHEL 8.1
 
-- create ssh key using following command : ssh-keygen
+- RHEL package repositories are setup and dnf updates are completed
+
+- root account access. All SKC Components are installed with root user permissions
+
+- Get access to the following SKC components git repositories in gitlab
+	Authentiction and Authorization Service (AAS) - https://gitlab.devtools.intel.com/sst/isecl/authservice
+	Certificate Management Service (CMS) - https://gitlab.devtools.intel.com/sst/isecl/certificate-management-service
+	SGX Caching Service (SCS) - https://gitlab.devtools.intel.com/sst/isecl/sgx-caching-service
+	SGX Quote Verification Service (SQVS) - https://gitlab.devtools.intel.com/sst/isecl/sgx-verification-service
+	SGX Host Verification Service (SHVS) - https://gitlab.devtools.intel.com/sst/isecl/sgx-hvs
+	SGX Hub Service (SHUB) - https://gitlab.devtools.intel.com/sst/isecl/sgx-ah
+
+- Configure http_proxy and https_proxy in case machines are accessed through proxy server
+
+- configure no_proxy and add loopback address/ vm ip and sgx server ip
+
+- create ssh key using ssh-keygen
 
 - copy the content of ~/.ssh/id_rsa.pub to the Gitlab, https://gitlab.devtools.intel.com/sst/isecl (UserProfile->Settings->SSH Keys->Add Key)
 
 - create ~/.gitconfig file and copy the following content in it:
     [user]
             email = <intel mail id>
-            name = <username>
+            name = <intel username>
     [color]
             ui = true
     [url "ssh://git@gitlab.devtools.intel.com:29418/"]
@@ -16,6 +34,9 @@
             filemode = false
 Save and close
 
+
+Building all SKC Golang Components
+----------------------------------
 # ./build_skc.sh
  This will clone and build following SKC golang services
 	Authentiction and Authorization Service (AAS)
@@ -24,17 +45,22 @@ Save and close
 	SGX Quote Verification Service (SQVS)
 	SGX Host Verification Service (SHVS)
 	SGX Hub Service (SHUB)
-	Key Broker Service (KBS) - This is a jave service which is directly deployed from a binary
+	Key Broker Service (KBS) - This is a java service which is directly deployed from a binary
 
 The source code will be checked out to ~/skc folder and built binaries will be available in ~/skc/bin
 
 After build is completed, please update the IP address of the VM/machine where these services need to be installed in skc.conf
-As of now all these components need to be installed on same VM/Machine (please note that these services dont need SGX enabledserver)
+As of now all these components need to be installed on same VM/Machine where they are built
+(please note that these services dont need SGX enabled serve for build or deployment)
 
+
+Deploying all SKC Golang Components
+-----------------------------------
 # ./install_skc.sh
  This script will install all SKC golang services along with databases, user accounts and roles asscoiated for each user
- To check if installation is successful, following command can be used
-# netstat -lntp (if netstat is not available, run dnf install net-tools) 
+
+To check if installation is successful, following command can be used
+# netstat -lntp (if netstat command is not available, run dnf install net-tools) 
 
 Alternatively each service status can be checked as follows
 # cms status
@@ -48,7 +74,7 @@ Alternatively each service status can be checked as follows
 Turn off Firewall service or ensure that these services can be accessed from the machine where SGX Agent/SKC_Library is running
 # systemctl stop firewalld
 
-Configuration files for all golang components can be found in /etc directory (for ex: /etc/cms/)
+Configuration files for all SKC golang components can be found in /etc directory (for ex: /etc/cms/)
 
 Log files are accessible from /var/log directory (for ex: /var/log/cms/cms.log)
 

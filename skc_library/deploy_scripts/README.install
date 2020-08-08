@@ -47,7 +47,7 @@ To test Secure key transfer of a key from KBS to the nginx, please follow the be
 		 pkcs11:token=KMS;id=4fa20b5a-ef7e-4cba-ab51-f778656d65a3;object=RSAKEY;type=private;pin-value=1234
 		 replace the id with the id printed as output of step 2
 	b. edit /etc/nginx/nginx.conf file add same id in ssl_certificate_key. also add crt file location which was copied in step 3. save and close
-	c. open /opt/skc/wtc/pkcs11-apimodule.ini file and following line under [core] section
+	c. open /opt/skc/etc/pkcs11-apimodule.ini file and following line under [core] section
 		preload_keys=/root/keys.txt. save and close
 	d. systemctl restart nginx
 		This will fetch the key from KBS to enclave loaded by nginx
