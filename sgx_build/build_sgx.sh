@@ -105,7 +105,7 @@ install_ctk()
 install_prerequisites()
 {
 	dnf localinstall -y https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/e/epel-release-8-8.el8.noarch.rpm
-	dnf install -y make wget git tar gcc-c++ automake autoconf libtool yum-utils dkms protobuf cppunit-devel p11-kit-devel openssl-devel || exit 1
+	dnf install -y make wget git tar gcc-c++ automake autoconf libtool yum-utils kernel-devel dkms protobuf cppunit-devel p11-kit-devel openssl-devel || exit 1
 }
 
 for arg in "$@"
