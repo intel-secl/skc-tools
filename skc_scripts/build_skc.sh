@@ -30,7 +30,7 @@ mkdir -p $SKC_BINARY_DIR
 pushd $PWD
 cd $SKC_DIR
 
-repo init -u ssh://git@gitlab.devtools.intel.com:29418/sst/isecl/skc_manifest.git -b v13+next-major -m skc.xml
+repo init -u ssh://git@gitlab.devtools.intel.com:29418/sst/isecl/skc_manifest.git -b v14+next-major -m skc.xml
 repo sync
 # Build all the SKC components
 make || exit 1

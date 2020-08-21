@@ -7,7 +7,7 @@
 	"sgx_enclave_svn_minimum":1,
 	"sgx_config_id_anyof":["00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"],
 	"tls_client_certificate_issuer_cn_anyof":["CMSCA", "CMS TLS Client CA"],
-	"tls_client_certificate_san_allof":["nginx","USA"],
+	"client_permissions_allof":["nginx","USA"],
 	"attestation_type_anyof":["SGX"],
 	"sgx_enforce_tcb_up_to_date":false
 }
