@@ -6,4 +6,4 @@ This directory has following scripts to facilitate build and deployment of SGX D
 
  3. deploy_sgx_artifacts.sh - This needs to be run on a SGX enabled server. This script will untar the tarball from step 2 above and deploy all dcap ingredients on the SGX enabled server
 
- 4. sagent_pckid.sh - This needs to be built and deployed on a SGX enabled server. This script needs be runafter the SGX dcap ingredients are installed. This will deploy PCKIDRetrieval tool for collecting manifest file from SGX platform
+ 4. sagent_pckid.sh - This needs to be built and deployed on a SGX enabled server. This script needs be run after the SGX dcap ingredients are installed. This will deploy PCKIDRetrieval tool for collecting manifest file and other platform data from SGX platform

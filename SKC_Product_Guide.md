@@ -1269,7 +1269,7 @@ The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.1
 
 Authentication is centrally managed by the Authentication and Authorization Service (AAS). This service uses a Bearer Token authentication method This service also centralizes the creation of roles and users, allowing much easier management of users, passwords, and permissions across all Intel® SecL-DC services.
 
-To make an API request to an Intel® SecL-DC service, an authentication token is required. API requests must now include an Authorization header with a valid
+To make an API request to an Intel® SecL-DC service, an authentication token is required. API requests must now include an Authorization header with a valid token
 
 The token is issued by AAS and expires after a set amount of time. This token may be used with any Intel® SecL-DC service and will carry the appropriate permissions for the role(s) assigned to the account the token was generated for.
 
@@ -2276,8 +2276,8 @@ Contains database scripts
 
 | Key                      | Sample Value                                             | Description                                                  |
 | ------------------------ | -------------------------------------------------------- | ------------------------------------------------------------ |
-| SGX_TRUSTED_ROOT_CA_PATH | /tmp/trusted_rootca.pem                                  | Required. The path to root ca se to verify quote             |
-| SCS_BASE_URL             | https://10.105.168.27:9000/scs/sgx/certification/v1/     | Required. The SCS url is needed.                             |
+| SGX_TRUSTED_ROOT_CA_PATH | /tmp/trusted_rootca.pem                                  | Required. The path to SGX root ca used to verify quote       |
+| SCS_BASE_URL             | https://<IP address or hostname for SCS>:9000/scs/sgx/certification/v1/     | Required. The SCS url is needed.          |
 | CMS_TLS_CERT_SHA384      |                                                          | Required. SHA384 hash of the CMS  TLS certificate            |
 | CMS_BASE_URL             | https://<IP address or  hostname for   CMS>:8445/cms/v1/ | Required. Defines the base URL for the CMS owned by  the image owner. Note that this CMS  may be different from the CMS used for other components. |
 | AAS_API_URL              | https://<IP address or  hostname for AAS>:8444/aas       | Required. Defines the baseurl for the AAS owned by  the image owner. Note that this AAS  may be different from the AAS used for other components. |

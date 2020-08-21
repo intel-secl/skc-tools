@@ -143,7 +143,7 @@ cd into sgx_agent/build_scripts folder
 
 Follow the instructions in README.build file
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v14+next-major/sgx_agent/build_scripts/README.build
+https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/sgx_agent/build_scripts/README.build
 
 **Deploy SGX Agent**
 
@@ -151,7 +151,7 @@ cd into sgx_agent/deploy_scripts folder
 
 Follow the instructions in README.build file
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v14+next-major/sgx_agent/deploy_scripts/README.install
+https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/sgx_agent/deploy_scripts/README.install
 
 **Build SKC Library**
 
@@ -159,7 +159,7 @@ cd into sgx_agent/build_scripts folder
 
 Follow the instructions in README.build file
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v14+next-major/skc_library/build_scripts/README.build
+https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/skc_library/build_scripts/README.build
 
 **Deploy SKC Library**
 
@@ -167,7 +167,7 @@ cd into sgx_agent/deploy_scripts folder
 
 Follow the instructions in README.build file
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v14+next-major/skc_library/deploy_scripts/README.install
+https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/skc_library/deploy_scripts/README.install
 
 ## Creating AES and RSA Keys in Key Broker Service
 
@@ -261,8 +261,8 @@ ssl_certificate_key "engine:pkcs11:pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4
 
 **Product Guide**
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v14+next-major/SKC_Product_Guide.md
+https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/SKC_Product_Guide.md
 
 **Release Notes**
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v14+next-major/ReleaseNotes
+https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/ReleaseNotes

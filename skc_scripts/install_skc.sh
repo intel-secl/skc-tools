@@ -38,7 +38,7 @@ echo "################ Uninstalling SHUB....  #################"
 shub uninstall --purge
 echo "################ Remove SHUB DB....  #################"
 sudo -u postgres dropdb pgshubdb
-echo "################ Uninstalling KMS....  #################"
+echo "################ Uninstalling KBS....  #################"
 kms uninstall --purge
 popd
 
@@ -214,7 +214,7 @@ fi
 SHUB_TOKEN=`curl --noproxy "*" -k -X POST https://$AAS_IP:8444/aas/token -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "shubuser@shub","password": "shubpassword"}'`
 echo "SHUB Token $SHUB_TOKEN"
 
-# KMS User and Roles
+# KBS User and Roles
 
 KMS_USER=`curl --noproxy "*" -k  -X POST https://$AAS_IP:8444/aas/users -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -d '{"username": "kmsuser@kms","password": "kmspassword"}'`
 KMS_USER_ID=`curl --noproxy "*" -k https://$AAS_IP:8444/aas/users?name=kmsuser@kms -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' | jq -r '.[0].user_id'`
@@ -298,7 +298,7 @@ if [ $? -ne 0 ]; then
 fi
 echo "################ Installed SHUB....  #################"
 
-echo "################ Update KMS env....  #################"
+echo "################ Update KBS env....  #################"
 sed -i "s/^\(JETTY_TLS_CERT_IP\s*=\s*\).*\$/\1$KMS_IP/" ~/kms.env
 sed -i "s/^\(BEARER_TOKEN\s*=\s*\).*\$/\1$KMS_TOKEN/" ~/kms.env
 sed -i "s/^\(CMS_TLS_CERT_SHA384\s*=\s*\).*\$/\1$CMS_TLS_SHA/" ~/kms.env
@@ -307,11 +307,11 @@ sed -i "s@^\(CMS_BASE_URL\s*=\s*\).*\$@\1$CMS_URL@" ~/kms.env
 SQVS_URL=https://$SQVS_IP:12000/svs/v1
 sed -i "s@^\(SVS_BASE_URL\s*=\s*\).*\$@\1$SQVS_URL@" ~/kms.env
 hostnamectl set-hostname kbshostname
-echo "################ Installing KMS....  #################"
+echo "################ Installing KBS....  #################"
 ./kms-*.bin || exit 1
 if [ $? -ne 0 ]; then
-  echo "############ KMS Installation Failed"
+  echo "############ KBS Installation Failed"
   exit 1
 fi
-echo "################ Installed KMS....  #################"
+echo "################ Installed KBS....  #################"
 popd

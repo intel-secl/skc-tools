@@ -7,8 +7,6 @@ Features in this Release
 
 Known Issues
 ------------
-- Key Transfer fails when KBS is restarted during key transfer phase
-- SGX Caching Service does not employ Retry mechanism with Intel PCS Service, when communication with PCS fails
 
 Workarounds
 -----------

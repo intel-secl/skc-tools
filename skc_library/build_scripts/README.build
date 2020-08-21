@@ -34,5 +34,5 @@ download_dcap_driver.sh 	Download SGX dcap driver pre-built binary and adds to t
 install_sgxsdk.sh 		Downloads SGX SDK pre-built binary and installs it on build machine
 install_sgxrpms.sh 		Downloads SGX PSW/QGL RPMS and installs them
 install_sgxssl.sh	 	Downloads SGX SSL repo, builds it and adds it to the tar file
-install_ctk.sh		 	Downloads Crypto Apoi Toolkit repo, builds it and adds it to the tar file
-remove_pccs_connect.diff 	Patch file applied to PCKRetrieval tool to disable password check
+install_ctk.sh		 	Downloads Crypto Api Toolkit repo, builds it and adds it to the tar file
+build_skclib.sh			Downloads SKC_Library repo, builds it and adds it to the tar file
