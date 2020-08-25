@@ -1,7 +1,7 @@
 Pre-requisite for the SGX Agent Deployment
 ==========================================
  - Icelake Server with SGX Enabled in BIOS
- - RHEL 8.1 OS
+ - RHEL 8.2 OS
 
 RHEL8 package Requirements
 ==========================

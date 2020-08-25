@@ -669,7 +669,7 @@ skc discovery and provisioning
 
 ### Supported Operating System 
 
-The Intel® Security Libraries Certificate Management Service supports Red Hat Enterprise Linux 8.1.
+The Intel® Security Libraries Certificate Management Service supports Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware
 
@@ -739,7 +739,7 @@ The Intel® SecL-DC Authentication and Authorization Service (AAS) requires a Po
 
 ### Supported Operating Systems
 
-The Intel® Security Libraries Authentication and Authorization Service supports Red Hat Enterprise Linux 8.1.
+The Intel® Security Libraries Authentication and Authorization Service supports Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware 
 
@@ -839,7 +839,7 @@ If they are not already installed, the SGX Host Verification Service installer a
 
 ### Supported Operating Systems 
 
-The Intel® Security Libraries SGX Host Verification Service supports Red Hat Enterprise Linux 8.1.
+The Intel® Security Libraries SGX Host Verification Service supports Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware
 
@@ -889,7 +889,7 @@ SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS mat
 
 Execute the installer binary.
 
-./shvs-M13.bin
+./shvs-v3.0.0.bin
 
 When the installation completes, the SGX Host Verification Service is available. The services can be verified by running **shvs** status from the SGX Host Verification Service command line.
 
@@ -931,7 +931,7 @@ must be installed by the user before executing the SCS installation.
 
 ### Supported Operating System 
 
-The Intel® Security Libraries SGX Caching Service supports Red Hat Enterprise Linux 8.1.
+The Intel® Security Libraries SGX Caching Service supports Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware 
 
@@ -983,7 +983,7 @@ The Intel® Security Libraries SGX Caching Service supports Red Hat Enterprise L
 
 Execute the SCS installer binary:
 
-./scs-M13.bin
+./scs-v3.0.0.bin
 
 ## Installing the SGX Agent 
 
@@ -1007,7 +1007,7 @@ The Intel® Security Libraries Verification Service requires the following packa
 
 ### Supported Operating Systems
 
-Red Hat Enterprise Linux 8.1.
+Red Hat Enterprise Linux 8.2.
 
 1.  []{#_Toc46743564 .anchor}**Recommended Hardware**
 
@@ -1041,7 +1041,7 @@ The Intel® Security Libraries Quote Verification Service requires the following
 
 ### Supported Operating Systems
 
-Red Hat Enterprise Linux 8.1.
+Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware 
 
@@ -1063,7 +1063,7 @@ To install the SQVS Service, follow these steps:
 
 3.  Execute the sqvs installer binary.
 
-sqvs-M13.bin
+sqvs-v3.0.0.bin
 
 A sample minimal sqvs.env file is provided below. For all configuration options and their descriptions, refer to the Configuration section on the SGX Quote Verification Service.
 
@@ -1125,7 +1125,7 @@ If these are not already installed, the Integration Hub installer attempts to in
 
 ### Supported Operating Systems
 
-The Intel Security Libraries SGX Hub supports Red Hat Enterprise Linux 8.1.
+The Intel Security Libraries SGX Hub supports Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware
 
@@ -1179,7 +1179,7 @@ To install the SGX Hub, follow these steps:
 
 3.  Execute the installer binary.
 
-./shub-M13.bin
+./shub-v3.0.0.bin
 
 ##  Installing the Key Broker Service
 
@@ -1203,7 +1203,7 @@ N/A
 
 ### Supported Operating Systems
 
-supports Red Hat Enterprise Linux 8.1.
+supports Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware
 
@@ -1249,7 +1249,7 @@ cryptpapitoolkit
 
 ### Supported Operation System 
 
-The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.1.
+The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware 
 
@@ -1512,7 +1512,7 @@ Admin can get the host state information by calling this rest API. GET https://\
 | SHVS_DB_USERNAME               | dbshvsuser                                            | Username for accessing the database. If a remote database connection will be used, this user/password must be created and granted all permissions for the database schema before installing the SGX Host Verification Service. |
 | SHVS_DB_PASSWORD               | dbpassword                                            | Password for accessing the database. If a remote database connection will be used, this user/password must be created and granted all permissions for the database schema before installing the SGX Host Verification Service. |
 | SHVS_DB_HOSTNAME               | localhost                                             | Defines the database server IP address or hostname. This should be the loopback address for local database server installations but should be the IP address or hostname of the database server if a remote database will be used. |
-| SAN_LIST                       | 127.0.0.1,localhost,10.x.x. x                         | Comma-separated list of IP addresses and hostnames that will be valid connection points for the service. Requests sent to the service using an IP or hostname not in this list will be denied, even if it resolves to this service |
+| SAN_LIST                       | 127.0.0.1,localhost                                   | Comma-separated list of IP addresses and hostnames that will be valid connection points for the service. Requests sent to the service using an IP or hostname not in this list will be denied, even if it resolves to this service |
 | SCS_BASE_URL                   | https://<IP or hostname of SCS>:9000/scs/sgx/         | Base URL of SCS                                              |
 | SHVS_ADMIN_USERNAME            | shvsuser@shvs                                         | Username for a new user to be created during installation.   |
 | SHVS_ADMIN_PASSWORD            | mypassword123                                         | Password for the user to be created during installation.     |
@@ -1687,7 +1687,7 @@ Contains the config.yml configuration file.
 | CMS_BASE_URL         | https://<Certificate Management Service IP or Hostname>:8445/cms/v1 | Base URL for the CMS                                         |
 | SHUB_PORT            | 14000                                                        | Defines the HTTPS port the Hub will use for API resources    |
 | SHUB_SCHEDULER_TIMER | 120                                                          | Defines in minutes the frequency at which the Hub will poll the HVS for updated hosts and host platform-data |
-| SAN_LIST             | 127.0.0.1, localhost, 10.x.x.x                               | Comma-separated list of IP addresses and hostnames that will be valid connection points for the service. Requests sent to the service using an IP or hostname not in this list will be denied, even if it resolves to this service. |
+| SAN_LIST             | 127.0.0.1, localhost                                         | Comma-separated list of IP addresses and hostnames that will be valid connection points for the service. Requests sent to the service using an IP or hostname not in this list will be denied, even if it resolves to this service. |
 | SHUB_LOGLEVEL        | Critical, error, warning, info, debug, trace                 | Defaults to INFO. Changes the log level used.                |
 | SHUB_TLS_CERT_CN     | SHUB TLS Certificate                                         | SHUB TLS Certificate Common Name                             |
 | SHUB_NOSETUP         | false                                                        | Determines  whether “setup” will be executed after installation. Typically, this is set  to “false” to install and perform setup in one action. The “true” option is  intended for building the service as a container, where the installation  would be part of the image  build, and setup would be performed when the container starts for the first  time to generate any persistent data. |
@@ -1937,7 +1937,7 @@ This folder contains the CMS root CA certificate.
 | AAS_ADMIN_PASSWORD   | aasAdminPass                                 | Required. Password for the new AAS admin user                |
 | AAS_JWT_CERT_SUBJECT | "AAS JWT Signing Certificate"                | Optional. Defines the subject of the JWT signing certificate. |
 | AAS_JWT_TOKEN_DURATI | 5                                            | Optional. Defines the amount of time in minutes that an issued token will be valid. |
-| SAN_LIST             | 127.0.0.1,localhost,10.x.x.x                 | Comma-separated list of IP addresses and hostnames that will be valid connection points for the service. Requests sent to the service using an IP or hostname not in this list will be denied, even if it resolves to this service. |
+| SAN_LIST             | 127.0.0.1,localhost                          | Comma-separated list of IP addresses and hostnames that will be valid connection points for the service. Requests sent to the service using an IP or hostname not in this list will be denied, even if it resolves to this service. |
 | BEARER_TOKEN         | <token>                                      | Required. Token from the CMS generated during CMS setup that allows the AAS to perform initial setup tasks. |
 | LOG_LEVEL            | Critical, error, warning, info, debug, trace | Optional. Defaults to INFO. Changes the log level used.      |
 

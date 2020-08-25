@@ -2,7 +2,7 @@
 SGX_DRIVER_VERSION=1.35
 KDIR=/lib/modules/$(uname -r)/build
 SGX_INSTALL_DIR=/opt/intel
-SGX_AGENT_BIN_NAME=sgx_agent-skc_M12.bin
+SGX_AGENT_BIN_NAME=sgx_agent-v3.0.0.bin
 MP_RPM_VER=1.7.90.2-1
 SGX_AGENT_BIN=bin
 

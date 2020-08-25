@@ -12,13 +12,6 @@ RHEL8 package Requirements
 - dnf install git
 - Ensure that the system date is properly setup (to PDT time)
 
-Git Access
-==========
-- SGX Agent source code is hosted in gitlab. Ensure that access is available to these repositories
-- To download source code, the SSH keys of the build system needs to be uploaded into gitlab
-	To generate ssh keys, run ssh-keygen and follow the instructions. SSH Public key will be stored in ~/.ssh/id_rsa.pub
-	copy the content of ~/.ssh/id_rsa.pub to the Gitlab, https://gitlab.devtools.intel.com/sst/isecl (UserProfile->Settings->SSH Keys->Add Key)
-
 How to Build
 =============
 - To build SGX Agent, 
@@ -35,5 +28,5 @@ install_sgxsdk.sh 		Downloads SGX SDK pre-built binary and installs it on build 
 download_sgx_psw_qgl.sh 	Downloads SGX PSW/QGL RPMS and adds it to tar file
 download_mpa_uefi_rpm.sh 	Downloads Multipackage Agent UEFI RPM and adds it to tar file
 build_pckretrieval_tool.sh 	Downloads DCAP PCKRetrieval tool and builds it adds to tar file
-build_sgx_agent.sh 		Downloads SGX Agent repo from gitlab and builds it as a golang service
+build_sgx_agent.sh 		Downloads SGX Agent repo and builds it as a golang service
 remove_pccs_connect.diff 	Patch file applied to PCKRetrieval tool to disable password check

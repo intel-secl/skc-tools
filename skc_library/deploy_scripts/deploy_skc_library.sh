@@ -2,7 +2,7 @@
 SKCLIB_BIN=bin
 SGX_DRIVER_VERSION=1.35
 SGX_INSTALL_DIR=/opt/intel
-SKC_LIBRARY_BIN_NAME=skc_library_M14_v1.0.bin
+SKC_LIBRARY_BIN_NAME=skc_library_v1.0.bin
 
 source skc_library.conf
 

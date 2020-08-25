@@ -14,28 +14,6 @@
 
 ## System Requirements
 
-**SKC Services**
-
-- gitlab access permissions are required for the following components
-
-   - Authorization and Authentication Service
-
-   - Certificate Management Service
-
-   - SGX Host Verification Service
-
-   - SGX Caching Service
-
-   - SGX hub
-
-   - Key Broker Service
-
-   - SGX Quote Verification Service
-
-   - SGX Agent
-
-   - SKC Library
-
 **Recommended HW**
 
 ​	1 vCPUs 
@@ -45,7 +23,7 @@
 
 **Operating System**
 
-​	RHEL8.1 with root account access (All SKC Services run as root)
+​	RHEL8.2 with root account access (All SKC Services run as root)
 
 **Disable Firewall**
 
@@ -59,65 +37,31 @@
 
 **Operating System**
 
-​	RHEL 8.1
+​	RHEL 8.2
 
 **Disable Firewall**
 
 ​	systemctl stop firewalld
 
-## Access Requirements & Configuration
-
-- Get access to SKC git repositories in gitlab
-
-- create ssh key using following command
-
-  - ssh-keygen
-
-- copy the content of ~/.ssh/id_rsa.pub to the Gitlab
-
-  - https://gitlab.devtools.intel.com/sst/isecl (UserProfile->Settings->SSH Keys->Add Key)
-
-- create ~/.gitconfig file and copy the following content in it:
-
-  [user]            
-
-  ​	email = intel mail id
-
-  ​	name = intel username
-
-  [color]            
-
-  ​	ui = true    
-
-  [url "ssh://git@gitlab.devtools.intel.com:29418/"]            
-
-  ​	insteadOf = https://gitlab.devtools.intel.com/    
-
-  [core]
-
-  ​	filemode = false
-
- Save and close
 
 ## Building & Deployment of Services
 
 **Build SKC Services**
 
-- pull sgx-tools repo (https://gitlab.devtools.intel.com/sst/isecl/sgx-tools) to workspace using git clone command 
 - cd into skc_scripts
 - run build_skc.sh
-  - It will download and install required pre-requisites.
-  - The source code will be checked out to ~/skc folder and built binaries will be available in ~/skc/bin
+  - It will copy following component binaries to a common location
 - Authentication and Authorization Service (AAS)
 - Certificate Management Service (CMS)
 - SGX Caching Service (SCS)
 - SGX Quote Verification Service (SQVS)
 - SGX Host Verification Service (SHVS)
 - SGX Hub Service (SHUB)
+- Key Broker Service (KBS)
 
 **Deploy SKC Service**
 
-- Update the skc.conf with the IP address of the VM where services will be deployed
+- Update the skc.conf with the IP address of the VM, where services will be deployed
 - run install_skc.sh
   - It will update all the required configuration files and install all the services
 - Check Service Status
@@ -133,17 +77,14 @@
 - Turn off Firewall service or ensure that these services can be accessed from the machine where SGX Agent/SKC_Library is running
    # systemctl stop firewalld
 
-## Building & Deployment SGX Agent & SKC Library
+## Build & Deployment of SGX Agent & SKC Library
 
 **Build SGX_Agent**
-
-pull sgx-tools repo to workspace using git clone command.
 
 cd into sgx_agent/build_scripts folder
 
 Follow the instructions in README.build file
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/sgx_agent/build_scripts/README.build
 
 **Deploy SGX Agent**
 
@@ -151,7 +92,6 @@ cd into sgx_agent/deploy_scripts folder
 
 Follow the instructions in README.build file
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/sgx_agent/deploy_scripts/README.install
 
 **Build SKC Library**
 
@@ -159,7 +99,6 @@ cd into sgx_agent/build_scripts folder
 
 Follow the instructions in README.build file
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/skc_library/build_scripts/README.build
 
 **Deploy SKC Library**
 
@@ -167,7 +106,6 @@ cd into sgx_agent/deploy_scripts folder
 
 Follow the instructions in README.build file
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/skc_library/deploy_scripts/README.install
 
 ## Creating AES and RSA Keys in Key Broker Service
 
@@ -261,8 +199,8 @@ ssl_certificate_key "engine:pkcs11:pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4
 
 **Product Guide**
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/SKC_Product_Guide.md
+https://github.com/intel-secl/skc-tools/SKC_Product_Guide.md
 
 **Release Notes**
 
-https://gitlab.devtools.intel.com/sst/isecl/sgx-tools/-/blob/v15+next-major/ReleaseNotes
+https://github.com/intel-secl/skc-tools/ReleaseNotes

@@ -1,7 +1,7 @@
 Pre-requisite for the SKC Library Deployment
 ==========================================
  - Icelake Server with SGX Enabled in BIOS
- - RHEL 8.1 OS
+ - RHEL 8.2 OS
 
 RHEL8 package Requirements
 ==========================
@@ -16,14 +16,14 @@ Following RHEL 8 repositories should be setup and available (/etc/yum.repos.d) t
 - Ensure CMS/AAS/KBS server/VM IP addresses are added to the no_proxy environment variable.
 	Also ensure the KBS VM hostname(kbshostname) is added to the no_proxy list
 	Also kbshostname domain to KBS VM IP mapping should be added in SGX Server /etc/hosts file, where SKC_Library is being deployed
-	for ex: 10.80.245.119 kbshostname
+	for ex: <VM IP> kbshostname
 
 - Ensure that the system date is properly setup to same date/time(PDT time) on all machines/VMs where SKC components are being installed
 	This is important, else certificate verifications will fail
 
 How to Deploy
 ==============
-- Please ensure the SGX Agent is already deployed on the same machine, where SKC Library is being deployed. for SGX Agent deployment instructions,
+- Please ensure the SGX Agent is already deployed first  on the same machine, where SKC Library is being deployed. for SGX Agent deployment instructions,
   refer to sgx_agent/deploy_scripts/README.install
 
 - To verify the checksum of the SKC Library tar file and extract

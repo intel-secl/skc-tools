@@ -12,13 +12,6 @@ RHEL8 package Requirements
 - dnf install git
 - Ensure that the system date is properly setup (to PDT time)
 
-Git Access
-==========
-- SKC Library source code is hosted in gitlab. Ensure that access is available to these repositories
-- To download source code, the SSH keys of the build system needs to be uploaded into gitlab
-	To generate ssh keys, run ssh-keygen and follow the instructions. SSH Public key will be stored in ~/.ssh/id_rsa.pub
-	copy the content of ~/.ssh/id_rsa.pub to the Gitlab, https://gitlab.devtools.intel.com/sst/isecl (UserProfile->Settings->SSH Keys->Add Key)
-
 How to Build
 =============
 - To build SKC Library, 
