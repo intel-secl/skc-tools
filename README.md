@@ -86,7 +86,7 @@ cd into sgx_agent/build_scripts folder
 Follow the instructions in README.build file
 
 
-**Deploy SGX Agent**
+**Deploy SGX Agent** (To be run on SGX Enabled server)
 
 cd into sgx_agent/deploy_scripts folder
 
@@ -100,7 +100,7 @@ cd into sgx_agent/build_scripts folder
 Follow the instructions in README.build file
 
 
-**Deploy SKC Library**
+**Deploy SKC Library** (To be run on SGX Enabled server)
 
 cd into sgx_agent/deploy_scripts folder
 
