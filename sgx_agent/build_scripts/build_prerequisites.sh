@@ -17,7 +17,7 @@ install_go()
 install_pre_requisites()
 {
 	dnf install -y wget tar git gcc-c++ make curl-devel
-	dnf localinstall -y https://rpmfind.net/linux/fedora/linux/releases/30/Everything/x86_64/os/Packages/m/makeself-2.4.0-3.fc30.noarch.rpm
+	dnf localinstall -y https://dl.fedoraproject.org/pub/fedora/linux/releases/30/Everything/x86_64/os/Packages/m/makeself-2.4.0-3.fc30.noarch.rpm
 }
 
 install_pre_requisites
