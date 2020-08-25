@@ -14,21 +14,18 @@ Pre Requisites
 Building all SKC Golang Components
 ----------------------------------
 # ./build_skc.sh
- This will clone and build following SKC golang services
+ This will copy following SKC services binaries to a common location
 	Authentiction and Authorization Service (AAS)
 	Certificate Management Service (CMS)
 	SGX Caching Service (SCS)
 	SGX Quote Verification Service (SQVS)
 	SGX Host Verification Service (SHVS)
 	SGX Hub Service (SHUB)
-	Key Broker Service (KBS) - This is a java service which is directly deployed from a binary
+	Key Broker Service (KBS)
 
-The source code will be checked out to ~/skc folder and built binaries will be available in ~/skc/bin
-
-After build is completed, please update the IP address of the VM/machine where these services need to be installed in skc.conf
+Once completed, please update the IP address of the VM/machine where these services need to be installed in skc.conf
 As of now all these components need to be installed on same VM/Machine where they are built
-(please note that these services dont need SGX enabled serve for build or deployment)
-
+(please note that these services dont need SGX enabled server for build or deployment)
 
 Deploying all SKC Golang Components
 -----------------------------------
