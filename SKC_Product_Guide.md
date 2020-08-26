@@ -827,6 +827,8 @@ The following must be completed before installing the SGX Host Verification Serv
 
 -   The Authentication and Authorization Service must be installed and available
 
+-   SGX Caching Service must be installed and available.
+
 -   The SGX Host Verification Service database must be available
 
 ### Package Dependencies
