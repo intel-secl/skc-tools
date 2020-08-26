@@ -39,7 +39,7 @@ similarly backup of /etc/pki/tls/openssl.cnf is taken as /etc/pki/tls/openssl.cn
 
 To test Secure key transfer of a key from KBS to the nginx, please follow the below mentioned steps.
 1. On the KBS VM:
-	edit sgx-tools/kbs_scripts/run.sh, change the KMS_IP and AAS_IP with the ip address where these services are running, save and close
+	edit skc-tools/kbs_scripts/run.sh, change the KMS_IP and AAS_IP with the ip address where these services are running, save and close
 2. ./run.sh reg
 3. copy the crt file generated to the SGX server /root/ directory where skc_library is installed
 4. On the SGX Server :

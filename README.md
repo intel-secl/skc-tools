@@ -113,13 +113,14 @@ Follow the instructions in README.install file
 
 ​	cd into kbs_scripts folder
 
-​	Update KBS and AAS IP address in ./run.sh
+​	Update KBS and AAS IP address in run.sh
 
 **Create AES Key**
 
 ​	Execute the command
 
 ​	./run.sh
+- Copy the key id generated
 
 **Create RSA Key**
 
