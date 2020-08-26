@@ -20,9 +20,9 @@ else
 	dnf install jq -y
 fi
 
-KMS_IP=10.80.245.104
+KMS_IP=kms.server.com
 KMS_PORT=9443
-AAS_IP=10.80.245.104
+AAS_IP=aas.server.com
 AAS_PORT=8444
 AAS_USERNAME=admin
 AAS_PASSWORD=password

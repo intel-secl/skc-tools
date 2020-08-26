@@ -75,12 +75,15 @@ install_sgx_agent() {
 	fi
 
 	source agent.conf
-	sed -i "s|CMS_BASE_URL=.*|CMS_BASE_URL=https://$CMS_IP:$CMS_PORT/cms/v1|g" ~/sgx_agent.env
-	sed -i "s|AAS_API_URL=.*|AAS_API_URL=https://$AAS_IP:$AAS_PORT/aas|g" ~/sgx_agent.env
-	sed -i "s|HVS_BASE_URL=.*|HVS_BASE_URL=https://$SHVS_IP:$SHVS_PORT/sgx-hvs/v1|g" ~/sgx_agent.env
-	sed -i "s|SAN_LIST=.*|SAN_LIST=$SGX_AGENT_IP|g" ~/sgx_agent.env
-	sed -i "s|CMS_TLS_CERT_SHA384=.*|CMS_TLS_CERT_SHA384=$CMS_TLS_SHA|g" ~/sgx_agent.env
-
+	CMS_URL=https://$CMS_IP:$CMS_PORT/cms/v1
+	AAS_URL=https://$AAS_IP:$AAS_PORT/aas
+	SHVS_URL=https://$SHVS_IP:$SHVS_PORT/sgx-hvs/v1
+	sed -i "s@^\(CMS_BASE_URL\s*=\s*\).*\$@\1$CMS_URL@" ~/sgx_agent.env
+	sed -i "s@^\(AAS_API_URL\s*=\s*\).*\$@\1$AAS_URL@" ~/sgx_agent.env
+	sed -i "s@^\(SHVS_BASE_URL\s*=\s*\).*\$@\1$SHVS_URL@" ~/sgx_agent.env
+	sed -i "s/^\(SAN_LIST\s*=\s*\).*\$/\1$SGX_AGENT_IP/" ~/sgx_agent.env
+	sed -i "s/^\(CMS_TLS_CERT_SHA384\s*=\s*\).*\$/\1$CMS_TLS_SHA/" ~/sgx_agent.env
+	
 	./sgx_agent_create_roles.sh
 	if [ $? -ne 0 ];then
 		echo "Retrieve of Bearer token failed. Exiting"
