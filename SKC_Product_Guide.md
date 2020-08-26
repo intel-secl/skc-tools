@@ -522,7 +522,7 @@ Intel® Security Libraries is distributed as open source code and must be compil
 
 Instructions and sample scripts for building the Intel® SecL-DC components can be found here:
 
-https://01.org/intel-secl/documentation/build-installation-scripts
+[https://01.org/intel-secl/documentation/build-installation-scripts]{.ul}
 
 After the components have been built, the installation binaries can be found in the directories created by the build scripts.
 
@@ -628,8 +628,6 @@ Note that the values above assume that the database will be accessed locally. If
 Run the following command: dnf module disable postgresql-y
 
 Execute the installation script: ./install_pgdb.sh
-
-Execute the DB creation script: ./create_db.sh <dbname> <db username> <db password>
 
 Note: Only AAS has separate scripts for installing postgres and creating DB. Rest all SKC services have corresponding scripts which perform postgres installation and DB creation both.
 
@@ -826,8 +824,6 @@ The following must be completed before installing the SGX Host Verification Serv
 -   The Certificate Management Service must be installed and available
 
 -   The Authentication and Authorization Service must be installed and available
-
--   SGX Caching Service must be installed and available.
 
 -   The SGX Host Verification Service database must be available
 
