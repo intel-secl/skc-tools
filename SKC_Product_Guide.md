@@ -629,6 +629,8 @@ Run the following command: dnf module disable postgresql-y
 
 Execute the installation script: ./install_pgdb.sh
 
+Execute the DB creation script: ./create_db.sh <dbname> <db username> <db password>
+
 Note: Only AAS has separate scripts for installing postgres and creating DB. Rest all SKC services have corresponding scripts which perform postgres installation and DB creation both.
 
 ### Provisioning the Database
