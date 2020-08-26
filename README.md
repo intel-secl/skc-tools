@@ -90,21 +90,21 @@ Follow the instructions in README.build file
 
 cd into sgx_agent/deploy_scripts folder
 
-Follow the instructions in README.build file
+Follow the instructions in README.install file
 
 
 **Build SKC Library**
 
-cd into sgx_agent/build_scripts folder
+cd into skc_library/build_scripts folder
 
 Follow the instructions in README.build file
 
 
 **Deploy SKC Library** (To be run on SGX Enabled server)
 
-cd into sgx_agent/deploy_scripts folder
+cd into skc_library/deploy_scripts folder
 
-Follow the instructions in README.build file
+Follow the instructions in README.install file
 
 
 ## Creating AES and RSA Keys in Key Broker Service
@@ -112,8 +112,6 @@ Follow the instructions in README.build file
 **Configuration Update to create Keys in KBS**
 
 ​	cd into kbs_scripts folder
-
-​	Update Key Transfer Input Parameters transfer_policy_request.json (SGX Measurement and Type SGX)
 
 ​	Update KBS and AAS IP address in ./run.sh
 
