@@ -1015,11 +1015,7 @@ Intel® Xeon® SP (Ice Lake-SP)
 
 ### Installation
 
-Installation of the SGX \_Agent is done by running the binary of sgx_agent.
-
-To install the SGX Agent:
-
-    Please Refer to the README file in sgx-tools repo for instructions on SGX Agent deployment
+    Please Refer to "Build & Deployment of SGX Agent & SKC Library" section in the README.md for instructions on SGX Agent deployment
 
 ##  Installing the SGX-QVS
 
@@ -1265,7 +1261,7 @@ The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.2
 
 ### Installation
 
-    Please Refer to the README file in sgx-tools repo for instructions on SKC_Library deployment
+    Please Refer to the "Build & Deployment of SGX Agent & SKC Library" section in README.md for instructions on SKC_Library deployment
 
 # Authentication
 
@@ -1679,7 +1675,7 @@ Contains the config.yml configuration file.
 | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | SHVS_BASE_URL        | https://<SGX Host Verification Service IP or hostname>: 13000/sgx-hvs/v1/ | Base URL  of SHVS                                            |
 | SHUB_DB_HOSTNAME     | Localhost                                                    | Database hostname                                            |
-| SHUB_DB_NAME         | pgsahdb                                                      | Database name for the SHUB database schema                   |
+| SHUB_DB_NAME         | pgshubdb                                                     | Database name for the SHUB database schema                   |
 | SHUB_DB_USERNAME     | dbuser                                                       | Database username                                            |
 | SHUB_DB_PASSWORD     | dbpassword                                                   | Database password                                            |
 | SHUB_DB_PORT         | 5432                                                         | Database Port                                                |
