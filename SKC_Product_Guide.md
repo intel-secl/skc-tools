@@ -695,9 +695,9 @@ AAS_TLS_SAN=\<comma-separated list of IPs and hostnames for the AAS\>
 
 AAS_API_URL=https://\<Authentication and Authorization Service IP or Hostname\>:8444/aas
 
-SAN_LIST=\<Comma-Separated list of IP addresses and hostnames for the CMS\>,127.0.01, localhost
+SAN_LIST=\<Comma-Separated list of IP addresses and hostnames for the CMS\>
 
-The SAN list will be used to authenticate the Certificate Signing Request from the AAS to the CMS. Only a CSR originating from a host matching the SAN list will be honored. Later, in the AAS authservice.env installation answer file, this same SAN list will be provided for the AAS installation. These lists must match and must be valid for IPs and/or hostnames used by the AAS system. If both the AAS and CMS will be installed on the same system, "127.0.0.1, localhost" may be used. The SAN list variables also accept the wildcards "?" (for single-character wildcards) and "\*" (for multiple-character wildcards) to allow address ranges or multiple FQDNs.
+The SAN list will be used to authenticate the Certificate Signing Request from the AAS to the CMS. Only a CSR originating from a host matching the SAN list will be honored. Later, in the AAS authservice.env installation answer file, this same SAN list will be provided for the AAS installation. These lists must match and must be valid for IPs and/or hostnames used by the AAS system. The SAN list variables also accept the wildcards "?" (for single-character wildcards) and "\*" (for multiple-character wildcards) to allow address ranges or multiple FQDNs.
 
 The AAS_API_URL represents the URL for the AAS that will exist after the AAS is installed.
 
@@ -827,6 +827,8 @@ The following must be completed before installing the SGX Host Verification Serv
 
 -   The Authentication and Authorization Service must be installed and available
 
+-   SGX Caching Service must be installed and available.
+
 -   The SGX Host Verification Service database must be available
 
 ### Package Dependencies
@@ -859,7 +861,7 @@ To install the SGX Host Verification Service, follow these steps:
 
 -   Copy the SGX Host Verification Service installation binary to the /root/ directory.
 
--   Create the sgx-host-verification-service.env installation answer file for an unattended installation.
+-   Create the shvs.env  installation answer file for an unattended installation.
 
 A sample minimal shvs.env file is provided below. For all configuration options and their descriptions, refer to the Intel® SecL Configuration section on the SGX Host Verification Service.
 
@@ -893,7 +895,7 @@ Execute the installer binary.
 
 ./shvs-v3.0.0.bin
 
-When the installation completes, the SGX Host Verification Service is available. The services can be verified by running **shvs** status from the SGX Host Verification Service command line.
+When the installation completes, the SGX Host Verification Service is available. The service can be verified by running **shvs** status from the SGX Host Verification Service command line.
 
 \# shvs status
 
@@ -997,7 +999,7 @@ The SGX Agent is REQUIRED for SGX Discovery and Provisioning. SGX Agent register
 
 -   The following must be completed before installing the SGX Agent:
 
-    -   Certificate Management Service, Authentication and Authorization Service, SGX Host Verification Services must be installed and available.
+    -   Certificate Management Service, Authentication and Authorization Service,SGX Caching Service and SGX Host Verification Service must be installed and available.
 
 ### Package Dependencies
 
@@ -1033,7 +1035,7 @@ SGX ECDSA Attestation / SGX Quote Verification by KBS
 
 -   The following must be completed before installing the SGX QVS:
 
-    -   Certificate Management Service, Authentication and Authorization Service must be installed and available.
+    -   Certificate Management Service, Authentication and Authorization Service and SGX Caching Service must be installed and available.
 
 ### Package Dependencies
 
@@ -1071,7 +1073,7 @@ A sample minimal sqvs.env file is provided below. For all configuration options 
 
 ​       SGX_TRUSTED_ROOT_CA_PATH=<IP address or hostname of the Verification Service> 
 
-​       SCS_BASE_URL
+​       SCS_BASE_URL=<https://<SCS IP:9000/scs/sgx/certification/v1>
 
 ​       SQVS_USERNAME=<SGX Quote Verification Service username> 
 
@@ -1089,7 +1091,7 @@ SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS mat
 
 Execute the installer binary.
 
-When the installation completes, the SGX Quote Verification Service is available. The services can be verified by sqvs status from the sqvs command line.
+When the installation completes, the SGX Quote Verification Service is available. The service can be verified by sqvs status from the sqvs command line.
 
 \# sqvs status
 
@@ -1107,6 +1109,8 @@ Orchestration or other integration support.
 
 The Intel® Security Libraries SGX Hub can be run on a VM or on a bare-metal server. The SGX Hub may be installed on the same server (physical or VM) as the SGX Host Verification Service.
 
+-   SGX Caching Service must be installed and available.
+  
 -   The SGX Host Verification Service must be installed and available
 
 -   The Authentication and Authorization Service must be installed and available
@@ -1149,9 +1153,9 @@ To install the SGX Hub, follow these steps:
 
 2.  Create the shub.env installation answer file. See the sample file below
 
-​           SHUB_ADMIN_USERNAME =<SAH SHUB service user username> 
+​           SHUB_ADMIN_USERNAME =<SHUB service user username> 
 
-​           SHUB_ADMIN_PASSWORD=<SAH SHUB service user password> 
+​           SHUB_ADMIN_PASSWORD=<SHUB service user password> 
 
 ​           SHVS_BASE_URL = https://<SHVS IP or Hostname>:13000/sgx-hvs/v1/ 
 
@@ -1247,7 +1251,7 @@ Openssl
 
 Curl
 
-cryptpapitoolkit
+cryptoapitoolkit
 
 ### Supported Operation System 
 
@@ -1269,7 +1273,7 @@ The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.2
 
 # Authentication
 
-Authentication is centrally managed by the Authentication and Authorization Service (AAS). This service uses a Bearer Token authentication method This service also centralizes the creation of roles and users, allowing much easier management of users, passwords, and permissions across all Intel® SecL-DC services.
+Authentication is centrally managed by the Authentication and Authorization Service (AAS). This service uses a Bearer Token authentication method. This service also centralizes the creation of roles and users, allowing much easier management of users, passwords, and permissions across all Intel® SecL-DC services.
 
 To make an API request to an Intel® SecL-DC service, an authentication token is required. API requests must now include an Authorization header with a valid token
 
@@ -1866,7 +1870,7 @@ Reports the version of the service.
 
 #### Tlscertsha384 
 
-Shows the SHA384 of the TLS certificate.
+Shows the SHA384 digest of the TLS certificate.
 
 #### setup \[task\] 
 
@@ -2079,7 +2083,7 @@ Stops the service.
 
 #### tlscertsha384 
 
-Shows the SHA384 of the TLS certificate.
+Shows the SHA384 digest of the TLS certificate.
 
 #### Uninstall 
 
@@ -2091,7 +2095,7 @@ Shows the version of the service.
 
 ### Directory Layout 
 
-The Verification Service installs by default to /opt/authservice with the following folders.
+The Authendication and Authorization Service installs by default to /opt/authservice with the following folders.
 
 ####  Bin 
 
@@ -2106,16 +2110,13 @@ Contains database scripts.
 ### Installation Answer File Options 
 
 | Variable Name        | Default Value                                         | Notes                                                        |
-| -------------------- | ----------------------------------------------------- | ------------------------------------------------------------ |
-| USERNAME             | User name of KBS User                                 | KBS admin username                                           |
-| PASSWORD             | Password of KBS User                                  | KBS admin password                                           |
+| -------------------- | ----------------------------------------------------- | ------------------------------------------------------------ |                     
 | CMS_BASE_URL         | https://<cms IP or hostname>/cms/v1/                  | Required for generating TLS certificate                      |
 | CMS_TLS_CERT_SHA384  | <Certificate Management   Service TLS digest>         | SHA384 digest of CMS TLS certificate                         |
 | AAS_API_URL          | https://<Hostname or IP address of the AAS>:8444/aas/ | AAS baseurl                                                  |
 | BEARER_TOKEN         |                                                       | JWT token for installation user                              |
 | KMS_HOME             | /opt/kms                                              | Application home directory                                   |
 | KBS_SERVICE_USERNAME | kms                                                   | Non-root user to run KMS                                     |
-| JETTY_PORT           | 80                                                    | The server will listen for HTTP connections on this port     |
 | JETTY_SECURE_PORT    | 443                                                   | The server will listen for HTTPS connections on this port    |
 | KMS_LOG_LEVEL        | INFO                                                  | Sets the root log level in logback.xml                       |
 | KMS_NOSETUP          | false                                                 | Skips setup during installation if set to true               |
@@ -2234,25 +2235,25 @@ Displays the list of available CLI commands.
 
 #### start 
 
-Scs Start
+scs start
 
 Starts the SGX Caching Service
 
 #### stop 
 
-Scs Stop
+scs stop
 
 Stops the SGX Caching Service
 
 #### status 
 
-Scs status
+scs status
 
 Reports whether the SGX Caching Service is currently running
 
 #### uninstall 
 
-Scs uninstall \[\--purge\]
+scs uninstall \[\--purge\]
 
 uninstall the SGX Caching Service. \--purge option needs to be applied to remove configuration files
 
