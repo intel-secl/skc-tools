@@ -522,7 +522,7 @@ Intel® Security Libraries is distributed as open source code and must be compil
 
 Instructions and sample scripts for building the Intel® SecL-DC components can be found here:
 
-[https://01.org/intel-secl/documentation/build-installation-scripts]{.ul}
+https://01.org/intel-secl/documentation/build-installation-scripts
 
 After the components have been built, the installation binaries can be found in the directories created by the build scripts.
 
@@ -703,7 +703,7 @@ For all configuration options and their descriptions, refer to the Intel® SecL 
 
 3.  Execute the installer binary.
 
-./certificate-management-service-2.2.0.bin
+./certificate-management-service-3.0.0.bin
 
 When the installation completes, the Certificate Management Service is available. The services can be verified by running cms status from the command line.
 
@@ -789,7 +789,7 @@ Create the authservice.env installation answer file:
 
 Execute the AAS installer:
 
-./authservice-v2.2.0.bin
+./authservice-v3.0.0.bin
 
 Note: the AAS_ADMIN credentials specified in this answer file will have administrator rights for the AAS and can be used to create other users, create new roles, and assign roles to users.
 
