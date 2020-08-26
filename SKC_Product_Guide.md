@@ -522,9 +522,9 @@ Intel® Security Libraries is distributed as open source code and must be compil
 
 Instructions and sample scripts for building the Intel® SecL-DC components can be found here:
 
-[\<provide the link to SKC build installation script\>]{.ul}
+[https://01.org/intel-secl/documentation/build-installation-scripts]{.ul}
 
-After the components have been built, the installation binaries can be found in the directories created by the build scripts. Intel® SecL-DC is migrating from being based on Java to being written in GO, so there is a slightly different build path based on the language the component uses: cation Service
+After the components have been built, the installation binaries can be found in the directories created by the build scripts.
 
 For components written in GO (Authentication and Authorization Service, Certificate Management Service, SGXAgent, SGX Attestation HUB, SGX Verfication Service):
 
@@ -628,8 +628,6 @@ Note that the values above assume that the database will be accessed locally. If
 Run the following command: dnf module disable postgresql-y
 
 Execute the installation script: ./install_pgdb.sh
-
-Execute the DB creation script: ./create_db.sh <dbname> <db username> <db password>
 
 Note: Only AAS has separate scripts for installing postgres and creating DB. Rest all SKC services have corresponding scripts which perform postgres installation and DB creation both.
 
@@ -826,8 +824,6 @@ The following must be completed before installing the SGX Host Verification Serv
 -   The Certificate Management Service must be installed and available
 
 -   The Authentication and Authorization Service must be installed and available
-
--   SGX Caching Service must be installed and available.
 
 -   The SGX Host Verification Service database must be available
 
@@ -2286,8 +2282,8 @@ Contains database scripts
 | AAS_API_URL              | https://<IP address or  hostname for AAS>:8444/aas       | Required. Defines the baseurl for the AAS owned by  the image owner. Note that this AAS  may be different from the AAS used for other components. |
 | BEARER_TOKEN             | <token>                                                  | Required; token from CMS with  permissions used for installation. |
 | SQVS_LOG_LEVEL           | INFO (default), DEBUG                                    | Optional; defines the log level  for the SQVS. Defaults to INFO. |
-| SVS_PASSWORD             |                                                          | Defines the credentials for the  SQVS user                   |
-| SVS_USERNAME             |                                                          | Defines the credentials for the  SQVS User                   |
+| SQVS_PASSWORD             |                                                          | Defines the credentials for the  SQVS user                   |
+| SQVS_USERNAME             |                                                          | Defines the credentials for the  SQVS User                   |
 
 
 
@@ -2393,11 +2389,11 @@ sqvs uninstall \--purge
 
 Removes the following directories:
 
-1.  /opt/svs/
+1.  /opt/sqvs/
 
-2.  /etc/svs/
+2.  /etc/sqvs/
 
-3.  /var/log/svs
+3.  /var/log/sqvs
 
 # Appendix 
 
