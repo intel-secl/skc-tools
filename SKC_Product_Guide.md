@@ -522,7 +522,7 @@ Intel® Security Libraries is distributed as open source code and must be compil
 
 Instructions and sample scripts for building the Intel® SecL-DC components can be found here:
 
-[https://01.org/intel-secl/documentation/build-installation-scripts]{.ul}
+https://01.org/intel-secl/documentation/build-installation-scripts
 
 After the components have been built, the installation binaries can be found in the directories created by the build scripts.
 
