@@ -450,7 +450,7 @@ The SKC Client is typically deployed inside a tenant VM or container. It can als
 
 # Definitions, Acronyms, and Abbreviation
 
-SKC -- Secure Key Catching
+SKC -- Secure Key Caching
 
 SGX -- Software Guard Extension
 
@@ -585,7 +585,7 @@ This Includes:
 
 -   Certificate Management Service (CMS)
 
--   Authorization and Authentication Service (AAS)
+-   Authentication and Authorization Service (AAS)
 
 -   SGX HUB (SHUB)
 
@@ -629,7 +629,9 @@ Run the following command: dnf module disable postgresql-y
 
 Execute the installation script: ./install_pgdb.sh
 
-**Note:** the database installation only needs to be performed once if the same database server will be used for all services that require a database. Only the "create_db" step needs to be repeated if the database server will be shared.
+Execute the DB creation script: ./create_db.sh <dbname> <db username> <db password>
+
+Note: Only AAS has separate scripts for installing postgres and creating DB. Rest all SKC services have corresponding scripts which perform postgres installation and DB creation both.
 
 ### Provisioning the Database
 
