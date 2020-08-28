@@ -1442,7 +1442,6 @@ Following are the set of roles which are required during installation and runtim
 | < CMS:CertApprover:CN=SCS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SCS to retrieve TLS Certificate from CMS         |
 | < KMS:KeyTransfer:permissions=nginx,USA >                    |                                                              | Used by the SKC Library user for Key Transfer                |
 | < CMS:CertApprover:CN=skcuser;CERTTYPE=TLS-Client>           |                                                              | Used by the SKC Library user to retrieve TLS-Client Certificate from CMS |
-| < KMS:UserRoleManager>                                       |                                                              | Used by the KMS user                                         |
 | < CMS:CertApprover:CN=KMS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the KMS to retrieve TLS Certificate from CMS         |
 | AAS: Administrator                                           | *:*:*                                                        | Administrator role for the AAS only. Has all permissions for AAS resources, including the ability to create or delete users and roles |
 | AAS: RoleManager                                             | AAS: [roles:create:*, roles:retrieve:*, roles:search:*, roles:delete:*] | AAS role that allows all actions for Roles but cannot create or delete Users or assign Roles to Users. |
@@ -1624,13 +1623,13 @@ sgx_agent start
 
 Stop the sgx agent service. 
 
-sgx-agent stop
+sgx_agent stop
 
 ##### status 
 
 Get the status of the sgx_agent service. 
 
-sgx-agent status
+sgx_agent status
 
 ### Directory Layout 
 
@@ -2089,8 +2088,8 @@ Contains database scripts.
 | KMS_LOG_LEVEL        | INFO                                                  | Sets the root log level in logback.xml                       |
 | KMS_NOSETUP          | false                                                 | Skips setup during installation if set to true               |
 | KBS_SERVICE_PASSWORD | kbspassword                                           | The master password protects the configuration file and the password vault. It must be set before.|
-| KMS_TLS_CERT_IP      | <KMS IP>                                              | IP addresses to be included in SAN list. |
-| KMS_TLS_CERT_DNS     | <hostname or DNS>                                     | DNS addresses to be included in SAN list.|
+| KMS_TLS_CERT_IP      | < KMS IP >                                            | IP addresses to be included in SAN list. |
+| KMS_TLS_CERT_DNS     | < hostname or DNS >                                   | DNS addresses to be included in SAN list.|
 
 
 
@@ -2269,9 +2268,37 @@ Syntax:
 
 sqvs \<command\>
 
-(for example start, stop)
+#### Help 
 
--   
+Displays the list of available CLI commands.
+
+#### start 
+
+sqvs start
+
+Starts the SGX Quote Verification Service
+
+#### stop 
+
+sqvs stop
+
+Stops the SGX Quote Verification Service
+
+#### status 
+
+sqvs status
+
+Reports whether the SGX Quote Verification Service is currently running.
+
+#### uninstall 
+
+sqvs uninstall \[\--purge\]
+
+uninstalls the SGX Quote Verification Service. \--purge option needs to be applied to remove configuration files
+
+#### version 
+
+Reports the version of the sqvs
 
 # Uninstallation 
 
