@@ -2189,7 +2189,7 @@ Contains additional scripts
 | CMS_BASE_URL                      | CMS_BASE_URL=https://  {host}:{port}/cms/v1                  | API URL  for Certificate Management Service (CMS).           |
 | CMS_TLS_CERT_SHA384               | CMS_TLS_CERT_SHA384  =bd8ebf5091289958b57 65da4...           | SHA384  Hash sum for verifying the CMS TLS certificate.      |
 | INTEL_PROVISIONING_SERVER         | Required: https://sbx.api.trustedservices.intel.com/sgx/certification/v1 | Intel pcs server url                             |
-| INTEL_PROVISIONING_SERVER_API_KEY | Required:  9e0153b3f0c948d9ade866635f039e1e                  |                                                              |
+| INTEL_PROVISIONING_SERVER_API_KEY | Required:  <Add your API subscription key>                   | Intel PCS Server API subscription key                                                          |
 | SCS_REFRESH_HOURS                 | 1 hour                                                       | Time after which the SGX collaterals in SCS db get refreshed from  Intel PCS server |
 | SCS_DB_HOSTNAME                   | Required: localhost                                          |                                                              |
 | SCS_DB_PORT                       | Required: localhost                                          |                                                              |
