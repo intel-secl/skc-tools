@@ -1451,6 +1451,7 @@ Following are the set of roles which are required during installation and runtim
 | AAS: UserManager                                             | AAS: [users:create:*, users:retrieve:*, users:store:*, users:search:*, users:delete:*] | AAS role with all permissions for Users but has no ability to create Roles or assign Roles to Users. |
 | AAS: UserRoleManager                                         | AAS: [user_roles:create:*, user_roles:retrieve:*, user_roles:search:*, user_roles:delete:*] | AAS role with permissions to assign Roles to Users but cannot create delete or modify Users or Roles. |
 | < SHVS:HostListManager:>                                     |                                                              | Used by the SHVS admin to delete the hosts.                  |
+| < SQVS:QuoteVerifier: >                                      |                                                              | Used by the KBS service user for quote verification          |
 
 
 
@@ -2187,7 +2188,7 @@ Contains additional scripts
 | BEARER_TOKEN                      | BEARER_TOKEN=eyJhbG  ciOiJSUzM4NCIsjdkMTdiN mUz...           | JWT from  AAS that contains "install" permissions needed to access ISecL  services during provisioning and registration |
 | CMS_BASE_URL                      | CMS_BASE_URL=https://  {host}:{port}/cms/v1                  | API URL  for Certificate Management Service (CMS).           |
 | CMS_TLS_CERT_SHA384               | CMS_TLS_CERT_SHA384  =bd8ebf5091289958b57 65da4...           | SHA384  Hash sum for verifying the CMS TLS certificate.      |
-| INTEL_PROVISIONING_SERVER         | Required: https://sbx.api.trustedservices.intel.com/sgx/certification/v1 | Intel pcs server url                                         |
+| INTEL_PROVISIONING_SERVER         | Required: https://sbx.api.trustedservices.intel.com/sgx/certification/v1 | Intel pcs server url                             |
 | INTEL_PROVISIONING_SERVER_API_KEY | Required:  9e0153b3f0c948d9ade866635f039e1e                  |                                                              |
 | SCS_REFRESH_HOURS                 | 1 hour                                                       | Time after which the SGX collaterals in SCS db get refreshed from  Intel PCS server |
 | SCS_DB_HOSTNAME                   | Required: localhost                                          |                                                              |
