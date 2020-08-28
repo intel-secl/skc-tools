@@ -589,7 +589,7 @@ This Includes:
 
 -   SGX Host Verification Service (SHVS)
 
--   SGX HUB (SHUB)
+-   SGX Integration HUB (SHUB)
 
 -   Key Broker Service (KBS) with backend key management
 
@@ -623,11 +623,11 @@ If a single shared database server will be used for each Intel® SecL service (f
 
 If separate database servers will be used (for example, if the management plane services will reside on separate systems and will use their own local database servers), execute the script on each server hosting a database. The database install scripts use default configuration
 
-Scs: install_pgscsdb.sh
+SCS: install_pgscsdb.sh
 
 SHVS: install_pgshvsdb.sh
 
-SAH: install_pgshvsdb.sh
+SHUB: install_pgshubdb.sh
 
 AAS: install_pg.sh
 
@@ -1072,11 +1072,11 @@ When the installation completes, the SGX Quote Verification Service is available
 
 ##  Installing the SGX Hub
 
-**Note:** The SGX Hub is only required to integrate Intel® SecL with third-party scheduler services, such as OpenStack Nova or Kubernetes. The Hub is not required for usage models that do not require Intel® SecL security attributes to be pushed to an integration endpoint.
+**Note:** The SGX Integration Hub is only required to integrate Intel® SecL with third-party scheduler services, such as OpenStack Nova or Kubernetes. The Hub is not required for usage models that do not require Intel® SecL security attributes to be pushed to an integration endpoint.
 
 ### Required For
 
-The SGX Hub is REQUIRED for the following use case.
+The SGX Integration Hub is REQUIRED for the following use case.
 
 Orchestration or other integration support.
 
@@ -1096,7 +1096,7 @@ The Intel® Security Libraries SGX Hub can be run on a VM or on a bare-metal ser
 
 ### Package Dependencies
 
-The Intel® SecL Integration Hub requires a number of packages and their dependencies:
+The Intel® SecL SGX Integration Hub requires a number of packages and their dependencies:
 
 -   Postgres\* client and server 11.6 (server component optional if an external Postgres database is used)
 
@@ -1106,7 +1106,7 @@ If these are not already installed, the Integration Hub installer attempts to in
 
 ### Supported Operating Systems
 
-The Intel Security Libraries SGX Hub supports Red Hat Enterprise Linux 8.2.
+The Intel Security Libraries SGX Integration Hub supports Red Hat Enterprise Linux 8.2.
 
 ### Recommended Hardware
 
@@ -1122,7 +1122,7 @@ The Intel Security Libraries SGX Hub supports Red Hat Enterprise Linux 8.2.
 
 #### Installing the SGX Hub
 
-To install the SGX Hub, follow these steps:
+To install the SGX Integration Hub, follow these steps:
 
 1.  Copy the SGX Hub installation binary to the /root/ directory.
 
@@ -1427,20 +1427,20 @@ Following are the set of roles which are required during installation and runtim
 | Role Name                                                    | Permissions                                                  | Utility                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | < SGX_AGENT:HostDataReader: >                                |                                                              | Used by the SHVS to retrieve platform data from SGX_Agent    |
-| < CMS:CertApprover:CN=SGX_AGENT TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SGX-AGENT to get TLS certificate from CMS        |
+| < CMS:CertApprover:CN=SGX_AGENT TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                              | Used by the SGX-AGENT to get TLS certificate from CMS        |
 | < SHVS:HostRegistration: >                                   |                                                              | Used by the SGX_Agent to register host to the SHVS           |
 | < SHVS:HostsListReader: >                                    |                                                              | Used by the SHUB to retrieve the list of hosts from SHVS     |
 | < SHVS:HostDataReader: >                                     |                                                              | Used by the SHUB to retrieve platform-data from SHVS         |
-| < CMS:CertApprover:CN=SHVS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SHVS to retrieve TLS Certificate from CMS        |
+| < CMS:CertApprover:CN=SHVS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                   | Used by the SHVS to retrieve TLS Certificate from CMS        |
 | < SHUB:TenantManager: >                                      |                                                              | Used by the SHUB to manage the tenant and host-assignments resource |
-| < CMS:CertApprover:CN=SHUB TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SHUB to retrieve TLS Certificate from CMS        |
+| < CMS:CertApprover:CN=SHUB TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                   | Used by the SHUB to retrieve TLS Certificate from CMS        |
 | < SCS:HostDataUpdater: >                                     |                                                              | Used by the SHVS to push the platform-info to SCS            |
 | < SCS:HostDataReader: >                                      |                                                              | Used by the SHVS to retrieve the TCB status info from SCS    |
 | < SCS:CacheManager: >                                        |                                                              | Used by the SCS admin to refresh the platform info           |
-| < CMS:CertApprover:CN=SCS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SCS to retrieve TLS Certificate from CMS         |
+| < CMS:CertApprover:CN=SCS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                    | Used by the SCS to retrieve TLS Certificate from CMS         |
 | < KMS:KeyTransfer:permissions=nginx,USA >                    |                                                              | Used by the SKC Library user for Key Transfer                |
 | < CMS:CertApprover:CN=skcuser;CERTTYPE=TLS-Client>           |                                                              | Used by the SKC Library user to retrieve TLS-Client Certificate from CMS |
-| < CMS:CertApprover:CN=KMS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the KMS to retrieve TLS Certificate from CMS         |
+| < CMS:CertApprover:CN=KMS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                    | Used by the KMS to retrieve TLS Certificate from CMS         |
 | AAS: Administrator                                           | *:*:*                                                        | Administrator role for the AAS only. Has all permissions for AAS resources, including the ability to create or delete users and roles |
 | AAS: RoleManager                                             | AAS: [roles:create:*, roles:retrieve:*, roles:search:*, roles:delete:*] | AAS role that allows all actions for Roles but cannot create or delete Users or assign Roles to Users. |
 | AAS: UserManager                                             | AAS: [users:create:*, users:retrieve:*, users:store:*, users:search:*, users:delete:*] | AAS role with all permissions for Users but has no ability to create Roles or assign Roles to Users. |
@@ -1492,8 +1492,8 @@ Admin can get the host state information by calling this rest API. GET https://\
 | SHVS_ADMIN_USERNAME            | shvsuser@shvs                                         | Username for a new user to be created during installation.   |
 | SHVS_ADMIN_PASSWORD            | mypassword123                                         | Password for the user to be created during installation.     |
 | CMS_TLS_CERT_SHA384            |                                                       | SHA384 hash of the CMS TLS certificate                       |
-| CMS_BASE_URL                   | https://< IP address or hostname for CMS >:8445/cms/v1/ | Base URL of the CMS                                          |
-| AAS_API_URL                    | https://< IP address or hostname for AAS >:8444/aas     | Base URL of the AAS                                          |
+| CMS_BASE_URL                   | https://< IP address or hostname for CMS >:8445/cms/v1/ | Base URL of the CMS                                        |
+| AAS_API_URL                    | https://< IP address or hostname for AAS >:8444/aas     | Base URL of the AAS                                        |
 | BEARER_TOKEN                   |                                                       | token from CMS with permissions used for installation.       |
 | SHVS_LOGLEVEL                  | Critical, error, warning, info, debug, trace          | Defaults to INFO. Changes the log level used.                |
 | SHVS_PORT                      | 13000                                                 | SGX Host Verification Service HTTP Port                      |
@@ -1551,7 +1551,7 @@ Removes the service. Use \--purge option to remove configuration directory(/etc/
 
 #### Version 
 
-Shvs \--version
+shvs \--version
 
 Shows the version of the service.
 
@@ -1588,10 +1588,10 @@ This folder contains log files: /var/log/shvs/
 | SGX_AGENT_PASSWORD  | sgx_agent_pass                                               | Password of SGX_AGENT user.                                  |
 | BEARER_TOKEN        |                                                              | JWT from AAS that contains "install" permissions needed to access ISecL services during provisioning and registration |
 | CMS_BASE_URL        | https://{host}:{port}/cms/v1                                 | API URL for Certificate Management Service (CMS).            |
-| CMS_TLS_CERT_SHA384 |                                                              | SHA384 Hash for verifying the CMS TLS certificate.       |
+| CMS_TLS_CERT_SHA384 |                                                              | SHA384 Hash for verifying the CMS TLS certificate.           |
 | SHVS_BASE_URL       | https://{host}:{port}/sgx-hvs/v1                             | The url used during setup to request information from SHVS.  |
 | SGX_AGENT_LOG_LEVEL | critical, trace, debug, error, info                          | The logging level to be saved in config.yml during installation ("trace", "debug", "info"). |
-| SGX_PORT            | 11001                                                        | The port on which the SGX Agent service will listen.       |
+| SGX_PORT            | 11001                                                        | The port on which the SGX Agent service will listen.         |
 
 
 
@@ -1668,7 +1668,7 @@ Contains the config.yml configuration file.
 
 ### Configuration Options 
 
-The SGX Attestation Hub configuration can be found in /etc/shub/config.yml.
+The SGX Integration Hub configuration can be found in /etc/shub/config.yml.
 
 ### Command-Line Options 
 
@@ -1706,7 +1706,7 @@ Reports whether the service is currently running.
 
 #####  Uninstall 
 
-Shub uninstall \[\--purge\]
+shub uninstall \[\--purge\]
 
 Removes the service. Use \--purge option to remove configuration directory(/etc/shub/)
 
