@@ -2,7 +2,7 @@
 
 ***Secure Key Caching (SKC)***
 
-***Date: July-2020***
+***Date: Aug-2020***
 
 ***Version 1.0****
 
@@ -472,15 +472,13 @@ AAS -- Authentication and Authorization Service
 
 SWK -- Symmetric Wrapping Key
 
-SHVS -- SGX Host Verification Service 
-
 CRDs -- Custom Resource Definitions 
 
 # Architecture Overview 
 
 As indicated in section 1.4, SKC provides 3 features essentially:
 
--   Key Protection: this is the feature seen by tenants using a CSP to run workloads with key protection requirements.
+-   Key Protection: this is the feature used by tenants using a CSP to run workloads with key protection requirements.
 
 -   SGX Attestation Support: this is the feature that CSPs provide to tenants who need to run SGX workloads that require attestation.
 
@@ -526,7 +524,7 @@ https://01.org/intel-secl/documentation/build-installation-scripts
 
 After the components have been built, the installation binaries can be found in the directories created by the build scripts.
 
-For components written in GO (Authentication and Authorization Service, Certificate Management Service, SGXAgent, SGX Attestation HUB, SGX Verfication Service):
+For components written in GO (Authentication and Authorization Service, Certificate Management Service, SGXAgent, SGX Attestation HUB, SGX Caching Service, SGX Quote Verfication Service, SGX Host Verification Service):
 
 \<servicename\>/out/\<servicename\>.bin
 
@@ -552,7 +550,7 @@ Install_pgshubdb: sgx-ah/out/install_pgshubdb.sh
 
 ### BIOS Requirements
 
--   Intel® SGX-TEM BIOS requirements are outlined in the latest Intel® SGX Platforms BIOS Writer's Guide (links are available in the following slides)
+-   Intel® SGX-TEM BIOS requirements are outlined in the latest Intel® SGX Platforms BIOS Writer's Guide
 
 -   Intel® SGX should be enabled in BIOS menu (Intel® SGX is Disabled by default on Ice Lake).
 
@@ -881,7 +879,7 @@ The Intel® Security Libraries SGX Caching Service supports Red Hat Enterprise L
 
 ​           AAS_API_URL=https://\<IP or hostname to AAS\>:8444/aas/
 
-​         SAN_LIST=\<comma-separated list of IPs and hostnames for the SCS\>
+​           SAN_LIST=\<comma-separated list of IPs and hostnames for the SCS\>
 
 Execute the SCS installer binary:
 
@@ -1511,7 +1509,7 @@ Admin can get the host state information by calling this rest API. GET https://\
 
 ###  Configuration Options 
 
-The SGX Host Verification Service configuration in path /etc/sgx-host-verification-service/config.yml.
+The SGX Host Verification Service configuration in path /etc/shvs/config.yml.
 
 ###  Command-Line Options 
 
@@ -1651,7 +1649,7 @@ Contains the config.yml configuration file.
 
 | Key                  | sample Value                                                 | Description                                                  |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| SHVS_BASE_URL        | https://< SGX Host Verification Service IP or hostname>:13000/sgx-hvs/v1/ | Base URL  of SHVS                                            |
+| SHVS_BASE_URL        | https://< SGX Host Verification Service IP or hostname>:13000/sgx-hvs/v1/ | Base URL  of SHVS                               |
 | SHUB_DB_HOSTNAME     | Localhost                                                    | Database hostname                                            |
 | SHUB_DB_NAME         | pgshubdb                                                     | Database name for the SHUB database schema                   |
 | SHUB_DB_USERNAME     | dbuser                                                       | Database username                                            |
@@ -1659,14 +1657,18 @@ Contains the config.yml configuration file.
 | SHUB_DB_PORT         | 5432                                                         | Database Port                                                |
 | CMS_TLS_CERT_SHA384  | < Certificate Management Service TLS digest>                 | SHA384 digest of the CMS TLS certificate                     |
 | BEARER_TOKEN         |                                                              | Installation token                                           |
-| AAS_API_URL          | https://< Authentication and Authorization Service IP or  Hostname>:8444/aas | Base URL for the AAS                                         |
-| CMS_BASE_URL         | https://< Certificate Management Service IP or Hostname>:8445/cms/v1 | Base URL for the CMS                                         |
+| AAS_API_URL          | https://< Authentication and Authorization Service IP or  Hostname>:8444/aas | Base URL for the AAS                         |
+| CMS_BASE_URL         | https://< Certificate Management Service IP or Hostname>:8445/cms/v1 | Base URL for the CMS                                 |
 | SHUB_PORT            | 14000                                                        | Defines the HTTPS port the Hub will use for API resources    |
 | SHUB_SCHEDULER_TIMER | 120                                                          | Defines in minutes the frequency at which the Hub will poll the HVS for updated hosts and host platform-data |
 | SAN_LIST             | 127.0.0.1, localhost                                         | Comma-separated list of IP addresses and hostnames that will be valid connection points for the service. Requests sent to the service using an IP or hostname not in this list will be denied, even if it resolves to this service. |
 | SHUB_LOGLEVEL        | Critical, error, warning, info, debug, trace                 | Defaults to INFO. Changes the log level used.                |
 | SHUB_TLS_CERT_CN     | SHUB TLS Certificate                                         | SHUB TLS Certificate Common Name                             |
 | SHUB_NOSETUP         | false                                                        | Determines  whether “setup” will be executed after installation. Typically, this is set  to “false” to install and perform setup in one action. The “true” option is  intended for building the service as a container, where the installation  would be part of the image  build, and setup would be performed when the container starts for the first  time to generate any persistent data. |
+
+### Configuration Options 
+
+The SGX Attestation Hub configuration can be found in /etc/shub/config.yml.
 
 ### Command-Line Options 
 
@@ -1918,9 +1920,9 @@ This folder contains the CMS root CA certificate.
 
 ### Configuration Options 
 
-### Command-Line Options 
+The AAS configuration can be found in /etc/authservice/config.yml.
 
-#### Help 
+#### Help
 
 Displays the list of available CLI commands.
 
@@ -2078,9 +2080,9 @@ Contains database scripts.
 
 | Variable Name        | Default Value                                         | Notes                                                        |
 | -------------------- | ----------------------------------------------------- | ------------------------------------------------------------ |                     
-| CMS_BASE_URL         | https://< cms IP or hostname >/cms/v1/                 | Required for generating TLS certificate                      |
-| CMS_TLS_CERT_SHA384  | < Certificate Management Service TLS digest >          | SHA384 digest of CMS TLS certificate                         |
-| AAS_API_URL          | https://< Hostname or IP address of the AAS >:8444/aas/ | AAS baseurl                                                  |
+| CMS_BASE_URL         | https://< cms IP or hostname >/cms/v1/                | Required for generating TLS certificate                      |
+| CMS_TLS_CERT_SHA384  | < Certificate Management Service TLS digest >         | SHA384 digest of CMS TLS certificate                         |
+| AAS_API_URL          | https://< Hostname or IP address of the AAS >:8444/aas/ | AAS baseurl                                                |
 | BEARER_TOKEN         |                                                       | JWT token for installation user                              |
 | KMS_HOME             | /opt/kms                                              | Application home directory                                   |
 | KBS_SERVICE_USERNAME | kmsuser@kms                                           | KBS Service Username                                         |
@@ -2137,7 +2139,7 @@ Available setup tasks:
 
 ### Directory Layout 
 
-The Verification Service installs by default to /opt/kms with the following folders.
+The Key Broker Service installs by default to /opt/kms with the following folders.
 
 #### Bin 
 
@@ -2163,7 +2165,7 @@ Contains logs. Primary log file is kms.log
 
 #### Repository 
 
-Contains the "keys" subdirectory, which is used for storing image encryption keys.
+Contains the "keys" subdirectory, which is used for storing symmetric/asymmetric encryption keys.
 
 #### Script 
 
@@ -2182,7 +2184,7 @@ Contains additional scripts
 | CMS_BASE_URL                      | https://{host}:{port}/cms/v1                                 | API URL  for Certificate Management Service (CMS).           |
 | CMS_TLS_CERT_SHA384               |                                                              | SHA384  Hash sum for verifying the CMS TLS certificate.      |
 | INTEL_PROVISIONING_SERVER         | Required: https://sbx.api.trustedservices.intel.com/sgx/certification/v1 | Intel pcs server url                             |
-| INTEL_PROVISIONING_SERVER_API_KEY | Required:  < Add your API subscription key >                 | Intel PCS Server API subscription key                                                          |
+| INTEL_PROVISIONING_SERVER_API_KEY | Required:  < Add your API subscription key >                 | Intel PCS Server API subscription key                        |
 | SCS_REFRESH_HOURS                 | 1 hour                                                       | Time after which the SGX collaterals in SCS db get refreshed from  Intel PCS server |
 | SCS_DB_HOSTNAME                   | Required: localhost                                          | SCS Databse hostname                                         |
 | SCS_DB_PORT                       | Required: localhost                                          | SCS Database port                                            |
@@ -2193,6 +2195,8 @@ Contains additional scripts
 
 
 ### Configuration Options 
+
+The SGX Caching Service configuration can be found in /etc/scs/config.yml.
 
 ### Command-Line Options 
 
@@ -2247,7 +2251,7 @@ Contains database scripts
 | Key                      | Sample Value                                             | Description                                                  |
 | ------------------------ | -------------------------------------------------------- | ------------------------------------------------------------ |
 | SGX_TRUSTED_ROOT_CA_PATH | /tmp/trusted_rootca.pem                                  | Required. The path to SGX root ca used to verify quote       |
-| SCS_BASE_URL             | https://< IP address or hostname for SCS >:9000/scs/sgx/certification/v1/     | Required. The SCS url is needed.          |
+| SCS_BASE_URL             | https://< IP address or hostname for SCS >:9000/scs/sgx/certification/v1/     | Required. The SCS url is needed.        |
 | CMS_TLS_CERT_SHA384      |                                                          | Required. SHA384 hash of the CMS  TLS certificate            |
 | CMS_BASE_URL             | https://< IP address or hostname for CMS >:8445/cms/v1/  | Required. Defines the base URL for the CMS owned by  the image owner. Note that this CMS  may be different from the CMS used for other components. |
 | AAS_API_URL              | https://< IP address or  hostname for AAS >:8444/aas     | Required. Defines the baseurl for the AAS owned by  the image owner. Note that this AAS  may be different from the AAS used for other components. |
@@ -2259,6 +2263,8 @@ Contains database scripts
 
 
 ### Configuration Options 
+
+The SGX Quote Verification Service configuration can be found in /etc/sqvs/config.yml.
 
 ### Command-Line Options 
 
