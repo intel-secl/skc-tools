@@ -601,17 +601,9 @@ SGX Agent & SKC Library needs to be installed on SGX Enabled Machine.
 
 The node components (SGX Agent) must be installed on each protected physical server:
 
-## Installing/Configuring the Database 
-
-The Intel® SecL-DC Authentication and Authorization Service (AAS) requires a Postgresql 11 database. Scripts (install_pgdb.sh, create_db.sh) are provided with the AAS that will automatically add the Postgresql repositories and install/configure a sample database. If this script will not be used, a Postgresql 11 database must be installed by the user before executing the AAS installation.
-
 ### Using the provided Database Installation Script 
 
-Install a sample Postgresql 11 database using the install_pgdb.sh script. This script will automatically install the Postgresql database and client packages required.
-
-Add the Postgresql 11 repository:
-
-<https://download.postgresql.org/pub/repos/yum/11/redhat/rhel-8-x86_64/pgdg-redhat->
+Install a sample Postgresql 11 database using the script provided in corresponding component. This script will automatically install the Postgresql database and client packages required.
 
 Create the iseclpgdb.env answer file:
 
@@ -624,12 +616,6 @@ ISECL_PGDB_SAVE_DB_INSTALL_LOG=true
 ISECL_PGDB_CERT_DNS=localhost ISECL_PGDB_CERT_IP=127.0.0.1
 
 Note that the values above assume that the database will be accessed locally. If the database server will be external to the Intel® SecL services, change these values to the hostname or FQDN and IP address where the client will access the database server.
-
-Run the following command: dnf module disable postgresql-y
-
-Execute the installation script: ./install_pgdb.sh
-
-Note: Only AAS has separate scripts for installing postgres and creating DB. Rest all SKC services have corresponding scripts which perform postgres installation and DB creation both.
 
 ### Provisioning the Database
 
@@ -826,6 +812,7 @@ The following must be completed before installing the SGX Host Verification Serv
 -   The Authentication and Authorization Service must be installed and available
 
 -   The SGX Host Verification Service database must be available
+
 
 ### Package Dependencies
 
@@ -1065,7 +1052,7 @@ A sample minimal sqvs.env file is provided below. For all configuration options 
 
 ​       SGX_TRUSTED_ROOT_CA_PATH=< IP address or hostname of the Verification Service > 
 
-​       SCS_BASE_URL=< https://<SCS IP:9000/scs/sgx/certification/v1 >
+​       SCS_BASE_URL=https://< SCS IP or Hostname >:9000/scs/sgx/certification/v1
 
 ​       SQVS_USERNAME=< SGX Quote Verification Service username > 
 
