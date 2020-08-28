@@ -863,27 +863,27 @@ A sample minimal shvs.env file is provided below. For all configuration options 
 
 ​     SHVS_DB_HOSTNAME=< hostname or IP address to database server > 
 
-​     SHVS_DB_USERNAME =<Database administrative username> 
+​     SHVS_DB_USERNAME =< Database administrative username > 
 
 ​     SHVS_DB_PORT =5432 
 
-​     SHVS_DB_PASSWORD =<Database password> 
+​     SHVS_DB_PASSWORD =< Database password > 
 
-​     SHVS_DB_NAME =<Database schema>
+​     SHVS_DB_NAME =< Database schema >
 
-​     SHVS_ADMIN_USERNAME =<SGX Host Verification Service username> 
+​     SHVS_ADMIN_USERNAME =< SGX Host Verification Service username > 
 
-​     SHVS_ADMIN_PASSWORD =<SGX HostVerification Service password> 
+​     SHVS_ADMIN_PASSWORD =< SGX HostVerification Service password > 
 
-​     CMS_TLS_CERT_SHA384=<Certificate Management Service TLS digest> 
+​     CMS_TLS_CERT_SHA384=< Certificate Management Service TLS digest > 
 
-​     BEARER_TOKEN=<Installation token from populate-users script> 
+​     BEARER_TOKEN=< Installation token from AAS > 
 
-​     AAS_API_URL=https://<Authentication and Authorization Service IP or Hostname>:8444/aas 
+​     AAS_API_URL=https://< Authentication and Authorization Service IP or Hostname >:8444/aas 
 
-​     CMS_BASE_URL=https://<Certificate Management Service IP or Hostname>:8445/cms/v1 
+​     CMS_BASE_URL=https://< Certificate Management Service IP or Hostname >:8445/cms/v1 
 
-​    SCS_BASE_URL= https://<SGX Caching Service IP or Hostname>:9000/scs/sgx/
+​     SCS_BASE_URL= https://< SGX Caching Service IP or Hostname >:9000/scs/sgx/
 
 SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS matching the SAN list specified in the populate-users  script; may include wildcards* > 
 
@@ -1145,35 +1145,31 @@ To install the SGX Hub, follow these steps:
 
 2.  Create the shub.env installation answer file. See the sample file below
 
-​           SHUB_ADMIN_USERNAME =<SHUB service user username> 
+​           SHUB_ADMIN_USERNAME =< SHUB service user username > 
 
-​           SHUB_ADMIN_PASSWORD=<SHUB service user password> 
+​           SHUB_ADMIN_PASSWORD=< SHUB service user password > 
 
-​           SHVS_BASE_URL = https://<SHVS IP or Hostname>:13000/sgx-hvs/v1/ 
+​           SHVS_BASE_URL = https://< SHVS IP or Hostname >:13000/sgx-hvs/v1/ 
 
-​           CMS_TLS_CERT_SHA384=<CMS TLS digest> 
+​           CMS_TLS_CERT_SHA384=< CMS TLS digest > 
 
-​           BEARER_TOKEN=<Installation token from populate-users script> 
+​           BEARER_TOKEN=< Installation token from AAS > 
 
-​           AAS_API_URL=https://<AAS IP or Hostname>:8444/aas/ 
+​           AAS_API_URL=https://< AAS IP or Hostname >:8444/aas/ 
 
-​           CMS_BASE_URL=https://<CMS IP or Hostname>:8445/cms/v1 
+​           CMS_BASE_URL=https://< CMS IP or Hostname >:8445/cms/v1 
 
+​           SHUB_DB_NAME=< database name >
 
-
-​           SHUB_DB_NAME=<database name>
-
-​           SHUB_DB_USERNAME=<database username> 
+​           SHUB_DB_USERNAME=< database username > 
 
 ​           SHUB_DB_PASSWORD=< database password >
 
-​           SHUB_DB_HOSTNAME=<database hostname or IP> 
+​           SHUB_DB_HOSTNAME=< database hostname or IP > 
 
-​           SHUB_DB_PORT=<database port; default is 5432> 
+​           SHUB_DB_PORT=< database port; default is 5432 > 
 
-
-
-​           SAN_LIST =<comma separated list of hostnames for the Hub>
+​           SAN_LIST =< comma separated list of IPs and hostnames for the SHUB >
 
 3.  Execute the installer binary.
 
@@ -1450,21 +1446,21 @@ Following are the set of roles which are required during installation and runtim
 | Role Name                                                    | Permissions                                                  | Utility                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | < SGX_AGENT:HostDataReader: >                                |                                                              | Used by the SHVS to retrieve platform data from SGX_Agent    |
-| <CMS:CertApprover:CN=SGX_AGENT TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SGX-AGENT to get TLS certificate from CMS        |
+| < CMS:CertApprover:CN=SGX_AGENT TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SGX-AGENT to get TLS certificate from CMS        |
 | < SHVS:HostRegistration: >                                   |                                                              | Used by the SGX_Agent to register host to the SHVS           |
 | < SHVS:HostsListReader: >                                    |                                                              | Used by the SHUB to retrieve the list of hosts from SHVS     |
 | < SHVS:HostDataReader: >                                     |                                                              | Used by the SHUB to retrieve platform-data from SHVS         |
-| <CMS:CertApprover:CN=SHVS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SHVS to retrieve TLS Certificate from CMS        |
+| < CMS:CertApprover:CN=SHVS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SHVS to retrieve TLS Certificate from CMS        |
 | < SHUB:TenantManager: >                                      |                                                              | Used by the SHUB to manage the tenant and host-assignments resource |
-| <CMS:CertApprover:CN=SHUB TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SHUB to retrieve TLS Certificate from CMS        |
+| < CMS:CertApprover:CN=SHUB TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SHUB to retrieve TLS Certificate from CMS        |
 | < SCS:HostDataUpdater: >                                     |                                                              | Used by the SHVS to push the platform-info to SCS            |
 | < SCS:HostDataReader: >                                      |                                                              | Used by the SHVS to retrieve the TCB status info from SCS    |
 | < SCS:CacheManager: >                                        |                                                              | Used by the SCS admin to refresh the platform info           |
-| <CMS:CertApprover:CN=SCS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SCS to retrieve TLS Certificate from CMS         |
+| < CMS:CertApprover:CN=SCS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the SCS to retrieve TLS Certificate from CMS         |
 | < KMS:KeyTransfer:permissions=nginx,USA >                    |                                                              | Used by the SKC Library user for Key Transfer                |
 | < CMS:CertApprover:CN=skcuser;CERTTYPE=TLS-Client>           |                                                              | Used by the SKC Library user to retrieve TLS-Client Certificate from CMS |
 | < KMS:UserRoleManager>                                       |                                                              | Used by the KMS user                                         |
-| <CMS:CertApprover:CN=KMS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the KMS to retrieve TLS Certificate from CMS         |
+| < CMS:CertApprover:CN=KMS TLS Certificate;SAN=<san list>;CERTTYPE=TLS> |                                                              | Used by the KMS to retrieve TLS Certificate from CMS         |
 | AAS: Administrator                                           | *:*:*                                                        | Administrator role for the AAS only. Has all permissions for AAS resources, including the ability to create or delete users and roles |
 | AAS: RoleManager                                             | AAS: [roles:create:*, roles:retrieve:*, roles:search:*, roles:delete:*] | AAS role that allows all actions for Roles but cannot create or delete Users or assign Roles to Users. |
 | AAS: UserManager                                             | AAS: [users:create:*, users:retrieve:*, users:store:*, users:search:*, users:delete:*] | AAS role with all permissions for Users but has no ability to create Roles or assign Roles to Users. |
