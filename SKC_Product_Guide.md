@@ -941,7 +941,7 @@ The Intel® Security Libraries SGX Caching Service supports Red Hat Enterprise L
 
 -   100 GB
 
--   One network interface with network access to all managed servers
+-   One network interface with network access to all managed servers. Internet connection is needed for connecting to Intel PCS Server.
 
 ### Installation
 
@@ -1009,7 +1009,7 @@ The Intel® Security Libraries Verification Service requires the following packa
 
 Red Hat Enterprise Linux 8.2.
 
-1.  []{#_Toc46743564 .anchor}**Recommended Hardware**
+**Recommended Hardware**
 
 Intel® Xeon® SP (Ice Lake-SP)
 
@@ -1063,21 +1063,21 @@ sqvs-v3.0.0.bin
 
 A sample minimal sqvs.env file is provided below. For all configuration options and their descriptions, refer to the Configuration section on the SGX Quote Verification Service.
 
-​       SGX_TRUSTED_ROOT_CA_PATH=<IP address or hostname of the Verification Service> 
+​       SGX_TRUSTED_ROOT_CA_PATH=< IP address or hostname of the Verification Service > 
 
-​       SCS_BASE_URL=<https://<SCS IP:9000/scs/sgx/certification/v1>
+​       SCS_BASE_URL=< https://<SCS IP:9000/scs/sgx/certification/v1 >
 
-​       SQVS_USERNAME=<SGX Quote Verification Service username> 
+​       SQVS_USERNAME=< SGX Quote Verification Service username > 
 
-​       SQVS_PASSWORD=< SGX Quote Verification Service password> 
+​       SQVS_PASSWORD=< SGX Quote Verification Service password > 
 
-​       CMS_TLS_CERT_SHA384=<Certificate Management Service TLS digest> 
+​       CMS_TLS_CERT_SHA384=< Certificate Management Service TLS digest > 
 
-​       BEARER_TOKEN=<Installation token > 
+​       BEARER_TOKEN=< Installation token > 
 
-​       AAS_API_URL=https://<Authentication and Authorization Service IP or Hostname>:8444/aas 
+​       AAS_API_URL=https://< Authentication and Authorization Service IP or Hostname >:8444/aas 
 
-​       CMS_BASE_URL=https://<Certificate Management Service IP or Hostname>:8445/cms/v1 
+​       CMS_BASE_URL=https://< Certificate Management Service IP or Hostname >:8445/cms/v1 
 
 SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS matching the SAN list specified in the populate-users script; may include wildcards* > 
 
@@ -1238,8 +1238,6 @@ The Intel® Security Libraries SKC Library requires the following packages and t
 Openssl
 
 Curl
-
-cryptoapitoolkit
 
 ### Supported Operation System 
 
