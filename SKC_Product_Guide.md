@@ -36,9 +36,9 @@
 
 ​     [2.2 Authentication and Authorization Service](#authentication-and-authorization-service)
 
-​     [2.3 SGX Host Verification Service](#sgx-host-verification-service)
+​     [2.3 SGX Caching Service](#sgx-caching-service)
 
-​     [2.4 SGX Caching Service](#sgx-caching-service)
+​     [2.4 SGX Host Verification Service](#sgx-host-verification-service)     
 
 ​     [2.5 SGX Agent](#sgx-agent)
 
@@ -106,21 +106,7 @@
 
 ​       [5.6.7 Creating Users](#creating-users)
 
-[5.7 Installing the SGX Host Verification Service](#installing-the-sgx-host-verification-service)
-
-​        [5.7.1 Required For](#required-for-2)
-
-​        [5.7.2 Prerequisites](#prerequisites-1)
-
-​        [5.7.3 Package Dependencies](#package-dependencies-1)
-
-​        [5.7.4 Supported Operating Systems](#supported-operating-systems-1)
-
-​        [5.7.5 Recommended Hardware](#recommended-hardware-2)
-
-​        [5.7.6 Installation](#installation-2)
-
-[5.8 Installing the Caching Service](#installing-the-caching-service)
+[5.7 Installing the SGX Caching Service](#installing-the-sgx-caching-service)
 
 ​        [5.8.1 Required For](#required-for-3)
 
@@ -133,6 +119,20 @@
 ​        [5.8.5 Recommended Hardware](#recommended-hardware-3)
 
 ​        [5.8.6 Installation](#installation-3)
+
+ [5.8 Installing the SGX Host Verification Service](#installing-the-sgx-host-verification-service)
+
+​        [5.7.1 Required For](#required-for-2)
+
+​        [5.7.2 Prerequisites](#prerequisites-1)
+
+​        [5.7.3 Package Dependencies](#package-dependencies-1)
+
+​        [5.7.4 Supported Operating Systems](#supported-operating-systems-1)
+
+​        [5.7.5 Recommended Hardware](#recommended-hardware-2)
+
+​        [5.7.6 Installation](#installation-2)
 
  [5.9 Installing the SGX Agent](#installing-the-sgx-agent)
 
@@ -148,7 +148,7 @@
 
 ​       [5.9.6 Installation](#installation-4)
 
-  [5.10 Installing the SGX-QVS](#installing-the-sgx-qvs)
+ [5.10 Installing the SGX-QVS](#installing-the-sgx-qvs)
 
 ​           [5.10.1 Required for](#required-for-5)
 
@@ -174,7 +174,7 @@
 
 ​          [5.11.5 Recommended Hardware](#recommended-hardware-5)
 
-​     [5.12 Installing the Key Broker Service](#installing-the-key-broker-service)
+ [5.12 Installing the Key Broker Service](#installing-the-key-broker-service)
 
 ​          [5.12.1 Required for](#required-for-7)
 
@@ -188,7 +188,7 @@
 
 ​          [5.12.6 Installation](#installation-6)
 
-​      [5.13 Installing the SKC Library](#installing-the-skc-library)
+ [5.13 Installing the SKC Library](#installing-the-skc-library)
 
 ​           [5.13.1 Required For](#required-for-8)
 
@@ -266,7 +266,7 @@
 
 ​        [9.2.4 Directory Layout](#directory-layout-1)
 
-[9.3 SGX Attestation Hub](#sgx-attestation-hub)
+ [9.3 SGX Attestation Hub](#sgx-attestation-hub)
 
 ​       [9.3.1 Installation Answer File](#installation-answer-file)
 
@@ -274,7 +274,7 @@
 
 ​       [9.3.3 Directory Layout](#directory-layout-2)
 
-[9.4 Certificate Management Service](#certificate-management-service-1)
+ [9.4 Certificate Management Service](#certificate-management-service-1)
 
 ​       [9.4.1 Installation Answer File Options](#installation-answer-file-options-2)
 
@@ -294,7 +294,7 @@
 
 ​       [9.5.4 Directory Layout](#directory-layout-4)
 
-   [9.6 Key Broker Service](#key-broker-service-1)
+ [9.6 Key Broker Service](#key-broker-service-1)
 
 ​      [9.6.1 Installation Answer File Options](#installation-answer-file-options-4)
 
@@ -304,7 +304,7 @@
 
 ​      [9.6.4 Directory Layout](#directory-layout-5)
 
-   [9.7 SGX Caching Service](#sgx-caching-service-1)
+ [9.7 SGX Caching Service](#sgx-caching-service-1)
 
 ​      [9.7.1 Installation Answer File Options](#installation-answer-file-options-5)
 
@@ -314,7 +314,7 @@
 
 ​      [9.7.4 Directory Layout](#directory-layout-6)
 
-[9.8 SGX Quote Verification](#sgx-quote-verification)
+ [9.8 SGX Quote Verification](#sgx-quote-verification)
 
 ​      [9.8.1 Installation Answer File Options](#installation-answer-file-options-6)
 
@@ -408,12 +408,6 @@ The authentication and authorization for all SKC services and the SGX Agent are 
 
 AAS is an infrastructure service and is shared with other Intel® SecL-DC components.
 
-## SGX Host Verification Service
-
-The SGX Host Verification Service (SHVS) collects the SGX information of all the compute nodes in a data center using the SGX Agent. The SGX information consists of SGX discovery information (SGX supported, SGX enabled, FLC enabled and EPC memory size) and SGX platform hardware and software information (Manifest file/encPPID, CPU SVN, ISV SVN, QEID, QEIdentity, PCEID).
-
-SHVS pushes the SGX platform hardware and software information to the SGX Caching Service (SCS), which uses it to get the PCK certificates of the platform from Intel SGX Provisioning Certification Service (PCS). SHVS also uses SCS to determine if the platform is up to date on hardware and security patches (TCB).
-
 ## SGX Caching Service
 
 The SGX Caching Service (SCS) allows to retrieve the PCK certificates of the data center server platforms from Intel SGX Provisioning Certification Service (PCS). SCS retrieves also platform models collateral. The collateral consists of the security patches (TCBInfo) that have been issued for Intel platform models. Finally, SCS retrieves the Certificate Revocation Lists (CRLs).
@@ -423,6 +417,12 @@ Since the Caching Service stores all the TCBInfo of all the platform models in t
 The SKC Client retrieves its PCK certificate from the Caching Service when it generates an SGX quote.
 
 SCS can be deployed in both Cloud Service Provider (CSP) and tenant environments. In the CSP environment, SCS is used to fetch PCK certificates for compute nodes in the data center. In the tenant environment, it's used to cache SGX collateral information used in verifying SGX quotes.
+
+## SGX Host Verification Service
+
+The SGX Host Verification Service (SHVS) collects the SGX information of all the compute nodes in a data center using the SGX Agent. The SGX information consists of SGX discovery information (SGX supported, SGX enabled, FLC enabled and EPC memory size) and SGX platform hardware and software information (Manifest file/encPPID, CPU SVN, ISV SVN, QEID, QEIdentity, PCEID).
+
+SHVS pushes the SGX platform hardware and software information to the SGX Caching Service (SCS), which uses it to get the PCK certificates of the platform from Intel SGX Provisioning Certification Service (PCS). SHVS also uses SCS to determine if the platform is up to date on hardware and security patches (TCB).
 
 ## SGX Agent
 
@@ -587,13 +587,13 @@ This Includes:
 
 -   Authentication and Authorization Service (AAS)
 
--   SGX HUB (SHUB)
-
--   Key Broker Service (KBS) with backend key management
+-   SGX Caching Service (SCS)
 
 -   SGX Host Verification Service (SHVS)
 
--   SGX Caching Service (SCS)
+-   SGX HUB (SHUB)
+
+-   Key Broker Service (KBS) with backend key management
 
 -   SGX Quote Verification Service (SQVS)
 
@@ -797,91 +797,6 @@ SQVS: sqvs_aas_curl.sh
 
 The output of these scripts is a bearer-token which needs to be updated in the BEARER_TOKEN env variable in the corresponding component’s env file.
 
-## Installing the SGX Host Verification Service 
-
-### Required For
-
-The SGX Host Verification Service is REQUIRED for SGX Discovery and Provisioning
-
-### Prerequisites
-
-The following must be completed before installing the SGX Host Verification Service:
-
--   The Certificate Management Service must be installed and available
-
--   The Authentication and Authorization Service must be installed and available
-
--   The SGX Host Verification Service database must be available
-
-
-### Package Dependencies
-
-The Intel® Security Libraries SGX Host Verification Service requires the following packages and their dependencies:
-
--   Postgres\* client and server 11.6 (server component optional if an external Postgres database is used)
-
--   Golang packages
-
-If they are not already installed, the SGX Host Verification Service installer attempts to install these automatically using the package manager. Automatic installation requires access to package repositories (the RHEL subscription repositories, the EPEL repository, or a suitable mirror), which may require an Internet connection. If the packages are to be installed from the package repository, be sure to update the repository package lists before installation.
-
-### Supported Operating Systems 
-
-The Intel® Security Libraries SGX Host Verification Service supports Red Hat Enterprise Linux 8.2.
-
-### Recommended Hardware
-
--   4 vCPUs
-
--   RAM: 8 GB
-
--   100 GB
-
--   One network interface with network access to all managed servers
-
-###  Installation
-
-To install the SGX Host Verification Service, follow these steps:
-
--   Copy the SGX Host Verification Service installation binary to the /root/ directory.
-
--   Create the shvs.env  installation answer file for an unattended installation.
-
-A sample minimal shvs.env file is provided below. For all configuration options and their descriptions, refer to the Intel® SecL Configuration section on the SGX Host Verification Service.
-
-​     SHVS_DB_HOSTNAME=< hostname or IP address to database server > 
-
-​     SHVS_DB_USERNAME =< Database administrative username > 
-
-​     SHVS_DB_PORT =5432 
-
-​     SHVS_DB_PASSWORD =< Database password > 
-
-​     SHVS_DB_NAME =< Database schema >
-
-​     SHVS_ADMIN_USERNAME =< SGX Host Verification Service username > 
-
-​     SHVS_ADMIN_PASSWORD =< SGX HostVerification Service password > 
-
-​     CMS_TLS_CERT_SHA384=< Certificate Management Service TLS digest > 
-
-​     BEARER_TOKEN=< Installation token from AAS > 
-
-​     AAS_API_URL=https://< Authentication and Authorization Service IP or Hostname >:8444/aas 
-
-​     CMS_BASE_URL=https://< Certificate Management Service IP or Hostname >:8445/cms/v1 
-
-​     SCS_BASE_URL= https://< SGX Caching Service IP or Hostname >:9000/scs/sgx/
-
-SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS matching the SAN list specified in the populate-users  script; may include wildcards* > 
-
-Execute the installer binary.
-
-./shvs-v3.0.0.bin
-
-When the installation completes, the SGX Host Verification Service is available. The service can be verified by running **shvs** status from the SGX Host Verification Service command line.
-
-\# shvs status
-
 ## Installing the Caching Service
 
 ### Required For
@@ -971,6 +886,91 @@ The Intel® Security Libraries SGX Caching Service supports Red Hat Enterprise L
 Execute the SCS installer binary:
 
 ./scs-v3.0.0.bin
+
+## Installing the SGX Host Verification Service 
+
+### Required For
+
+The SGX Host Verification Service is REQUIRED for SGX Discovery and Provisioning
+
+### Prerequisites
+
+The following must be completed before installing the SGX Host Verification Service:
+
+-   The Certificate Management Service must be installed and available
+
+-   The Authentication and Authorization Service must be installed and available
+
+-   The SGX Host Verification Service database must be available
+
+
+### Package Dependencies
+
+The Intel® Security Libraries SGX Host Verification Service requires the following packages and their dependencies:
+
+-   Postgres\* client and server 11.6 (server component optional if an external Postgres database is used)
+
+-   Golang packages
+
+If they are not already installed, the SGX Host Verification Service installer attempts to install these automatically using the package manager. Automatic installation requires access to package repositories (the RHEL subscription repositories, the EPEL repository, or a suitable mirror), which may require an Internet connection. If the packages are to be installed from the package repository, be sure to update the repository package lists before installation.
+
+### Supported Operating Systems 
+
+The Intel® Security Libraries SGX Host Verification Service supports Red Hat Enterprise Linux 8.2.
+
+### Recommended Hardware
+
+-   4 vCPUs
+
+-   RAM: 8 GB
+
+-   100 GB
+
+-   One network interface with network access to all managed servers
+
+###  Installation
+
+To install the SGX Host Verification Service, follow these steps:
+
+-   Copy the SGX Host Verification Service installation binary to the /root/ directory.
+
+-   Create the shvs.env  installation answer file for an unattended installation.
+
+A sample minimal shvs.env file is provided below. For all configuration options and their descriptions, refer to the Intel® SecL Configuration section on the SGX Host Verification Service.
+
+​     SHVS_DB_HOSTNAME=< hostname or IP address to database server > 
+
+​     SHVS_DB_USERNAME =< Database administrative username > 
+
+​     SHVS_DB_PORT =5432 
+
+​     SHVS_DB_PASSWORD =< Database password > 
+
+​     SHVS_DB_NAME =< Database schema >
+
+​     SHVS_ADMIN_USERNAME =< SGX Host Verification Service username > 
+
+​     SHVS_ADMIN_PASSWORD =< SGX HostVerification Service password > 
+
+​     CMS_TLS_CERT_SHA384=< Certificate Management Service TLS digest > 
+
+​     BEARER_TOKEN=< Installation token from AAS > 
+
+​     AAS_API_URL=https://< Authentication and Authorization Service IP or Hostname >:8444/aas 
+
+​     CMS_BASE_URL=https://< Certificate Management Service IP or Hostname >:8445/cms/v1 
+
+​     SCS_BASE_URL= https://< SGX Caching Service IP or Hostname >:9000/scs/sgx/
+
+SAN_LIST =< *Comma-separated list of IP addresses and hostnames for the SHVS matching the SAN list specified in the populate-users  script; may include wildcards* > 
+
+Execute the installer binary.
+
+./shvs-v3.0.0.bin
+
+When the installation completes, the SGX Host Verification Service is available. The service can be verified by running **shvs** status from the SGX Host Verification Service command line.
+
+\# shvs status
 
 ## Installing the SGX Agent 
 
@@ -2090,12 +2090,12 @@ Contains database scripts.
 | BEARER_TOKEN         |                                                       | JWT token for installation user                              |
 | KMS_HOME             | /opt/kms                                              | Application home directory                                   |
 | KBS_SERVICE_USERNAME | kms                                                   | Non-root user to run KMS                                     |
-| JETTY_SECURE_PORT    | 443                                                   | The server will listen for HTTPS connections on this port    |
+| JETTY_SECURE_PORT    | 9443                                                  | The server will listen for HTTPS connections on this port    |
 | KMS_LOG_LEVEL        | INFO                                                  | Sets the root log level in logback.xml                       |
 | KMS_NOSETUP          | false                                                 | Skips setup during installation if set to true               |
-| KBS_SERVICE_PASSWORD |                                                       | The master password protects the configuration file and the password vault. It must be set before |
-| KMS_TLS_CERT_IP      |                                                       | IP addresses to be included in SAN list the master password protects the configuration file and the password vault. It must be set before |
-| KMS_TLS_CERT_DNS     |                                                       | DNS addresses to be included in SAN list installing and before starting the KBS |
+| KBS_SERVICE_PASSWORD |                                                       | The master password protects the configuration file and the password vault. It must be set before.|
+| KMS_TLS_CERT_IP      |                                                       | IP addresses to be included in SAN list. |
+| KMS_TLS_CERT_DNS     |                                                       | DNS addresses to be included in SAN list.|
 
 
 
