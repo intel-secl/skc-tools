@@ -689,7 +689,7 @@ For all configuration options and their descriptions, refer to the Intel® SecL 
 
 3.  Execute the installer binary.
 
-./certificate-management-service-3.0.0.bin
+./cms-3.0.0.bin
 
 When the installation completes, the Certificate Management Service is available. The services can be verified by running cms status from the command line.
 
@@ -986,9 +986,7 @@ The SGX Agent is REQUIRED for SGX Discovery and Provisioning. SGX Agent register
 
 ### Package Dependencies
 
-The Intel® Security Libraries Verification Service requires the following packages and their dependencies:
-
--   A standalone Intel® SGX PSW for Linux
+The Intel® Security Libraries SGX Agent Service requires the following packages and their dependencies:
 
 -   Golang packages
 
@@ -1002,7 +1000,7 @@ Intel® Xeon® SP (Ice Lake-SP)
 
 ### Installation
 
-    Please Refer to "Build & Deployment of SGX Agent & SKC Library" section in the README.md for instructions on SGX Agent deployment
+    Please Refer to "Build & Deployment of SGX Agent & SKC Library" section in the skc-tools/README.md for instructions on SGX Agent deployment
 
 ##  Installing the SGX-QVS
 
@@ -1040,7 +1038,7 @@ Red Hat Enterprise Linux 8.2.
 
 To install the SQVS Service, follow these steps:
 
-1.  Copy the SQVS installation binary to the ~/root~ directory
+1.  Copy the SQVS installation binary to the ~/root directory
 
 2.  Verify that the sqvs.env answer file is present. This file is necessary for installing/provisioning sqvs.
 
@@ -1210,7 +1208,7 @@ NA
 
 3.  Execute the KBS installer.
 
-./kms-5.2-SNAPSHOT.bin
+./kms-6.0-SNAPSHOT.bin
 
 ##  Installing the SKC Library
 
@@ -1242,7 +1240,7 @@ The Intel® Security Libraries SKC Library supports Red Hat Enterprise Linux 8.2
 
 ### Installation
 
-    Please Refer to the "Build & Deployment of SGX Agent & SKC Library" section in README.md for instructions on SKC_Library deployment
+    Please Refer to the "Build & Deployment of SGX Agent & SKC Library" section in skc-tools/README.md for instructions on SKC_Library deployment
 
 # Authentication
 
@@ -2128,19 +2126,19 @@ Displays the version of the service
 
 #### setup 
 
-Usage: /usr/local/bin/kms setup \[\--force\|\--noexec\] \[task1 task2 \...\]
+Usage: kms setup \[\--force\|\--noexec\] \[task1 task2 \...\]
 
 Available setup tasks:
 
-##### kms setup jca-security-providers 
+##### kms setup jca-security-providers
 
-#####  kms setup password-vault 
+##### kms setup password-vault
 
-#####  kms setup jetty-ports 
+##### kms setup jetty-ports
 
-##### kms setup jetty-tls-keystore 
+##### kms setup jetty-tls-keystore
 
-##### kms setup shiro-ssl-port 
+##### kms setup shiro-ssl-port
 
 ### Directory Layout 
 
@@ -2260,8 +2258,8 @@ Contains database scripts
 | AAS_API_URL              | https://<IP address or  hostname for AAS>:8444/aas       | Required. Defines the baseurl for the AAS owned by  the image owner. Note that this AAS  may be different from the AAS used for other components. |
 | BEARER_TOKEN             | <token>                                                  | Required; token from CMS with  permissions used for installation. |
 | SQVS_LOG_LEVEL           | INFO (default), DEBUG                                    | Optional; defines the log level  for the SQVS. Defaults to INFO. |
-| SQVS_PASSWORD             |                                                          | Defines the credentials for the  SQVS user                   |
-| SQVS_USERNAME             |                                                          | Defines the credentials for the  SQVS User                   |
+| SQVS_PASSWORD            |                                                          | Defines the credentials for the  SQVS user                   |
+| SQVS_USERNAME            |                                                          | Defines the credentials for the  SQVS User                   |
 
 
 
@@ -2289,7 +2287,7 @@ Note: This section does not apply for containerized deployments. To uninstall a 
 
 To uninstall the SGX Host Verification Service, run the following command:
 
-shvs uninstall
+shvs uninstall \--purge
 
 Removes following directories:
 
@@ -2297,15 +2295,9 @@ Removes following directories:
 
 /var/log/shvs
 
-/usr/bin/shvs
+/etc/shvs
 
 /run/shvs
-
-shvs uninstall \--purge
-
-Removes all above directories and the following directory
-
-/etc/shvs
 
 Note: The uninstall command must be issued last, because the uninstall process removes the scripts that execute the other commands, along with all database connectivity info.
 
@@ -2327,7 +2319,7 @@ Removes following directories:
 
 To uninstall the SGX Attestation Hub, run the following command:
 
-shub uninstall
+shub uninstall \--purge
 
 Removes the following directories:
 
@@ -2337,13 +2329,7 @@ Removes the following directories:
 
 3.  /var/log/shub
 
-4.  /usr/bin/shub
-
-5.  Shub uninstall --purge
-
-Removes all above directories and the following directory
-
-/etc/shub/
+4.  /etc/shub
 
 ## SGX Caching Service
 
@@ -2355,7 +2341,7 @@ Removes the following directories:
 
 1.  /opt/scs/
 
-2.  /etc/scs /
+2.  /etc/scs/
 
 3.  /var/log/scs
 
