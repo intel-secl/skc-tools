@@ -861,7 +861,7 @@ To install the SGX Host Verification Service, follow these steps:
 
 A sample minimal shvs.env file is provided below. For all configuration options and their descriptions, refer to the Intel® SecL Configuration section on the SGX Host Verification Service.
 
-​     SHVS_DB_HOSTNAME=<hostname or IP address to database server> 
+​     SHVS_DB_HOSTNAME=< hostname or IP address to database server > 
 
 ​     SHVS_DB_USERNAME =<Database administrative username> 
 
