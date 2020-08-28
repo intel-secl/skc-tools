@@ -198,8 +198,8 @@ ssl_certificate_key "engine:pkcs11:pkcs11:token=KMS;id=164b41ae-be61-4c7c-a027-4
 
 **Product Guide**
 
-https://github.com/intel-secl/skc-tools/SKC_Product_Guide.md
+https://github.com/intel-secl/skc-tools/blob/v3.0.0/SKC_Product_Guide.md
 
 **Release Notes**
 
-https://github.com/intel-secl/skc-tools/ReleaseNotes
+https://github.com/intel-secl/skc-tools/blob/v3.0.0/ReleaseNotes
