@@ -1,344 +1,61 @@
-***Intel® Security Libraries --DC***
+# Intel® Security Libraries - Datacenter Secure Key Caching
 
-***Secure Key Caching (SKC)***
+## Product Guide
+### August 2020
 
-***Date: Aug-2020***
+### Revision 3.0
 
-***Version 1.0****
+Notice: This document contains information on products in the design phase of development. The information here is subject to change without notice. Do not finalize a design with this information.
 
-**Table of Contents**
+Intel technologies’ features and benefits depend on system configuration and may require enabled hardware, software, or service activation. Learn more at intel.com, or from the OEM or retailer.
 
-[1. Introduction](#introduction)
+No computer system can be absolutely secure. Intel does not assume any liability for lost or stolen data or systems or any damages resulting from such losses.
 
-​     [1.1 Overview](#overview)
+You may not use or facilitate the use of this document in connection with any infringement or other legal analysis concerning Intel products described herein. You agree to grant Intel a non-exclusive, royalty-free license to any patent claim thereafter drafted which includes subject matter disclosed herein.
 
-​     [1.2 Trusted Execution Environment](#trusted-execution-environment)
+No license (express or implied, by estoppel or otherwise) to any intellectual property rights is granted by this document.
 
-​            [1.2.1 Intel Software Guard Extensions](#intel-software-guard-extensions)
+The products described may contain design defects or errors known as errata which may cause the product to deviate from published
+specifications. Current characterized errata are available on request.
 
-​     [1.3 Key Protection](#key-protection)
+This document contains information on products, services and/or processes in development. All information provided here is subject to
+change without notice. Contact your Intel representative to obtain the latest Intel product specifications and roadmaps.
 
-​           [1.3.1 HSM](#hsm)
+Intel disclaims all express and implied warranties, including without limitation, the implied warranties of merchantability, fitness for a particular purpose, and non-infringement, as well as any warranty arising from course of performance, course of dealing, or usage in trade.
 
-​           [1.3.2 PKCS\#11](#pkcs11)
+Warning: Altering PC clock or memory frequency and/or voltage may (i) reduce system stability and use life of the system, memory and
+processor; (ii) cause the processor and other system components to fail; (iii) cause reductions in system performance; (iv) cause additional heat or other damage; and (v) affect system data integrity. Intel assumes no responsibility that the memory, included if used with altered clock frequencies and/or voltages, will be fit for any particular purpose.
+Check with memory manufacturer for warranty and additional details.
 
- [1.4 SKC Features](#skc-features)
+Tests document performance of components on a particular test, in specific systems. Differences in hardware, software, or configuration
+will affect actual performance. Consult other sources of information to evaluate performance as you consider your purchase. For more complete information about performance and benchmark results, visit http://www.intel.com/performance.
 
-​           [1.4.1 Key Protection](#key-protection-1)
+Cost reduction scenarios described are intended as examples of how a given Intel- based product, in the specified circumstances and
+configurations, may affect future costs and provide cost savings. Circumstances will vary. Intel does not guarantee any costs or cost
+reduction.
 
-​           [1.4.2 SGX Attestation Support](#sgx-attestation-support)
+Results have been estimated or simulated using internal Intel analysis or architecture simulation or modeling, and provided to you for
+informational purposes. Any differences in your system hardware, software or configuration may affect your actual performance.
 
-​           [1.4.3 SGX Support in Orchestrators](#sgx-support-in-orchestrators)
+Intel does not control or audit third-party benchmark data or the web sites referenced in this document. You should visit the referenced web site and confirm whether referenced data are accurate.
 
-[2. SKC Components](#skc-components)
+Intel is a sponsor and member of the Benchmark XPRT Development Community, and was the major developer of the XPRT family of benchmarks. Principled Technologies is the publisher of the XPRT family of benchmarks. You should consult other information and performance tests to assist you in fully evaluating your contemplated purchases.
 
-​     [2.1 Certificate Management Service](#certificate-management-service)
+Copies of documents which have an order number and are referenced in this document may be obtained by calling 1-800-548-4725 or by visiting w[ww.intel.com/design/literature.htm.](http://www.intel.com/design/literature.htm)
 
-​     [2.2 Authentication and Authorization Service](#authentication-and-authorization-service)
+Intel, the Intel logo, Intel TXT, and Xeon are trademarks of Intel Corporation in the U.S. and/or other countries.
 
-​     [2.3 SGX Caching Service](#sgx-caching-service)
+\*Other names and brands may be claimed as the property of others.
 
-​     [2.4 SGX Host Verification Service](#sgx-host-verification-service)     
+Copyright © 2020, Intel Corporation. All Rights Reserved.
 
-​     [2.5 SGX Agent](#sgx-agent)
+Revision History
 
-​     [2.6 SGX Hub](#sgx-hub)
+[[_TOC_]]
 
-​     [2.7 Key Broker Service](#key-broker-service)
+# 1 Introduction 
 
-​     [2.8 SGX Quote Verification Service](#sgx-quote-verification-service)
-
-​     [2.9 The SKC Client](#the-skc-client)
-
-[3. Definitions, Acronyms, and Abbreviation](#definitions-acronyms-and-abbreviation)
-
-[4. Architecture Overview](#architecture-overview)
-
-  [4.1 Key Protection](#key-protection-2)
-
-  [4.2 SGX Attestation Support and SGX Support in Orchestrators](#sgx-attestation-support-and-sgx-support-in-orchestrators)
-
-[5. Intel® Security Libraries Installation](#intel-security-libraries-installation)
-
-  [5.1 Building from Source](#building-from-source)
-
-  [5.2 Hardware Considerations](#hardware-considerations)
-
-​      [5.2.1 Supported Hardware](#supported-hardware)
-
-​      [5.2.2 BIOS Requirements](#bios-requirements)
-
-​      [5.2.3 OS Requirements (Intel® SGX does not supported on 32-bit OS):](#os-requirements-intel-sgx-does-not-supported-on-32-bit-os)
-
- [5.3 Recommended Service Layout](#recommended-service-layout)
-
-  [5.4 Installing/Configuring the Database](#installingconfiguring-the-database)
-
-​       [5.4.1 Using the provided Database Installation Script](#using-the-provided-database-installation-script)
-
-​       [5.4.2 Provisioning the Database](#provisioning-the-database)
-
-​       [5.4.3 Database Server TLS Certificate](#database-server-tls-certificate)
-
- [5.5 Installing the Certificate Management Service](#installing-the-certificate-management-service)
-
-​       [5.5.1 Required For](#required-for)
-
-​       [5.5.2 Supported Operating System](#supported-operating-system)
-
-​       [5.5.3 Recommended Hardware](#recommended-hardware)
-
-​       [5.5.4 Installation](#installation)
-
- [5.6 Installing the Authentication and Authorization Service](#installing-the-authentication-and-authorization-service)
-
-​       [5.6.1 Required For](#required-for-1)
-
-​       [5.6.2 Prerequisites](#prerequisites)
-
-​       [5.6.3 Package Dependencies](#package-dependencies)
-
-​       [5.6.4 Supported Operating Systems](#supported-operating-systems)
-
-​       [5.6.5 Recommended Hardware](#recommended-hardware-1)
-
-​       [5.6.6 Installation](#installation-1)
-
-​       [5.6.7 Creating Users](#creating-users)
-
-[5.7 Installing the SGX Caching Service](#installing-the-sgx-caching-service)
-
-​        [5.8.1 Required For](#required-for-3)
-
-​        [5.8.2 Prerequisites (CSP & Enterprise)](#prerequisites-csp-enterprise)
-
-​        [5.8.3 Package Dependencies](#package-dependencies-2)
-
-​        [5.8.4 Supported Operating System](#supported-operating-system-1)
-
-​        [5.8.5 Recommended Hardware](#recommended-hardware-3)
-
-​        [5.8.6 Installation](#installation-3)
-
- [5.8 Installing the SGX Host Verification Service](#installing-the-sgx-host-verification-service)
-
-​        [5.7.1 Required For](#required-for-2)
-
-​        [5.7.2 Prerequisites](#prerequisites-1)
-
-​        [5.7.3 Package Dependencies](#package-dependencies-1)
-
-​        [5.7.4 Supported Operating Systems](#supported-operating-systems-1)
-
-​        [5.7.5 Recommended Hardware](#recommended-hardware-2)
-
-​        [5.7.6 Installation](#installation-2)
-
- [5.9 Installing the SGX Agent](#installing-the-sgx-agent)
-
-​        [5.9.1 Required for](#required-for-4)
-
-​        [5.9.2 Prerequisites](#prerequisites-2)
-
-​        [5.9.3 Package Dependencies](#package-dependencies-3)
-
-​        [5.9.4 Supported Operating Systems](#supported-operating-systems-2)
-
-​       [5.9.5 Recommended Hardware](#_Toc46743564)
-
-​       [5.9.6 Installation](#installation-4)
-
- [5.10 Installing the SGX-QVS](#installing-the-sgx-qvs)
-
-​           [5.10.1 Required for](#required-for-5)
-
-​           [5.10.2 Prerequisites](#prerequisites-3)
-
-​           [5.10.3 Package Dependencies](#package-dependencies-4)
-
-​           [5.10.4 Supported Operating Systems](#supported-operating-systems-3)
-
-​           [5.10.5 Recommended Hardware](#recommended-hardware-4)
-
-​           [5.10.6 Installation](#installation-5)
-
- [5.11 Installing the SGX Hub](#installing-the-sgx-hub)
-
-​          [5.11.1 Required For](#required-for-6)
-
-​          [5.11.2 Prerequisites](#prerequisites-4)
-
-​          [5.11.3 Package Dependencies](#package-dependencies-5)
-
-​          [5.11.4 Supported Operating Systems](#supported-operating-systems-4)
-
-​          [5.11.5 Recommended Hardware](#recommended-hardware-5)
-
- [5.12 Installing the Key Broker Service](#installing-the-key-broker-service)
-
-​          [5.12.1 Required for](#required-for-7)
-
-​          [5.12.2 Prerequisites](#prerequisites-5)
-
-​          [5.12.3 Package Dependencies](#package-dependencies-6)
-
-​          [5.12.4 Supported Operating Systems](#supported-operating-systems-5)
-
-​          [5.12.5 Recommended Hardware](#recommended-hardware-6)
-
-​          [5.12.6 Installation](#installation-6)
-
- [5.13 Installing the SKC Library](#installing-the-skc-library)
-
-​           [5.13.1 Required For](#required-for-8)
-
-​           [5.13.2 Package Dependencies](#package-dependencies-7)
-
-​           [5.13.3 Supported Operation System](#supported-operation-system)
-
-​           [5.13.4 Recommended Hardware](#recommended-hardware-7)
-
-​           [5.13.5 Installation](#installation-7)
-
-[6. Authentication](#authentication)
-
- [6.1 Create Token](#create-token)
-
- [6.2 User Management](#user-management)
-
-​         [6.2.1 Username and Password Requirement](#username-and-password-requirement)
-
-​         [6.2.2 Create User](#create-user)
-
-​         [6.2.3 Search User](#search-user)
-
-​         [6.2.4 Change User Password](#change-user-password)
-
-​         [6.2.5 Delete User](#delete-user)
-
-[6.3 Roles and Permission](#roles-and-permission)
-
-​        [6.3.1 Create Roles](#create-roles)
-
-​        [6.3.2 Search Roles](#search-roles)
-
-​        [6.3.3 Delete Role](#delete-role)
-
-​        [6.3.4 Assign Role to User](#assign-role-to-user)
-
-​        [6.3.5 List Roles Assigned to User](#list-roles-assigned-to-user)
-
-​        [6.3.6 Remove Role from User](#remove-role-from-user)
-
-​        [6.3.7 Role Definitions](#role-definitions)
-
-[7. Connection Strings](#connection-strings)
-
- [7.1 SGX Agent](#sgx-agent-1)
-
-[8. SGX Features Provisioning](#sgx-features-provisioning)
-
- [8.1 Host Registration](#host-registration)
-
-​        [8.1.1 SGX Agent](#sgx-agent-2)
-
-​        [8.1.2 Retrieving Current Host State Information](#retrieving-current-host-state-information)
-
-[9. Intel Security Libraries Configuration Settings](#intel-security-libraries-configuration-settings)
-
- [9.1 SGX Host Verification Service](#sgx-host-verification-service-1)
-
-​        [9.1.1 Installation Answer File Options](#installation-answer-file-options)
-
-​        [9.1.2 Configuration Options](#configuration-options)
-
-​        [9.1.3 Command-Line Options](#command-line-options)
-
-​        [9.1.4 Directory Layout](#directory-layout)
-
- [9.2 SGX Agent](#sgx-agent-3)
-
-​        [9.2.1 Installation Answer File Options](#installation-answer-file-options-1)
-
-​        [9.2.2 Configuration Options - This is same as above.](#configuration-options---this-is-same-as-above.)
-
-​        [9.2.3 Command-Line Options](#command-line-options-1)
-
-​        [9.2.4 Directory Layout](#directory-layout-1)
-
- [9.3 SGX Attestation Hub](#sgx-attestation-hub)
-
-​       [9.3.1 Installation Answer File](#installation-answer-file)
-
-​       [9.3.2 Command-Line Options](#command-line-options-2)
-
-​       [9.3.3 Directory Layout](#directory-layout-2)
-
- [9.4 Certificate Management Service](#certificate-management-service-1)
-
-​       [9.4.1 Installation Answer File Options](#installation-answer-file-options-2)
-
-​       [9.4.2 Configuration Options](#configuration-options-1)
-
-​       [9.4.3 Command-Line Options](#command-line-options-3)
-
-​       [9.4.4 Directory Layout](#directory-layout-3)
-
- [9.5 Authentication and Authorization Service](#authentication-and-authorization-service-1)
-
-​        [9.5.1 Installation Answer File Options](#installation-answer-file-options-3)
-
-​        [9.5.2 Configuration Options](#configuration-options-2)
-
-​        [9.5.3 Command-Line Options](#command-line-options-4)
-
-​       [9.5.4 Directory Layout](#directory-layout-4)
-
- [9.6 Key Broker Service](#key-broker-service-1)
-
-​      [9.6.1 Installation Answer File Options](#installation-answer-file-options-4)
-
-​      [9.6.2 Configuration Options](#configuration-options-3)
-
-​      [9.6.3 Command-Line Options](#command-line-options-5)
-
-​      [9.6.4 Directory Layout](#directory-layout-5)
-
- [9.7 SGX Caching Service](#sgx-caching-service-1)
-
-​      [9.7.1 Installation Answer File Options](#installation-answer-file-options-5)
-
-​      [9.7.2 Configuration Options](#configuration-options-4)
-
-​      [9.7.3 Command-Line Options](#command-line-options-6)
-
-​      [9.7.4 Directory Layout](#directory-layout-6)
-
- [9.8 SGX Quote Verification](#sgx-quote-verification)
-
-​      [9.8.1 Installation Answer File Options](#installation-answer-file-options-6)
-
-​      [9.8.2 Configuration Options](#configuration-options-5)
-
-​      [9.8.3 Command-Line Options](#command-line-options-7)
-
-[10. Uninstallation](#uninstallation)
-
-  [10.1 SGX Host Verification Service](#sgx-host-verification-service-2)
-
-  [10.2 SGX_Agent](#sgx_agent)
-
-  [10.3 SGX Attestation Hub](#sgx-attestation-hub-1)
-
-  [10.4 SGX Caching Service](#sgx-caching-service-2)
-
-  [10.5 SGX Quote Verification Service](#sgx-quote-verification-service-1)
-
-[11. Appendix](#appendix)
-
-# Introduction 
-
-## Overview
+## 1.1 Overview
 
  Secure Key Caching (SKC) is part of the Intel Security Libraries for datacenter (ISecL-DC). Intel Security Libraries for Datacenter is a collection of software applications and development libraries intended to help turn Intel platform security features into real-world security use cases. SKC provides the key protection at rest and in-use use case using the Intel Software Guard Extensions technology (SGX). SGX implements the Trusted Execution Environment (TEE) paradigm.
 
@@ -498,7 +215,7 @@ The high-level architectures of these features are presented in the next sub-sec
 
 Key Protection is implemented by the SKC Client -- a set of libraries - which must be linked with a tenant workload, like Nginx, deployed in a CSP environment and the Key Broker Service (KBS) deployed in the tenant's enterprise environment. The SKC Client retrieves the keys needed by the workload from KBS after proving that the key can be protected in an SGX enclave as shown in the diagram below.
 
-![https://gitlab.devtools.intel.com/sivaramp/cicd-pipeline/-/blob/master/Images/image-20200727163116765.png]
+![Images/image-20200727163116765.png]
 
 Step 6 is optional (keys can be stored in KBS). Keys policies in step 2 are called Key Transfer Policies and are created by an Admin and assigned to Application keys.
 
@@ -508,7 +225,7 @@ The diagram below shows the infrastructure that CSPs need to deploy to support S
 
 The platform information can optionally be made available to Kubernetes via the SGX Hub (SHUB), which pulls it from SHVS and pushes it to the Kubernetes Master using Custom Resource Definitions (CRDs).
 
-![https://gitlab.devtools.intel.com/sivaramp/cicd-pipeline/-/blob/master/Images/image-20200727163158892.png]
+![Images/image-20200727163158892.png]
 
 The SGX Agent and the SGX services integrate with the Authentication and Authorization Service (AAS) and the Certificate Management Service (CMS). AAS and CMS are not represented on the diagram for clarity.
 
