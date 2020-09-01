@@ -215,7 +215,7 @@ The high-level architectures of these features are presented in the next sub-sec
 
 Key Protection is implemented by the SKC Client -- a set of libraries - which must be linked with a tenant workload, like Nginx, deployed in a CSP environment and the Key Broker Service (KBS) deployed in the tenant's enterprise environment. The SKC Client retrieves the keys needed by the workload from KBS after proving that the key can be protected in an SGX enclave as shown in the diagram below.
 
-![Images/image-20200727163116765.png]
+![](Images/image-20200727163116765.png)
 
 Step 6 is optional (keys can be stored in KBS). Keys policies in step 2 are called Key Transfer Policies and are created by an Admin and assigned to Application keys.
 
@@ -225,7 +225,7 @@ The diagram below shows the infrastructure that CSPs need to deploy to support S
 
 The platform information can optionally be made available to Kubernetes via the SGX Hub (SHUB), which pulls it from SHVS and pushes it to the Kubernetes Master using Custom Resource Definitions (CRDs).
 
-![Images/image-20200727163158892.png]
+![](Images/image-20200727163158892.png)
 
 The SGX Agent and the SGX services integrate with the Authentication and Authorization Service (AAS) and the Certificate Management Service (CMS). AAS and CMS are not represented on the diagram for clarity.
 
